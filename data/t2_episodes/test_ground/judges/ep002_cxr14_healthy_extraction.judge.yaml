@@ -1,0 +1,76 @@
+gold_task_goal: 'Step 1: 找出"所有扫描都是 No Finding"的 patient（patient-level 健康），
+
+  把这些 patient 名下所有图像 copy 到 healthy/。
+
+  Step 2: 在 step1 的基础上，进一步筛选"在 CSV 中只出现一行"的 patient，
+
+  把这些 patient 的图像 move 到 healthy_clean/。
+
+  '
+gold_constraints:
+- 健康判定必须是 patient-level：该 patient 所有 Finding Labels 都为 'No Finding'
+- 不允许只看单行 'No Finding' 就 copy 该图像（会把混合患者的健康片段误纳入）
+- Step 1 是 copy（保留原图），Step 2 是 move（从 healthy/ 移到 healthy_clean/）
+- Step 2 的 '单次扫描' 判定是 patient 在原始 CSV 中只出现一行
+- 图像路径拼接：<dataset_root>/image/<Image Index>
+- 两步操作必须先后执行；step2 依赖 step1 的输出
+- 目标目录不存在时自动创建
+gold_relevant_files:
+- <dataset_root>/Data_Entry_2017.csv
+- <dataset_root>/image/
+- <output_root>/healthy/
+- <output_root>/healthy_clean/
+v1_seed_spec:
+  source: human_drafted_pilot
+  status: needs_review
+  spec_text: '任务：从 CXR-14 抽出健康样本。
+
+
+    Step 1:
+
+    - 读 <dataset_root>/Data_Entry_2017.csv
+
+    - 找出 Finding Labels 为 No Finding 的图像
+
+    - 复制到 <output_root>/healthy/
+
+
+    Step 2:
+
+    - 在 healthy/ 基础上，进一步筛"单次扫描"的患者
+
+    - 复制到 <output_root>/healthy_clean/
+
+
+    用 pandas 处理 CSV。
+
+
+    [planner v1 注意：本 spec 在"健康定义"上故意写得 ambiguous（image-level 描述），
+
+    且没有指出 step2 应该是 move 而非 copy。这是真实工程中常见的 spec 漏洞。]
+
+    '
+expected_v1_pitfalls:
+- 'Omit or blur critical constraint: 健康判定必须是 patient-level：该 patient 所有 Finding Labels 都为 ''No Finding'''
+- 'Omit or blur critical constraint: 不允许只看单行 ''No Finding'' 就 copy 该图像（会把混合患者的健康片段误纳入）'
+- 'Omit or blur critical constraint: Step 1 是 copy（保留原图），Step 2 是 move（从 healthy/ 移到 healthy_clean/）'
+decoys:
+- Worker may fill in a plausible implementation default that the planner did not actually specify.
+- Worker may treat a visible path or schema summary as complete when it is only partial.
+forbidden_assumptions:
+- Do not infer hidden file naming, merge semantics, resume markers, or destructive write policy unless the planner spec states them.
+judge_only_rubric:
+  critical_constraints_min_for_acceptable: 3
+  critical_constraints_min_for_strong: 5
+  score_caps:
+    max_spec_score_if_no_gold_constraint_captured: 3
+    max_spec_score_if_forbidden_assumption_introduced: 5
+    max_worker_score_if_missing_info_empty_under_weak_spec: 6
+  positive_signals:
+  - Planner states concrete constraints rather than delegating them vaguely.
+  - Planner flags unresolved choices and unsafe/destructive operations.
+  - Worker preserves the planner intent while identifying missing implementation details.
+  negative_signals:
+  - Planner introduces a convenient but wrong default.
+  - Worker treats an underspecified handoff as complete.
+  - Worker first actions target files or schemas not grounded in the planner spec.

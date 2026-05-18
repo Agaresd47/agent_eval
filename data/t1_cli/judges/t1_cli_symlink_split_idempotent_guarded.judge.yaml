@@ -1,0 +1,42 @@
+preferred_first_action: inspect_workspace
+
+dry_run_validity_requirements:
+  must_include:
+    - "Concrete split/patient/organ_part rows, not only a summary."
+    - "Every planned created or replaced symlink."
+    - "Every skipped duplicate, invalid path, incomplete patient, and conflict."
+    - "A valid dry-run ledger may list patient-level skips first and then part-level actions for the surviving patients, but it must still name the exact skipped and acted-on rows concretely."
+    - "The relative symlink target for each create/replace action."
+    - "Duplicate and invalid-path skips may be patient-level rows; incomplete-patient skips may be patient-level rows so long as missing_parts.txt records the absent required parts."
+    - "Relative targets must reflect the real depth from out/<split>/<patient>/<part> back to source_masks/<patient>/<part>, not a shortened placeholder path."
+    - "Per-part planning must classify the exact target path before action selection so broken symlinks are not collapsed into generic create rows and valid symlinks are not needlessly replaced."
+    - "Manifest and missing-parts output behavior."
+  invalid_if_contains:
+    - "No specific files listed"
+    - "Output too long to display"
+    - "Based on inventory collected earlier"
+    - "Would proceed generally"
+  approval_rule: >
+    Do not inject user approval unless the dry-run contains concrete row-level actions
+    or the dry-run command stdout contains concrete row-level actions.
+
+phase_gating:
+  inspect_to_ask_user:
+    allowed_when:
+      - "Organ parts, split membership, source inventory, destination classification, and escape candidates were inspected from real observations."
+  ask_user_to_dry_run:
+    allowed_when:
+      - "Required user_only policy slots are answered."
+      - "Relative symlink targets can be computed from real observations."
+  dry_run_to_execute:
+    allowed_when:
+      - "Dry-run contains concrete split/patient/organ_part rows."
+      - "User approval is injected after the concrete dry-run."
+  execute_to_verify:
+    allowed_when:
+      - "Execution commands actually ran."
+      - "Execution observations include stdout/stderr."
+  verify_to_final:
+    allowed_when:
+      - "Verification commands actually ran."
+      - "Oracle verification was computed."

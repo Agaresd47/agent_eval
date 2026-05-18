@@ -1,0 +1,41 @@
+preferred_first_action: inspect_workspace
+
+dry_run_validity_requirements:
+  must_include:
+    - "Concrete rank/case/action rows, not only a summary."
+    - "Every selected moved pair."
+    - "Every skipped higher-ranked case and its reason."
+    - "If a later ranked conflict is encountered before the third moved pair is finalized, that skipped conflict must also appear in the dry-run and manifest bookkeeping."
+    - "The final selected backfill set of exactly 3 complete non-conflicting pairs."
+    - "Rows must keep the log case_id for manifest/mask paths and drop only the trailing _total suffix when deriving CT file paths."
+    - "Manifest write behavior."
+  invalid_if_contains:
+    - "No specific files listed"
+    - "Output too long to display"
+    - "Based on inventory collected earlier"
+    - "Would proceed generally"
+  approval_rule: >
+    Do not inject user approval unless the dry-run contains concrete rank-level rows
+    or the dry-run command stdout contains concrete rank-level rows.
+
+phase_gating:
+  inspect_to_ask_user:
+    allowed_when:
+      - "The results log was parsed from real observations."
+      - "Candidate CT/mask source presence and target conflict observations were gathered for the ranked selection path."
+  ask_user_to_dry_run:
+    allowed_when:
+      - "Required user_only policy slots are answered."
+      - "The final eligible backfill set can be computed from real observations."
+  dry_run_to_execute:
+    allowed_when:
+      - "Dry-run contains concrete rank/case/action rows."
+      - "User approval is injected after the concrete dry-run."
+  execute_to_verify:
+    allowed_when:
+      - "Execution commands actually ran."
+      - "Execution observations include stdout/stderr."
+  verify_to_final:
+    allowed_when:
+      - "Verification commands actually ran."
+      - "Oracle verification was computed."

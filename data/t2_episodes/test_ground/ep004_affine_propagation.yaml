@@ -1,0 +1,50 @@
+episode_id: ep004_affine_propagation
+project_id: pp_pipeline
+context_type: data_alignment_script
+planner_input:
+  request_text: 'TotalSeg 出来的 mask 和原 CT 在 affine 上有微小不一致（QR 分解后符号不一致），
+
+    导致后续读出来 spatial 没对齐。
+
+
+    请对每个病人目录：
+
+    1. 取 ct.nii.gz 的 affine 做参考
+
+    2. 用 QR 分解清理这个 affine（去掉 spacing 之外的旋转噪声）
+
+    3. 把符号对齐到原 CT 的 affine 符号
+
+    4. 把这个清理后的 affine 应用到该病人目录下所有其他 mask 文件上
+
+
+    数据量 ~3000 病人，并行跑。
+
+    '
+  design_summary: '病人级并行，每个病人独立处理。
+
+    affine 清理：QR 分解后保留 Q 矩阵 × 原 spacing，再用原 affine 的符号修正。
+
+    '
+  repo_summary:
+    modules:
+    - <dataset_root>/totalseg/<patient_id>/ct.nii.gz
+    - <dataset_root>/totalseg/<patient_id>/<mask_name>.nii.gz (多个)
+    notes:
+    - 已有 nibabel 和 numpy
+    - 病人目录是平铺的，没有 mask/ 子目录
+    - 脚本会原地覆写 mask 文件
+  file_index:
+  - <dataset_root>/totalseg/case_aa01/ct.nii.gz
+  - <dataset_root>/totalseg/case_aa01/aorta.nii.gz
+  - <dataset_root>/totalseg/case_aa01/heart.nii.gz
+  - <dataset_root>/totalseg/case_aa01/lung_upper_lobe_left.nii.gz
+  - <dataset_root>/totalseg/case_aa02/ct.nii.gz
+  - <dataset_root>/totalseg/case_aa02/aorta.nii.gz
+worker_prompt_template_version: v1_structured_interpretation
+worker_expected_fields:
+- understood_goal
+- constraints_to_follow
+- information_still_missing
+- first_3_concrete_actions
+judge_spec: data/t2_episodes/test_ground/judges/ep004_affine_propagation.judge.yaml

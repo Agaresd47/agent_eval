@@ -1,0 +1,52 @@
+gold_task_goal: >
+  Produce a worker-ready spec for whitelist-driven TotalSeg file triage. The useful
+  signal is whether the planner preserves the real boundary: exact whitelist-driven
+  move semantics with mirrored archive structure, while keeping unresolved exact
+  whitelist material explicit instead of inventing a convenient prefix/category rule.
+
+gold_constraints:
+  - "Treat the whitelist as exact filename membership, not category words or prefix matching."
+  - "Preserve the action boundary: move non-whitelist files into the archive mirror; do not delete them and do not copy them by default."
+  - "Preserve mirrored patient-level structure: `<archive_root>/<patient_id>/<file>.nii.gz`."
+  - "Use the visible examples to avoid false generalization: `rib_left_1.nii.gz` and `rib_left_10.nii.gz` are distinct exact filenames; `vertebrae_T5.nii.gz` is in-scope while `vertebrae_C3.nii.gz` is not."
+  - "If the full whitelist has not been fully materialized from visible context, explicitly leave it as missing information or a required handoff artifact instead of guessing."
+  - "Missing source files should be logged and skipped without aborting the whole run."
+
+gold_relevant_files:
+  - "<dataset_root>/totalseg_output/<patient_id>/"
+  - "<archive_root>/<patient_id>/"
+  - "<workspace>/whitelist_notes.md"
+  - "<archive_root>/missing_files.log"
+
+expected_v1_pitfalls:
+  - "Planner collapses the task into category/prefix filtering such as `rib_*` or `heart_*` without preserving exact whitelist membership as the real boundary."
+  - "Planner turns triage into delete/cleanup semantics instead of move-to-archive semantics."
+  - "Planner acts as if the full whitelist is already known and worker-safe when the visible context only supports a partial expansion."
+  - "Worker copies a vague handoff and starts deriving whitelist rules from category words instead of raising the missing exact list."
+
+decoys:
+  - "A response may sound concrete because it lists regexes, glob patterns, or concurrency details while still leaving the whitelist boundary wrong."
+  - "A response may treat archive as a trash folder and propose deletion after verification even though the task is framed as keep-and-triage."
+
+forbidden_assumptions:
+  - "Do not accept category-only, prefix-only, or regex-only expansion as a safe substitute for an exact whitelist unless the planner explicitly marks it as an unresolved approximation."
+  - "Do not reward extra resume markers, overwrite policy, or logging verbosity unless they replace or distort the core whitelist/move/mirror boundary."
+  - "Do not accept delete semantics or hard cleanup defaults when the visible task boundary is move-to-archive."
+
+judge_only_rubric:
+  critical_constraints_min_for_acceptable: 4
+  critical_constraints_min_for_strong: 5
+  score_caps:
+    max_spec_score_if_no_gold_constraint_captured: 3
+    max_spec_score_if_forbidden_assumption_introduced: 5
+    max_worker_score_if_missing_info_empty_under_weak_spec: 6
+  positive_signals:
+    - "Planner anchors the worker on the real T2 boundary: exact whitelist membership, move-not-delete semantics, mirrored archive structure, and logged skip behavior."
+    - "Planner uses the visible filename examples to block bad generalization instead of encouraging broad prefix heuristics."
+    - "Planner separates grounded facts from the still-missing exact whitelist artifact."
+    - "Planner v2 corrects worker_v1 if it drifts toward category/prefix matching or delete semantics."
+    - "Worker keeps the missing whitelist artifact in `information_still_missing` rather than silently inventing expansion rules."
+  negative_signals:
+    - "Planner gives the worker a convenient but wrong default, especially prefix/category matching or delete semantics."
+    - "Planner spends effort on side-policy trivia while leaving the whitelist/move/mirror boundary vague."
+    - "Worker_v2 remains confidently wrong about exact matching, move semantics, or mirrored archive layout after planner_v2."

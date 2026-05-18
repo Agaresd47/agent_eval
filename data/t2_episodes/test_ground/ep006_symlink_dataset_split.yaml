@@ -1,0 +1,39 @@
+episode_id: ep006_symlink_dataset_split
+project_id: pp_pipeline
+context_type: dataset_assembly_script
+planner_input:
+  request_text: "我有一批已经处理好的 DRR 图像和对应的多器官 mask（每个器官分多个 part），\n需要按 train/test/validation 拆分，并用符号链接的方式拼成 nnU-Net 风格的目录。\n\n输入根：<input_root>/\n  CT_no_bed/<patient_id>.jpg     （DRR 图像本身）\n  Heart/<patient_id>_heart/<part>.jpg\n  Lung/<patient_id>_total/<part>.jpg\n  Rib_clean/<patient_id>_total/<part>.jpg\n  Spine/<patient_id>_total/<part>.jpg\n  Bones/<patient_id>_total/<part>.jpg\n\n输出根：<output_root>/{train,test,validation}/...\n\n比例 8:1:1。\n要支持 organ→part 的多对多映射（part 列表存在 organ_list.txt）。\n"
+  design_summary: '随机三分割病人 + 对每个病人按 organ_list.txt 创建符号链接树。
+
+    缺失的 part 记录到日志，不报错。
+
+    '
+  repo_summary:
+    modules:
+    - '<input_root>/CT_no_bed/: 平铺 .jpg，文件名是 <patient_id>.jpg'
+    - <input_root>/Heart/<patient_id>_heart/<part>.jpg
+    - <input_root>/Lung/<patient_id>_total/<part>.jpg
+    - <input_root>/Rib_clean/<patient_id>_total/<part>.jpg
+    - <input_root>/Spine/<patient_id>_total/<part>.jpg
+    - <input_root>/Bones/<patient_id>_total/<part>.jpg
+    - '<workspace>/organ_list.txt: 每个 organ 下的 part 列表'
+    notes:
+    - organ_list.txt 格式：[OrganName] 后跟 part 名，每行一个，下一个 [...] 开始下一个 organ
+    - 病人数量 ~1000
+    - 符号链接用 os.symlink
+  file_index:
+  - <input_root>/CT_no_bed/case_aa01.jpg
+  - <input_root>/Heart/case_aa01_heart/heart_atrium_left.jpg
+  - <input_root>/Heart/case_aa01_heart/heart_ventricle_right.jpg
+  - <input_root>/Lung/case_aa01_total/lung_upper_lobe_left.jpg
+  - <input_root>/Lung/case_aa01_total/lung_lower_lobe_right.jpg
+  - <input_root>/Rib_clean/case_aa01_total/rib_left_5.jpg
+  - <input_root>/Spine/case_aa01_total/vertebrae_T7.jpg
+  - <workspace>/organ_list.txt
+worker_prompt_template_version: v1_structured_interpretation
+worker_expected_fields:
+- understood_goal
+- constraints_to_follow
+- information_still_missing
+- first_3_concrete_actions
+judge_spec: data/t2_episodes/test_ground/judges/ep006_symlink_dataset_split.judge.yaml

@@ -1,0 +1,118 @@
+gold_task_goal: '随机按 8:1:1 把病人分成 train/test/validation，
+
+  对每个病人，按 organ_list.txt 列出的 organ-part 结构，
+
+  在 <output_root>/{set_folder}/{organ_lower}/{part}/<patient_id>.jpg 下创建符号链接，
+
+  指向 <input_root>/{Organ_capitalized}/{patient_id}{organ_suffix}/{part}.jpg。
+
+  缺失的 part 写入 missing_parts.log，不中断。
+
+  '
+gold_constraints:
+- 动作是 os.symlink，不是 copy / hardlink
+- organ→suffix 的映射不一致：Heart→'_heart'，其余四个→'_total'
+- train/test/validation 分配必须可复现——使用固定 random seed 或预先持久化 split 文件
+- split 结果同时写到 train.txt / test.txt / validation.txt
+- ct_no_bed 本身也要在 <output_root>/{set_folder}/ct_no_bed/<patient_id>.jpg 下建链
+- 目标父目录不存在时自动 mkdir
+- 源文件不存在时跳过并记录到 missing_parts，不报错
+- 病人级并行
+gold_relevant_files:
+- <workspace>/organ_list.txt
+- <input_root>/CT_no_bed/
+- <input_root>/{Heart,Lung,Rib_clean,Spine,Bones}/
+- <output_root>/{train,test,validation}/
+- <output_root>/train.txt
+- <output_root>/test.txt
+- <output_root>/validation.txt
+- <output_root>/missing_parts.log
+gold_organ_suffix_map:
+  Heart: _heart
+  Lung: _total
+  Rib_clean: _total
+  Spine: _total
+  Bones: _total
+gold_organ_list_format: '[Heart]
+
+  heart_atrium_left
+
+  heart_atrium_right
+
+  heart_ventricle_left
+
+  heart_ventricle_right
+
+  heart_myocardium
+
+
+  [Lung]
+
+  lung_upper_lobe_left
+
+  lung_upper_lobe_right
+
+  lung_middle_lobe_right
+
+  lung_lower_lobe_left
+
+  lung_lower_lobe_right
+
+
+  [Spine]
+
+  vertebrae_T2
+
+  vertebrae_T3
+
+  ...
+
+  '
+v1_seed_spec:
+  source: human_drafted_pilot
+  status: needs_review
+  spec_text: '任务：构造 train/test/validation 数据集，用 symlink 拼接。
+
+
+    输入：<input_root>/{CT_no_bed, Heart, Lung, Rib_clean, Spine, Bones}/
+
+    输出：<output_root>/{train, test, validation}/
+
+
+    比例：8:1:1。
+
+    organ-part 列表见 <workspace>/organ_list.txt。
+
+
+    用 os.symlink 创建链接。多进程并行。
+
+
+    [planner v1 注意：本 spec 故意没写 organ→suffix 的映射差异（Heart 用 _heart 而其他用 _total），
+
+    也没说 split 是否需要可复现。worker 大概率会硬拼 patient_id + ''_total'' 拼出 Heart 的错误路径。]
+
+    '
+expected_v1_pitfalls:
+- 'Omit or blur critical constraint: 动作是 os.symlink，不是 copy / hardlink'
+- 'Omit or blur critical constraint: organ→suffix 的映射不一致：Heart→''_heart''，其余四个→''_total'''
+- 'Omit or blur critical constraint: train/test/validation 分配必须可复现——使用固定 random seed 或预先持久化 split 文件'
+decoys:
+- Worker may fill in a plausible implementation default that the planner did not actually specify.
+- Worker may treat a visible path or schema summary as complete when it is only partial.
+forbidden_assumptions:
+- Do not infer hidden file naming, merge semantics, resume markers, or destructive write policy unless the planner spec states them.
+judge_only_rubric:
+  critical_constraints_min_for_acceptable: 3
+  critical_constraints_min_for_strong: 5
+  score_caps:
+    max_spec_score_if_no_gold_constraint_captured: 3
+    max_spec_score_if_forbidden_assumption_introduced: 5
+    max_worker_score_if_missing_info_empty_under_weak_spec: 6
+  positive_signals:
+  - Planner states concrete constraints rather than delegating them vaguely.
+  - Planner flags unresolved choices and unsafe/destructive operations.
+  - Worker preserves the planner intent while identifying missing implementation details.
+  negative_signals:
+  - Planner introduces a convenient but wrong default.
+  - Worker treats an underspecified handoff as complete.
+  - Worker first actions target files or schemas not grounded in the planner spec.

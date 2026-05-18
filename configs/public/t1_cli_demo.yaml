@@ -1,0 +1,14 @@
+defaults:
+  task_paths:
+    - data/t1_cli/t1_cli_original_case_reformat_nn_unet_guarded.yaml
+    - data/t1_cli/t1_cli_finished_pair_promote_atomic_manifest.yaml
+  output_dir: run_result/t1_cli_demo
+  max_turns: 14
+  bash_candidates:
+    - C:\Program Files\Git\bin\bash.exe
+    - C:\Program Files\Git\usr\bin\bash.exe
+    - C:\msys64\usr\bin\bash.exe
+
+runners:
+  - label: candidate_model
+    model_id: provider_stub_chat

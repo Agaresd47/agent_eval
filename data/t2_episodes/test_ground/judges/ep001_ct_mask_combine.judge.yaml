@@ -1,0 +1,93 @@
+gold_task_goal: '对每个病人，按预定义的结构组（rib / lung / spine / heart / aorta / other_bones）
+
+  正则匹配 TotalSeg 输出文件，每组合并为单个二值 mask（np.maximum 语义），
+
+  并基于该 mask 抠出 real-intensity mask 和软组织 CT。
+
+  支持续跑（基于 .processing_done flag）。
+
+  patient-level 并行。
+
+  '
+gold_constraints:
+- 结构合并算子必须是 np.maximum，不是 np.add（避免重叠区域溢出）
+- 续跑判定基于 <output_root>/<patient_id>/.processing_done 文件存在性
+- 结构选择用正则模式（如 rib_(left|right)_\d+\.nii\.gz），不能硬编码完整列表
+- affine 和 header 取自第一个被合并的 mask 文件
+- 软组织 CT = CT 数据，把所有结构区域填为 padding_value（默认 5）
+- real-intensity mask 中非 mask 区域填 -999.9（不是 0）
+- 并行粒度是 patient，单 patient 内串行
+- 成功完成才写 .processing_done，部分完成不写
+gold_relevant_files:
+- <dataset_root>/ct/<patient_id>.nii.gz
+- <dataset_root>/mask/<patient_id>_total/
+- <output_root>/<patient_id>/.processing_done
+- <output_root>/<patient_id>/<patient_id>_<group>_mask.nii.gz
+- <output_root>/<patient_id>/<patient_id>_<group>_real.nii.gz
+- <output_root>/<patient_id>/<patient_id>_soft_tissue.nii.gz
+- <output_root>/processing_success.log
+v1_seed_spec:
+  source: human_drafted_pilot
+  status: needs_review
+  spec_text: '任务：对每个病人合并 TotalSeg mask 并生成软组织 CT。
+
+
+    输入：
+
+    - <dataset_root>/ct/<patient_id>.nii.gz
+
+    - <dataset_root>/mask/<patient_id>_total/*.nii.gz
+
+
+    输出：
+
+    - <output_root>/<patient_id>/ 下生成各类合并 mask 和软组织 CT
+
+
+    步骤：
+
+    1. 收集 <dataset_root>/ct/ 下所有 .nii.gz 拿到 patient_id 列表
+
+    2. 对每个病人，加载 CT 和对应 mask 子目录
+
+    3. 把 mask 合并成一个二值 mask
+
+    4. 输出合并 mask、real mask、软组织 CT
+
+
+    要求：
+
+    - 用 multiprocessing 并行
+
+    - 中断后能继续跑
+
+    - 跳过已完成的病人
+
+
+    [planner v1 注意：本 spec 故意省略了"按结构组合并"的要求、合并算子、padding_value、续跑机制的具体实现方式，留给 worker 提问]
+
+    '
+expected_v1_pitfalls:
+- 'Omit or blur critical constraint: 结构合并算子必须是 np.maximum，不是 np.add（避免重叠区域溢出）'
+- 'Omit or blur critical constraint: 续跑判定基于 <output_root>/<patient_id>/.processing_done 文件存在性'
+- 'Omit or blur critical constraint: 结构选择用正则模式（如 rib_(left|right)_\d+\.nii\.gz），不能硬编码完整列表'
+decoys:
+- Worker may fill in a plausible implementation default that the planner did not actually specify.
+- Worker may treat a visible path or schema summary as complete when it is only partial.
+forbidden_assumptions:
+- Do not infer hidden file naming, merge semantics, resume markers, or destructive write policy unless the planner spec states them.
+judge_only_rubric:
+  critical_constraints_min_for_acceptable: 3
+  critical_constraints_min_for_strong: 5
+  score_caps:
+    max_spec_score_if_no_gold_constraint_captured: 3
+    max_spec_score_if_forbidden_assumption_introduced: 5
+    max_worker_score_if_missing_info_empty_under_weak_spec: 6
+  positive_signals:
+  - Planner states concrete constraints rather than delegating them vaguely.
+  - Planner flags unresolved choices and unsafe/destructive operations.
+  - Worker preserves the planner intent while identifying missing implementation details.
+  negative_signals:
+  - Planner introduces a convenient but wrong default.
+  - Worker treats an underspecified handoff as complete.
+  - Worker first actions target files or schemas not grounded in the planner spec.

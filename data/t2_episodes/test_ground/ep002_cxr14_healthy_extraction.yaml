@@ -1,0 +1,51 @@
+episode_id: ep002_cxr14_healthy_extraction
+project_id: pp_pipeline
+context_type: data_filtering_script
+planner_input:
+  request_text: >
+    I am working with the NIH ChestX-ray14 dataset and want to extract healthy
+    controls.
+
+    Inputs:
+    - CSV metadata: <dataset_root>/Data_Entry_2017.csv
+    - image directory: <dataset_root>/image/
+
+    Do this in two steps:
+    1. First extract the healthy-control subset into <output_root>/healthy/.
+    2. Then make a cleaner subset of only single-scan healthy patients in
+       <output_root>/healthy_clean/.
+
+    Please use pandas for the CSV handling.
+    Other than these two filtering stages, you do not need to design extra
+    renaming, deduplication, or cleanup rules.
+  design_summary: >
+    This is a two-stage filtering script. Stage 1 is a healthy-control extraction
+    pass. Stage 2 is a stricter subset taken only from the stage-1 result.
+    The intended boundary is not image-row filtering; the worker should preserve
+    patient-level semantics when translating this into code.
+  repo_summary:
+    modules:
+      - "<dataset_root>/Data_Entry_2017.csv: standard NIH ChestX-ray14 metadata CSV"
+      - "<dataset_root>/image/: flat directory containing all image files"
+      - "<output_root>/: destination root for generated subsets"
+    notes:
+      - "Relevant CSV columns include Image Index, Finding Labels, Follow-up #, and Patient ID."
+      - "Finding Labels looks like 'No Finding' or multi-label strings such as 'Cardiomegaly|Effusion'."
+      - "Image Index is the image filename; image paths are formed as <dataset_root>/image/<Image Index>."
+      - "The same Patient ID can appear in multiple CSV rows, and those rows may have different Finding Labels."
+      - "Healthy controls should be decided at the patient level, not by copying every row whose Finding Labels happens to be 'No Finding'."
+      - "If a patient has any non-'No Finding' row anywhere in the CSV, that patient should not be treated as healthy."
+      - "The stage-2 single-scan subset should be counted on the original CSV by Patient ID occurrence count, then applied on top of the stage-1 healthy patient set."
+      - "Step 1 should copy images into healthy/; step 2 should move the qualifying subset into healthy_clean/."
+  file_index:
+    - <dataset_root>/Data_Entry_2017.csv
+    - <dataset_root>/image/00000001_000.png
+    - <dataset_root>/image/00000001_001.png
+    - <dataset_root>/image/00000003_000.png
+worker_prompt_template_version: v1_structured_interpretation
+worker_expected_fields:
+  - understood_goal
+  - constraints_to_follow
+  - information_still_missing
+  - first_3_concrete_actions
+judge_spec: data/t2_episodes/test_ground/judges/ep002_cxr14_healthy_extraction.judge.yaml

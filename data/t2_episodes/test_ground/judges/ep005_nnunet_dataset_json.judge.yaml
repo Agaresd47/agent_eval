@@ -1,0 +1,52 @@
+gold_task_goal: >
+  Produce a worker-ready spec for generating the nnU-Net v2 `dataset.json` for
+  `Dataset001_LungLobeRight`. The useful signal is whether the planner preserves
+  the visible v2/schema/path constraints and either states or clearly flags exact
+  details that it cannot ground safely.
+
+gold_constraints:
+  - "Treat the task as nnU-Net v2, not a legacy/v1 dataset.json handoff."
+  - "Make the worker preserve the v2 schema direction: `channel_name` is the image-channel mapping and `labels` must follow the v2 name-to-index convention, not a v1-style modality/default gloss."
+  - "Preserve case-id alignment: training images are `<case_id>_0000.nii.gz` and labels are `<case_id>.nii.gz`."
+  - "Use relative JSON paths rooted at `./imagesTr/`, `./labelsTr/`, and `./imagesTs/`."
+  - "Include test images in the JSON test list without paired labels."
+  - "Keep `file_ending: .nii.gz` and avoid reintroducing deprecated `tensorImageSize`."
+  - "If an exact v2 detail is uncertain, explicitly leave it as an open question instead of inventing a legacy/default answer."
+
+gold_relevant_files:
+  - "<dataset_root>/Dataset001_LungLobeRight/imagesTr/"
+  - "<dataset_root>/Dataset001_LungLobeRight/labelsTr/"
+  - "<dataset_root>/Dataset001_LungLobeRight/imagesTs/"
+  - "<dataset_root>/Dataset001_LungLobeRight/dataset.json"
+
+expected_v1_pitfalls:
+  - "Planner blurs the nnU-Net v2 vs v1 distinction and tells the worker generic dataset.json advice."
+  - "Planner mentions the directories but fails to define the case-id pairing boundary."
+  - "Planner turns an uncertain schema detail into a confident default instead of flagging it."
+  - "Worker copies a vague planner handoff and acts as if test-path or label behavior were fully settled."
+
+decoys:
+  - "A response may sound detailed because it lists optional metadata, logging, or overwrite policy that the user never asked for."
+  - "A response may mention labels/channel fields without making the v2 direction or case-id boundary clear."
+
+forbidden_assumptions:
+  - "Do not reward or punish extra overwrite, resume, empty-directory, duplicate-suffix, logging, or optional metadata policy unless it replaces or distorts a core visible constraint."
+  - "Do not give credit for generic nnU-Net familiarity if the planner still leaves the worker with the wrong v2/schema/path boundary."
+  - "Do not accept a concrete legacy/v1 default when the planner should have either stated the v2 rule or flagged the exact uncertainty."
+
+judge_only_rubric:
+  critical_constraints_min_for_acceptable: 4
+  critical_constraints_min_for_strong: 6
+  score_caps:
+    max_spec_score_if_no_gold_constraint_captured: 3
+    max_spec_score_if_forbidden_assumption_introduced: 5
+    max_worker_score_if_missing_info_empty_under_weak_spec: 6
+  positive_signals:
+    - "Planner anchors the worker on the real T2 boundary: v2-vs-v1 schema fidelity, case-id alignment, and path/test handling."
+    - "Planner separates grounded facts from exact details that still require verification."
+    - "Planner v2 specifically corrects worker_v1 schema drift or missing path/test constraints instead of restating generic instructions."
+    - "Worker keeps unresolved exact details in missing information rather than silently choosing a default."
+  negative_signals:
+    - "Planner gives the worker a concrete but wrong schema default, especially a legacy/v1 framing."
+    - "Planner spends effort on side-policy trivia while leaving the core v2/path/case-id boundary vague."
+    - "Worker_v2 remains confidently wrong on schema direction, case-id pairing, or test/list behavior after planner_v2."
