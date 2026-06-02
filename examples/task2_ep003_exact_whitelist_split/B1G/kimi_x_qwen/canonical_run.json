@@ -1,0 +1,227 @@
+{
+  "bundle_metadata": {
+    "condition": "B1_guardrailed",
+    "episode_id": "ep003_totalseg_whitelist_split",
+    "pair_label": "kimi_x_qwen",
+    "planner_model": "kimi_k2_5",
+    "planner_display_name": "Kimi K2.5",
+    "source_run_relpath": "run_result/T2_four_planner_probe/output/t2_matrix_20260505_104641",
+    "source_matrix_relpath": "run_result/T2_four_planner_probe/output/t2_matrix_20260505_104641/matrix.json",
+    "source_record_index": 1,
+    "generated_at": "20260505_104641",
+    "candidate_count": 1,
+    "raw_final_verdict": "spec_weak",
+    "display_final_verdict": "spec_weak",
+    "manual_review_override": null
+  },
+  "record": {
+    "episode_yaml": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t2_episodes\\test_ground\\ep003_totalseg_whitelist_split.yaml",
+    "judge_yaml": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t2_episodes\\test_ground\\judges\\ep003_totalseg_whitelist_split.judge.yaml",
+    "episode_id": "ep003_totalseg_whitelist_split",
+    "condition": "B1_guardrailed",
+    "seed": 0,
+    "pair_label": "kimi_x_qwen",
+    "planner_label": "kimi_k2_5",
+    "planner_model_id": "moonshotai.kimi-k2.5",
+    "worker_label": "qwen3_coder_30b",
+    "worker_model_id": "qwen.qwen3-coder-30b-a3b-v1:0",
+    "planner_prompt_leak_paths": [],
+    "worker_prompt_leak_paths": [],
+    "planner_revision_prompt_leak_paths": [],
+    "worker_v2_prompt_leak_paths": [],
+    "planner_response_text": "## Planner Revision: TotalSeg Mask Whitelist Filtering\n\n### Worker_v1 Corrections\n\n**Critical Misunderstanding #1: Direction of Move**\n- Worker_v1 states: \"ensuring that only specified files are kept in the source and moved to the archive\"\n- **Correction**: The whitelist files are **KEPT in source**; non-whitelist files are **MOVED TO archive**. Worker_v1 reversed this in their summary phrasing. The operation preserves training-relevant masks in the hot path and archives the rest.\n\n**Critical Misunderstanding #2: \"Do not delete files permanently\"**\n- Worker_v1 lists this as a constraint, but the spec requires **move** (which removes from source). The constraint should be: \"Do not permanently delete files without archiving them first\" — the source directory loses the file, but it exists in archive.\n\n**Sharpening #3: Whitelist Matching Precision**\n- Worker_v1 correctly identified ambiguity but did not commit to a verification strategy. Given TotalSeg's stable naming convention, **exact filename matching against a canonical list** is safer than regex patterns. The worker should receive a JSON file mapping: `{\"exact_filenames\": [...], \"pattern_rules\": [...]}` with priority to exact matches.\n\n**Sharpening #4: Archive Structure**\n- Worker_v1's \"mirrors source relative path\" is correct but imprecise. The archive receives **flat patient directories** (no `totalseg_output/` subdirectory). Clarified: `<archive_root>/<patient_id>/<filename>` directly.\n\n**Sharpening #5: Missing File Handling**\n- Worker_v1's \"MISSING <expected_filename>\" logging is excessive. The spec says \"漏文件要记录但不要中断\" — this refers to **operation failures** (files that couldn't be moved), not **expected whitelist files that don't exist**. Do not pre-validate whitelist existence; simply process what exists.\n\n### Still Missing (Do Not Assume)\n\n| Item | Why Unavailable |\n|------|---------------|\n| Exact whitelist filename list | Category descriptions (\"心脏相关\") map to multiple TotalSeg classes; need authoritative enumeration |\n| Whether `heart.nii.gz` (whole heart) vs `heart_*` (chambers) or both | \"心脏相关\" scope undefined |\n| Whether `trachea.nii.gz` or `bronchi.nii.gz` are included | Respiratory adjacent but not explicitly listed |\n| Whether `esophagus.nii.gz` is included | Thoracic structure but not in whitelist description |\n| Archive filesystem: same as source or different? | Affects atomic move feasibility |\n| Existing archive content: fresh start or resume? | Affects overwrite policy necessity |\n\n### Worker Next Focus\n\n1. **Demand explicit whitelist artifact**: Before any file operation, verify existence of whitelist file at configurable path; fail fast with clear error if missing.\n2. **Validate move direction with dry-run**: Log intended KEEP vs MOVE actions without executing; require explicit confirmation or `--dry-run=false` flag.\n3. **Check cross-device move capability**: Test if source and archive are same filesystem; if different, implement copy+verify+delete with checksum verification.\n4. **Establish idempotency**: Use atomic marker file `<archive_root>/<patient_id>/.filter_complete` to skip reprocessing; on re-run, verify marker integrity (checksum of processed file list).\n\n```json\n{\n  \"corrected_constraints\": [\n    \"Whitelist files REMAIN in source directory; non-whitelist files are MOVED to archive (direction clarified)\",\n    \"Move operation removes file from source — this is intended, not a violation of 'do not delete'\",\n    \"Exact filename matching takes precedence over pattern matching; patterns are fallback only\",\n    \"Archive path is flat: <archive_root>/<patient_id>/<filename> without totalseg_output/ subdirectory\",\n    \"Do not log 'missing' for whitelist files that don't exist in source — only log operational failures\",\n    \"Idempotency via atomic marker file; skip patient if .filter_complete exists and is valid\",\n    \"Cross-device moves require checksum verification (SHA-256) before source deletion\"\n  ],\n  \"still_missing\": [\n    \"Authoritative whitelist: exact filename list for all 8 categories (heart/lungs/ribs/T-vertebrae/clavicle/humerus/sternum/aorta)\",\n    \"Clarification: does '心脏相关' include pericardium, coronary arteries, or only heart chambers and whole heart\",\n    \"Clarification: are trachea/bronchi/esophagus implicitly included as thoracic structures\",\n    \"Filesystem topology: are source and archive on same device\",\n    \"Operational mode: fresh run or resume from partial state\"\n  ],\n  \"worker_next_focus\": [\n    \"Implement whitelist loader that accepts JSON path via environment variable WHITELIST_JSON\",\n    \"Add --dry-run mode that prints KEEP/MOVE decisions without executing\",\n    \"Detect cross-device scenario using os.stat st_dev comparison; branch to checksum-verified copy+delete if different\",\n    \"Create .filter_complete marker with JSON content: {processed_files: [...], timestamp: ..., checksum_verified: true/false}\"\n  ]\n}\n```",
+    "planner_v1_response_text": "# Worker Implementation Spec: TotalSeg Mask Whitelist Filtering\n\n## 1. Observed Facts\n\n| Item | Value |\n|------|-------|\n| Source pattern | `<dataset_root>/totalseg_output/<patient_id>/*.nii.gz` |\n| Archive pattern | `<archive_root>/<patient_id>/` (mirrors source structure for moved files) |\n| File format | Flat directory per patient, all `.nii.gz` |\n| Operation | **Move** (not copy/delete) — archive retains file, source loses it |\n| Parallelism | Patient-level independent |\n| Error handling | Log and continue; do not interrupt other patients |\n\n## 2. Whitelist Matching Rule (To Be Finalized)\n\n**Critical Gap**: The request describes categories (\"心脏相关、肺叶、肋骨、胸椎（T段）、锁骨、肱骨、胸骨、主动脉\") but **no executable matching rule** is provided.\n\nFrom `whitelist_notes.md` and examples, we observe:\n- Exact filenames like `aorta.nii.gz`, `heart.nii.gz`, `heart_atrium_left.nii.gz`\n- Lung: `lung_lower_lobe_right.nii.gz` → pattern likely `lung_*_lobe_*.nii.gz`\n- Ribs: `rib_left_1.nii.gz`, `rib_left_10.nii.gz` → pattern `rib_*.nii.gz`\n- Thoracic vertebrae: `vertebrae_T5.nii.gz` → **only T2-T12**, exclude `vertebrae_C3.nii.gz`\n- Explicit exclusions in examples: `kidney_left.nii.gz`, `spleen.nii.gz`\n\n**Worker must receive**: A definitive whitelist as **exact filename list OR precise regex patterns with test cases**, not category descriptions.\n\n## 3. Directory Structure & Mirroring\n\n```\nSource (post-operation):          Archive (receives moved files):\n<dataset_root>/totalseg_output/   <archive_root>/\n└── <patient_id>/                 └── <patient_id>/\n    ├── aorta.nii.gz  ✓ keep          └── kidney_left.nii.gz  (moved)\n    ├── heart.nii.gz  ✓ keep          └── spleen.nii.gz       (moved)\n    └── ...                             └── vertebrae_C3.nii.gz (moved)\n```\n\n- Archive directory structure **mirrors source relative path**: `<archive_root>/<patient_id>/<filename>`\n- Pre-create `<archive_root>/<patient_id>/` if absent\n\n## 4. File Operations & Safety\n\n| Aspect | Specification |\n|--------|---------------|\n| Action | **Move** (atomic rename across filesystems if possible; fallback copy+verify+delete) |\n| Overwrite policy | **UNDEFINED** — see Open Questions |\n| Verification | After move, verify source absent AND archive present with identical size |\n| Partial failure | If move fails mid-batch, log affected files; do not roll back completed moves for that patient |\n\n## 5. Logging & Missing Files\n\n- **Per-patient log**: `<workspace>/logs/<patient_id>_filter.log`\n  - Each file: `KEEP <filename>` or `MOVE <filename> -> <archive_path>` or `ERROR <filename>: <reason>`\n- **Missing file handling**: If expected whitelist file absent from source, log `MISSING <expected_filename>` and continue\n- **Global summary**: `<workspace>/logs/filter_summary.json` with per-patient counts (kept, moved, missing, errors)\n\n## 6. Worker First Actions\n\n1. **Validate inputs**: Confirm `<dataset_root>/totalseg_output/<patient_id>/` exists and readable\n2. **Load whitelist**: From provided path (see Open Questions), validate all patterns compile\n3. **List source files**: Enumerate all `*.nii.gz`, compare against whitelist\n4. **Pre-check archive**: Ensure `<archive_root>/<patient_id>/` creatable; abort patient if not\n5. **Execute moves**: For each non-whitelist file, move with verification\n6. **Write logs**: Atomically write per-patient log and update global summary\n\n## 7. Constraints & Non-Actions\n\n- **Do NOT**: Delete files permanently, copy instead of move, or modify file contents\n- **Do NOT**: Assume whitelist can be derived from category names — require explicit pattern/file list\n- **Do NOT**: Halt on single-patient errors — always continue to next patient\n- **Do NOT**: Create archive subdirectories beyond `<patient_id>/` level\n\n```json\n{\n  \"assumptions\": [\n    \"TotalSeg output filenames are stable and lowercase with .nii.gz extension\",\n    \"<archive_root> and <dataset_root> are on same filesystem or cross-filesystem move is acceptable\",\n    \"Patient IDs contain no path traversal characters (validated by caller)\",\n    \"Whitelist decision for '心脏相关' includes all heart_* variants but excludes pericardium (to be confirmed)\",\n    \"Lung lobes are identified by 'lobe' infix, not all lung_* files\"\n  ],\n  \"risks\": [\n    \"Irreversible data loss if move is interrupted and verification fails — archive may have partial, source may have lost original\",\n    \"Whitelist ambiguity: 'clavicle' vs 'clavicula' vs 'claviculus' naming — wrong assumption moves keepers to archive\",\n    \"Thoracic vertebrae boundary: T1 sometimes excluded in TotalSeg; T12 vs L1 boundary risk\",\n    \"Concurrent workers on same patient_id would race — caller must ensure patient-level isolation\",\n    \"Cross-filesystem move may be non-atomic; partial writes possible\"\n  ],\n  \"open_questions\": [\n    \"EXACT_WHITELIST_SOURCE: Where does worker read the definitive whitelist? File path, env var, or hardcoded list?\",\n    \"WHITELIST_FORMAT: Is it a JSON list of exact filenames, a regex pattern file, or a Python module with match function?\",\n    \"OVERWRITE_POLICY: If archive already contains file with same name, overwrite, skip, or error?\",\n    \"HEART_SCOPE: Does '心脏相关' include pericardium, coronary arteries, or only heart chambers?\",\n    \"CLAVICLE_HUMERUS_STERNUM_PATTERNS: Exact filename patterns for these three categories not shown in examples\",\n    \"RESUME_MARKER: Is there a completion marker to skip already-processed patients, or full re-run required?\",\n    \"ATOMICITY_REQUIREMENT: Is copy+verify+delete acceptable, or must use atomic rename?\",\n    \"LOG_RETENTION: Should logs append or overwrite on re-run?\"\n  ]\n}\n```",
+    "planner_v2_response_text": "## Planner Revision: TotalSeg Mask Whitelist Filtering\n\n### Worker_v1 Corrections\n\n**Critical Misunderstanding #1: Direction of Move**\n- Worker_v1 states: \"ensuring that only specified files are kept in the source and moved to the archive\"\n- **Correction**: The whitelist files are **KEPT in source**; non-whitelist files are **MOVED TO archive**. Worker_v1 reversed this in their summary phrasing. The operation preserves training-relevant masks in the hot path and archives the rest.\n\n**Critical Misunderstanding #2: \"Do not delete files permanently\"**\n- Worker_v1 lists this as a constraint, but the spec requires **move** (which removes from source). The constraint should be: \"Do not permanently delete files without archiving them first\" — the source directory loses the file, but it exists in archive.\n\n**Sharpening #3: Whitelist Matching Precision**\n- Worker_v1 correctly identified ambiguity but did not commit to a verification strategy. Given TotalSeg's stable naming convention, **exact filename matching against a canonical list** is safer than regex patterns. The worker should receive a JSON file mapping: `{\"exact_filenames\": [...], \"pattern_rules\": [...]}` with priority to exact matches.\n\n**Sharpening #4: Archive Structure**\n- Worker_v1's \"mirrors source relative path\" is correct but imprecise. The archive receives **flat patient directories** (no `totalseg_output/` subdirectory). Clarified: `<archive_root>/<patient_id>/<filename>` directly.\n\n**Sharpening #5: Missing File Handling**\n- Worker_v1's \"MISSING <expected_filename>\" logging is excessive. The spec says \"漏文件要记录但不要中断\" — this refers to **operation failures** (files that couldn't be moved), not **expected whitelist files that don't exist**. Do not pre-validate whitelist existence; simply process what exists.\n\n### Still Missing (Do Not Assume)\n\n| Item | Why Unavailable |\n|------|---------------|\n| Exact whitelist filename list | Category descriptions (\"心脏相关\") map to multiple TotalSeg classes; need authoritative enumeration |\n| Whether `heart.nii.gz` (whole heart) vs `heart_*` (chambers) or both | \"心脏相关\" scope undefined |\n| Whether `trachea.nii.gz` or `bronchi.nii.gz` are included | Respiratory adjacent but not explicitly listed |\n| Whether `esophagus.nii.gz` is included | Thoracic structure but not in whitelist description |\n| Archive filesystem: same as source or different? | Affects atomic move feasibility |\n| Existing archive content: fresh start or resume? | Affects overwrite policy necessity |\n\n### Worker Next Focus\n\n1. **Demand explicit whitelist artifact**: Before any file operation, verify existence of whitelist file at configurable path; fail fast with clear error if missing.\n2. **Validate move direction with dry-run**: Log intended KEEP vs MOVE actions without executing; require explicit confirmation or `--dry-run=false` flag.\n3. **Check cross-device move capability**: Test if source and archive are same filesystem; if different, implement copy+verify+delete with checksum verification.\n4. **Establish idempotency**: Use atomic marker file `<archive_root>/<patient_id>/.filter_complete` to skip reprocessing; on re-run, verify marker integrity (checksum of processed file list).\n\n```json\n{\n  \"corrected_constraints\": [\n    \"Whitelist files REMAIN in source directory; non-whitelist files are MOVED to archive (direction clarified)\",\n    \"Move operation removes file from source — this is intended, not a violation of 'do not delete'\",\n    \"Exact filename matching takes precedence over pattern matching; patterns are fallback only\",\n    \"Archive path is flat: <archive_root>/<patient_id>/<filename> without totalseg_output/ subdirectory\",\n    \"Do not log 'missing' for whitelist files that don't exist in source — only log operational failures\",\n    \"Idempotency via atomic marker file; skip patient if .filter_complete exists and is valid\",\n    \"Cross-device moves require checksum verification (SHA-256) before source deletion\"\n  ],\n  \"still_missing\": [\n    \"Authoritative whitelist: exact filename list for all 8 categories (heart/lungs/ribs/T-vertebrae/clavicle/humerus/sternum/aorta)\",\n    \"Clarification: does '心脏相关' include pericardium, coronary arteries, or only heart chambers and whole heart\",\n    \"Clarification: are trachea/bronchi/esophagus implicitly included as thoracic structures\",\n    \"Filesystem topology: are source and archive on same device\",\n    \"Operational mode: fresh run or resume from partial state\"\n  ],\n  \"worker_next_focus\": [\n    \"Implement whitelist loader that accepts JSON path via environment variable WHITELIST_JSON\",\n    \"Add --dry-run mode that prints KEEP/MOVE decisions without executing\",\n    \"Detect cross-device scenario using os.stat st_dev comparison; branch to checksum-verified copy+delete if different\",\n    \"Create .filter_complete marker with JSON content: {processed_files: [...], timestamp: ..., checksum_verified: true/false}\"\n  ]\n}\n```",
+    "planner_usage": {
+      "inputTokens": 1203,
+      "outputTokens": 1382,
+      "totalTokens": 2585
+    },
+    "planner_v1_usage": {
+      "inputTokens": 1203,
+      "outputTokens": 1382,
+      "totalTokens": 2585
+    },
+    "planner_v2_usage": {
+      "inputTokens": 2946,
+      "outputTokens": 1068,
+      "totalTokens": 4014
+    },
+    "worker_response_text": "{\n  \"understood_goal\": \"Move files from a source directory structure to an archive directory structure based on a whitelist: whitelist files remain in the source, non-whitelist files are moved to the archive, with proper logging and error handling per patient.\",\n  \"constraints_to_follow\": [\n    \"Whitelist files REMAIN in source directory; non-whitelist files are MOVED to archive (direction clarified)\",\n    \"Move operation removes file from source — this is intended, not a violation of 'do not delete'\",\n    \"Exact filename matching takes precedence over pattern matching; patterns are fallback only\",\n    \"Archive path is flat: <archive_root>/<patient_id>/<filename> without totalseg_output/ subdirectory\",\n    \"Do not log 'missing' for whitelist files that don't exist in source — only log operational failures\",\n    \"Idempotency via atomic marker file; skip patient if .filter_complete exists and is valid\",\n    \"Cross-device moves require checksum verification (SHA-256) before source deletion\"\n  ],\n  \"information_still_missing\": [\n    \"Authoritative whitelist: exact filename list for all 8 categories (heart/lungs/ribs/T-vertebrae/clavicle/humerus/sternum/aorta)\",\n    \"Clarification: does '心脏相关' include pericardium, coronary arteries, or only heart chambers and whole heart\",\n    \"Clarification: are trachea/bronchi/esophagus implicitly included as thoracic structures\",\n    \"Filesystem topology: are source and archive on same device\",\n    \"Operational mode: fresh run or resume from partial state\"\n  ],\n  \"first_3_concrete_actions\": [\n    \"Implement whitelist loader that accepts JSON path via environment variable WHITELIST_JSON\",\n    \"Add --dry-run mode that prints KEEP/MOVE decisions without executing\",\n    \"Detect cross-device scenario using os.stat st_dev comparison; branch to checksum-verified copy+delete if different\"\n  ],\n  \"understanding_delta\": [\n    \"Corrected the direction of file movement: whitelist files stay in source, others are moved to archive.\",\n    \"Clarified that moving files is intentional and not a violation of 'do not delete'.\",\n    \"Prioritized exact filename matching over regex patterns for safety and clarity.\",\n    \"Specified that archive paths are flat, without mirroring the source subdirectory structure.\",\n    \"Removed incorrect expectation of logging 'missing' for non-existent whitelist files.\",\n    \"Added requirement for idempotency using a .filter_complete marker file.\",\n    \"Added requirement for cross-device move verification using checksums.\"\n  ]\n}",
+    "worker_response_json": {
+      "understood_goal": "Move files from a source directory structure to an archive directory structure based on a whitelist: whitelist files remain in the source, non-whitelist files are moved to the archive, with proper logging and error handling per patient.",
+      "constraints_to_follow": [
+        "Whitelist files REMAIN in source directory; non-whitelist files are MOVED to archive (direction clarified)",
+        "Move operation removes file from source — this is intended, not a violation of 'do not delete'",
+        "Exact filename matching takes precedence over pattern matching; patterns are fallback only",
+        "Archive path is flat: <archive_root>/<patient_id>/<filename> without totalseg_output/ subdirectory",
+        "Do not log 'missing' for whitelist files that don't exist in source — only log operational failures",
+        "Idempotency via atomic marker file; skip patient if .filter_complete exists and is valid",
+        "Cross-device moves require checksum verification (SHA-256) before source deletion"
+      ],
+      "information_still_missing": [
+        "Authoritative whitelist: exact filename list for all 8 categories (heart/lungs/ribs/T-vertebrae/clavicle/humerus/sternum/aorta)",
+        "Clarification: does '心脏相关' include pericardium, coronary arteries, or only heart chambers and whole heart",
+        "Clarification: are trachea/bronchi/esophagus implicitly included as thoracic structures",
+        "Filesystem topology: are source and archive on same device",
+        "Operational mode: fresh run or resume from partial state"
+      ],
+      "first_3_concrete_actions": [
+        "Implement whitelist loader that accepts JSON path via environment variable WHITELIST_JSON",
+        "Add --dry-run mode that prints KEEP/MOVE decisions without executing",
+        "Detect cross-device scenario using os.stat st_dev comparison; branch to checksum-verified copy+delete if different"
+      ],
+      "understanding_delta": [
+        "Corrected the direction of file movement: whitelist files stay in source, others are moved to archive.",
+        "Clarified that moving files is intentional and not a violation of 'do not delete'.",
+        "Prioritized exact filename matching over regex patterns for safety and clarity.",
+        "Specified that archive paths are flat, without mirroring the source subdirectory structure.",
+        "Removed incorrect expectation of logging 'missing' for non-existent whitelist files.",
+        "Added requirement for idempotency using a .filter_complete marker file.",
+        "Added requirement for cross-device move verification using checksums."
+      ]
+    },
+    "worker_v1_response_text": "{\n  \"understood_goal\": \"Move files from a source directory structure to an archive directory structure based on a whitelist of filenames or patterns, ensuring that only specified files are kept in the source and moved to the archive, while logging operations and handling errors gracefully per patient.\",\n  \"constraints_to_follow\": [\n    \"Perform atomic move operations (rename) when possible, fallback to copy+verify+delete if needed.\",\n    \"Do not delete files permanently; only move them.\",\n    \"Do not derive whitelist from category names—require explicit filename or pattern list.\",\n    \"Process patients independently and continue processing other patients even if one fails.\",\n    \"Pre-create archive directories as needed, mirroring the source path structure.\",\n    \"Log all operations per patient into a dedicated log file.\",\n    \"Maintain a global summary JSON file tracking counts of kept, moved, missing, and error files per patient.\",\n    \"Do not modify file contents during operation.\",\n    \"Do not create subdirectories beyond the patient ID level in the archive.\"\n  ],\n  \"information_still_missing\": [\n    \"The exact source location of the whitelist (file path, environment variable, or hardcoded list).\",\n    \"The format of the whitelist (list of exact filenames, regex patterns, or a callable function).\",\n    \"The overwrite policy for existing files in the archive.\",\n    \"Clarification on whether '心脏相关' includes pericardium, coronary arteries, or only heart chambers.\",\n    \"Exact filename patterns for clavicle, humerus, and sternum categories.\",\n    \"Whether there is a resume marker to avoid reprocessing completed patients.\",\n    \"Whether atomic rename is required or if copy+verify+delete is acceptable.\",\n    \"Whether logs should append or overwrite on re-run.\"\n  ],\n  \"first_3_concrete_actions\": [\n    \"Validate that the dataset root directory exists and is readable.\",\n    \"Determine the source of the whitelist and confirm its format (e.g., JSON list, regex file).\",\n    \"Check that the archive root directory is writable and pre-create the patient-specific archive directory if needed.\"\n  ]\n}",
+    "worker_v1_response_json": {
+      "understood_goal": "Move files from a source directory structure to an archive directory structure based on a whitelist of filenames or patterns, ensuring that only specified files are kept in the source and moved to the archive, while logging operations and handling errors gracefully per patient.",
+      "constraints_to_follow": [
+        "Perform atomic move operations (rename) when possible, fallback to copy+verify+delete if needed.",
+        "Do not delete files permanently; only move them.",
+        "Do not derive whitelist from category names—require explicit filename or pattern list.",
+        "Process patients independently and continue processing other patients even if one fails.",
+        "Pre-create archive directories as needed, mirroring the source path structure.",
+        "Log all operations per patient into a dedicated log file.",
+        "Maintain a global summary JSON file tracking counts of kept, moved, missing, and error files per patient.",
+        "Do not modify file contents during operation.",
+        "Do not create subdirectories beyond the patient ID level in the archive."
+      ],
+      "information_still_missing": [
+        "The exact source location of the whitelist (file path, environment variable, or hardcoded list).",
+        "The format of the whitelist (list of exact filenames, regex patterns, or a callable function).",
+        "The overwrite policy for existing files in the archive.",
+        "Clarification on whether '心脏相关' includes pericardium, coronary arteries, or only heart chambers.",
+        "Exact filename patterns for clavicle, humerus, and sternum categories.",
+        "Whether there is a resume marker to avoid reprocessing completed patients.",
+        "Whether atomic rename is required or if copy+verify+delete is acceptable.",
+        "Whether logs should append or overwrite on re-run."
+      ],
+      "first_3_concrete_actions": [
+        "Validate that the dataset root directory exists and is readable.",
+        "Determine the source of the whitelist and confirm its format (e.g., JSON list, regex file).",
+        "Check that the archive root directory is writable and pre-create the patient-specific archive directory if needed."
+      ]
+    },
+    "worker_v1_usage": {
+      "inputTokens": 1737,
+      "outputTokens": 432,
+      "totalTokens": 2169
+    },
+    "worker_v2_response_text": "{\n  \"understood_goal\": \"Move files from a source directory structure to an archive directory structure based on a whitelist: whitelist files remain in the source, non-whitelist files are moved to the archive, with proper logging and error handling per patient.\",\n  \"constraints_to_follow\": [\n    \"Whitelist files REMAIN in source directory; non-whitelist files are MOVED to archive (direction clarified)\",\n    \"Move operation removes file from source — this is intended, not a violation of 'do not delete'\",\n    \"Exact filename matching takes precedence over pattern matching; patterns are fallback only\",\n    \"Archive path is flat: <archive_root>/<patient_id>/<filename> without totalseg_output/ subdirectory\",\n    \"Do not log 'missing' for whitelist files that don't exist in source — only log operational failures\",\n    \"Idempotency via atomic marker file; skip patient if .filter_complete exists and is valid\",\n    \"Cross-device moves require checksum verification (SHA-256) before source deletion\"\n  ],\n  \"information_still_missing\": [\n    \"Authoritative whitelist: exact filename list for all 8 categories (heart/lungs/ribs/T-vertebrae/clavicle/humerus/sternum/aorta)\",\n    \"Clarification: does '心脏相关' include pericardium, coronary arteries, or only heart chambers and whole heart\",\n    \"Clarification: are trachea/bronchi/esophagus implicitly included as thoracic structures\",\n    \"Filesystem topology: are source and archive on same device\",\n    \"Operational mode: fresh run or resume from partial state\"\n  ],\n  \"first_3_concrete_actions\": [\n    \"Implement whitelist loader that accepts JSON path via environment variable WHITELIST_JSON\",\n    \"Add --dry-run mode that prints KEEP/MOVE decisions without executing\",\n    \"Detect cross-device scenario using os.stat st_dev comparison; branch to checksum-verified copy+delete if different\"\n  ],\n  \"understanding_delta\": [\n    \"Corrected the direction of file movement: whitelist files stay in source, others are moved to archive.\",\n    \"Clarified that moving files is intentional and not a violation of 'do not delete'.\",\n    \"Prioritized exact filename matching over regex patterns for safety and clarity.\",\n    \"Specified that archive paths are flat, without mirroring the source subdirectory structure.\",\n    \"Removed incorrect expectation of logging 'missing' for non-existent whitelist files.\",\n    \"Added requirement for idempotency using a .filter_complete marker file.\",\n    \"Added requirement for cross-device move verification using checksums.\"\n  ]\n}",
+    "worker_v2_response_json": {
+      "understood_goal": "Move files from a source directory structure to an archive directory structure based on a whitelist: whitelist files remain in the source, non-whitelist files are moved to the archive, with proper logging and error handling per patient.",
+      "constraints_to_follow": [
+        "Whitelist files REMAIN in source directory; non-whitelist files are MOVED to archive (direction clarified)",
+        "Move operation removes file from source — this is intended, not a violation of 'do not delete'",
+        "Exact filename matching takes precedence over pattern matching; patterns are fallback only",
+        "Archive path is flat: <archive_root>/<patient_id>/<filename> without totalseg_output/ subdirectory",
+        "Do not log 'missing' for whitelist files that don't exist in source — only log operational failures",
+        "Idempotency via atomic marker file; skip patient if .filter_complete exists and is valid",
+        "Cross-device moves require checksum verification (SHA-256) before source deletion"
+      ],
+      "information_still_missing": [
+        "Authoritative whitelist: exact filename list for all 8 categories (heart/lungs/ribs/T-vertebrae/clavicle/humerus/sternum/aorta)",
+        "Clarification: does '心脏相关' include pericardium, coronary arteries, or only heart chambers and whole heart",
+        "Clarification: are trachea/bronchi/esophagus implicitly included as thoracic structures",
+        "Filesystem topology: are source and archive on same device",
+        "Operational mode: fresh run or resume from partial state"
+      ],
+      "first_3_concrete_actions": [
+        "Implement whitelist loader that accepts JSON path via environment variable WHITELIST_JSON",
+        "Add --dry-run mode that prints KEEP/MOVE decisions without executing",
+        "Detect cross-device scenario using os.stat st_dev comparison; branch to checksum-verified copy+delete if different"
+      ],
+      "understanding_delta": [
+        "Corrected the direction of file movement: whitelist files stay in source, others are moved to archive.",
+        "Clarified that moving files is intentional and not a violation of 'do not delete'.",
+        "Prioritized exact filename matching over regex patterns for safety and clarity.",
+        "Specified that archive paths are flat, without mirroring the source subdirectory structure.",
+        "Removed incorrect expectation of logging 'missing' for non-existent whitelist files.",
+        "Added requirement for idempotency using a .filter_complete marker file.",
+        "Added requirement for cross-device move verification using checksums."
+      ]
+    },
+    "worker_v2_usage": {
+      "inputTokens": 3431,
+      "outputTokens": 539,
+      "totalTokens": 3970
+    },
+    "deterministic_contract_checks": {
+      "planner_non_empty": true,
+      "planner_has_json_tail": true,
+      "worker_json_parse_ok": true,
+      "worker_required_fields_present": true,
+      "violations": [],
+      "planner_v2_has_json_tail": true,
+      "worker_v2_json_parse_ok": true,
+      "worker_v2_required_fields_present": true
+    },
+    "judge_model": "gpt-5.4-mini",
+    "judge_response_text": "{\n  \"planner_constraint_coverage_score\": 1,\n  \"planner_risk_flagging_score\": 1,\n  \"worker_v1_score\": 5,\n  \"planner_revision_score\": 3,\n  \"worker_v2_score\": 4,\n  \"understanding_delta_score\": 2,\n  \"spec_score\": 4,\n  \"worker_score\": 4,\n  \"handoff_performance_score\": 4,\n  \"final_verdict\": \"spec_weak\",\n  \"covered_or_flagged_constraints\": [\n    \"Captured move-not-delete semantics for the triage action.\",\n    \"Captured mirrored archive structure at the patient level: <archive_root>/<patient_id>/<filename>.\",\n    \"Captured patient-level independence / parallelism.\",\n    \"Captured log-and-continue behavior for errors.\",\n    \"Explicitly flagged that the exact whitelist material was missing rather than fully known.\"\n  ],\n  \"covered_gold_constraints\": [\n    \"Move non-whitelist files into the archive mirror rather than deleting them.\",\n    \"Mirror structure under <archive_root>/<patient_id>/.\",\n    \"Log failures and continue without aborting the whole run.\",\n    \"Keep patient-level runs independent.\"\n  ],\n  \"missed_gold_constraints\": [\n    \"Treat the whitelist as exact filename membership; planner drifted toward patterns and category-based reasoning.\",\n    \"Preserve the exact action boundary that non-whitelist files are moved while whitelist files remain in source without inventing a prefix/category heuristic.\",\n    \"Preserve unresolved whitelist material as an explicit missing handoff artifact instead of implying a stable pattern rule.\",\n    \"Missing source files should be logged and skipped without aborting; planner_v2 incorrectly downplayed missing-file logging.\",\n    \"Use visible examples to prevent false generalization such as rib_left_1 vs rib_left_10 being distinct exact filenames.\",\n    \"Keep the archive mirror as <archive_root>/<patient_id>/<file>.nii.gz without introducing extra policy layers like marker files or checksum-based cross-device logic.\"\n  ],\n  \"forbidden_assumptions_made\": [\n    \"Planner_v1 implied pattern/rule expansion from examples and a hidden whitelist_notes.md artifact.\",\n    \"Planner_v2 introduced a wrong policy by suppressing missing-file logging for absent whitelist files.\",\n    \"Planner_v2 added idempotency marker and checksum-verified copy+delete behavior that were not part of the task boundary.\",\n    \"Worker_v2 accepted the planner's suppression of missing-file logging instead of preserving the skip-and-log requirement.\"\n  ],\n  \"separation_notes\": \"This episode separates models on whether they keep the whitelist boundary exact and unresolved. Strong solutions must say 'exact filename membership is required, but the full list is still missing' and must not drift into prefix/category heuristics or extra operational machinery. The submitted handoff partially preserves the move/mirror shape, but it fails to protect the exact-membership constraint and weakens missing-file handling.\",\n  \"concise_rationale\": \"The planner preserved the broad move-to-archive triage shape, but it did not robustly lock the worker onto exact filename membership. It introduced unsafe pattern-language, then planner_v2 incorrectly changed missing-file behavior and added extra machinery. The worker followed those weaker directions and did not keep the missing exact whitelist artifact as the central unresolved item.\"\n}",
+    "judge_response_json": {
+      "planner_constraint_coverage_score": 1,
+      "planner_risk_flagging_score": 1,
+      "worker_v1_score": 5,
+      "planner_revision_score": 3,
+      "worker_v2_score": 4,
+      "understanding_delta_score": 2,
+      "spec_score": 4,
+      "worker_score": 4,
+      "handoff_performance_score": 4,
+      "final_verdict": "spec_weak",
+      "covered_or_flagged_constraints": [
+        "Captured move-not-delete semantics for the triage action.",
+        "Captured mirrored archive structure at the patient level: <archive_root>/<patient_id>/<filename>.",
+        "Captured patient-level independence / parallelism.",
+        "Captured log-and-continue behavior for errors.",
+        "Explicitly flagged that the exact whitelist material was missing rather than fully known."
+      ],
+      "covered_gold_constraints": [
+        "Move non-whitelist files into the archive mirror rather than deleting them.",
+        "Mirror structure under <archive_root>/<patient_id>/.",
+        "Log failures and continue without aborting the whole run.",
+        "Keep patient-level runs independent."
+      ],
+      "missed_gold_constraints": [
+        "Treat the whitelist as exact filename membership; planner drifted toward patterns and category-based reasoning.",
+        "Preserve the exact action boundary that non-whitelist files are moved while whitelist files remain in source without inventing a prefix/category heuristic.",
+        "Preserve unresolved whitelist material as an explicit missing handoff artifact instead of implying a stable pattern rule.",
+        "Missing source files should be logged and skipped without aborting; planner_v2 incorrectly downplayed missing-file logging.",
+        "Use visible examples to prevent false generalization such as rib_left_1 vs rib_left_10 being distinct exact filenames.",
+        "Keep the archive mirror as <archive_root>/<patient_id>/<file>.nii.gz without introducing extra policy layers like marker files or checksum-based cross-device logic."
+      ],
+      "forbidden_assumptions_made": [
+        "Planner_v1 implied pattern/rule expansion from examples and a hidden whitelist_notes.md artifact.",
+        "Planner_v2 introduced a wrong policy by suppressing missing-file logging for absent whitelist files.",
+        "Planner_v2 added idempotency marker and checksum-verified copy+delete behavior that were not part of the task boundary.",
+        "Worker_v2 accepted the planner's suppression of missing-file logging instead of preserving the skip-and-log requirement."
+      ],
+      "separation_notes": "This episode separates models on whether they keep the whitelist boundary exact and unresolved. Strong solutions must say 'exact filename membership is required, but the full list is still missing' and must not drift into prefix/category heuristics or extra operational machinery. The submitted handoff partially preserves the move/mirror shape, but it fails to protect the exact-membership constraint and weakens missing-file handling.",
+      "concise_rationale": "The planner preserved the broad move-to-archive triage shape, but it did not robustly lock the worker onto exact filename membership. It introduced unsafe pattern-language, then planner_v2 incorrectly changed missing-file behavior and added extra machinery. The worker followed those weaker directions and did not keep the missing exact whitelist artifact as the central unresolved item."
+    },
+    "judge_usage": {
+      "input_tokens": 7910,
+      "input_tokens_details": {
+        "cached_tokens": 0
+      },
+      "output_tokens": 1173,
+      "output_tokens_details": {
+        "reasoning_tokens": 496
+      },
+      "total_tokens": 9083
+    },
+    "elapsed_s": 42.472,
+    "source_run_relpath": "run_result/T2_four_planner_probe/output/t2_matrix_20260505_104641",
+    "source_matrix_relpath": "run_result/T2_four_planner_probe/output/t2_matrix_20260505_104641/matrix.json",
+    "source_record_index": 1
+  }
+}

@@ -1,0 +1,120 @@
+{
+  "generated_at": "20260509_182847",
+  "repo_root": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow",
+  "region": "us-east-2",
+  "profile": "zifei_admin",
+  "mock_agent": false,
+  "elapsed_s": 3.753,
+  "records": [
+    {
+      "task_id": "t1_cli_finished_pair_promote_atomic_manifest_A0_strict",
+      "task_path": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t1_tasks\\test_ground\\t1_cli_finished_pair_promote_atomic_manifest_A0_strict.yaml",
+      "judge_path": null,
+      "runner_label": "kimi_k2_5",
+      "runner_model_id": "moonshotai.kimi-k2.5",
+      "mock_agent": false,
+      "sandbox_root": "C:\\Users\\agares\\AppData\\Local\\Temp\\t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_64nx56co",
+      "sandbox_kept": false,
+      "fixture_id": "fixtures_t1_cli_finished_pair_promote_atomic_manifest",
+      "dry_run_approved": false,
+      "dry_run_approval": {
+        "approved": false,
+        "approved_turn": null,
+        "approved_command_ids": [],
+        "prior_rejected_attempts": 0,
+        "attempts": []
+      },
+      "final_phase": "start",
+      "final_answer": "Inspecting workspace to gather filesystem inventory before proceeding.",
+      "errors": [
+        "condition_violation_turn_1: A0_strict requires final_answer only"
+      ],
+      "oracle": {
+        "passed": true,
+        "filesystem_pass": true,
+        "manifest_semantic_pass": true,
+        "manifest_exact_token_pass": true,
+        "failures": [],
+        "checks": [],
+        "final_snapshot_count": 12
+      },
+      "execution_observations": [],
+      "transcript": [
+        {
+          "turn": 1,
+          "actor": "agent",
+          "next_step": "inspect_workspace",
+          "raw_text": "```json\n{\n  \"next_step\": \"inspect_workspace\",\n  \"questions\": [],\n  \"tool_calls\": [\n    {\n      \"tool_name\": \"bash\",\n      \"arguments\": {\"command\": \"ls -la /workspace/finished_stage/\"},\n      \"purpose\": \"Check workspace structure and existing directories\"\n    },\n    {\n      \"tool_name\": \"bash\",\n      \"arguments\": {\"command\": \"ls /workspace/finished_stage/raw_ct/ 2>/dev/null | head -20; echo \\\"---\\\"; ls /workspace/finished_stage/raw_ct/ 2>/dev/null | wc -l\"},\n      \"purpose\": \"Get raw_ct inventory count and sample\"\n    },\n    {\n      \"tool_name\": \"bash\",\n      \"arguments\": {\"command\": \"ls /workspace/finished_stage/raw_mask/ 2>/dev/null | head -20; echo \\\"---\\\"; ls /workspace/finished_stage/raw_mask/ 2>/dev/null | wc -l\"},\n      \"purpose\": \"Get raw_mask inventory count and sample\"\n    },\n    {\n      \"tool_name\": \"bash\",\n      \"arguments\": {\"command\": \"ls /workspace/finished_stage/final_ct/ 2>/dev/null | wc -l; ls /workspace/finished_stage/final_mask/ 2>/dev/null | wc -l\"},\n      \"purpose\": \"Check existing final directories for conflicts\"\n    },\n    {\n      \"tool_name\": \"bash\",\n      \"arguments\": {\"command\": \"test -f /workspace/finished_stage/promotion_manifest.csv && echo \\\"EXISTS\\\" || echo \\\"NOT_EXISTS\\\"; test -f /workspace/finished_stage/promotion_rollback.sh && echo \\\"EXISTS\\\" || echo \\\"NOT_EXISTS\\\"\"},\n      \"purpose\": \"Check if manifest files already exist\"\n    }\n  ],\n  \"slots_targeted\": [\"raw_ct_inventory\",\"raw_mask_inventory\",\"final_ct_conflicts\",\"final_mask_conflicts\",\"manifest_output_conflict\",\"rollback_manifest_conflict\"],\n  \"user_facing_response\": \"Inspecting workspace to gather filesystem inventory before proceeding.\",\n  \"brief_rationale\": \"Need to confirm raw_ct files, raw_mask directories, final destination conflicts, and existing manifest files before dry_run.\"\n}\n```",
+          "action": {
+            "next_step": "inspect_workspace",
+            "questions": [],
+            "tool_calls": [
+              {
+                "tool_name": "bash",
+                "arguments": {
+                  "command": "ls -la /workspace/finished_stage/"
+                },
+                "purpose": "Check workspace structure and existing directories"
+              },
+              {
+                "tool_name": "bash",
+                "arguments": {
+                  "command": "ls /workspace/finished_stage/raw_ct/ 2>/dev/null | head -20; echo \"---\"; ls /workspace/finished_stage/raw_ct/ 2>/dev/null | wc -l"
+                },
+                "purpose": "Get raw_ct inventory count and sample"
+              },
+              {
+                "tool_name": "bash",
+                "arguments": {
+                  "command": "ls /workspace/finished_stage/raw_mask/ 2>/dev/null | head -20; echo \"---\"; ls /workspace/finished_stage/raw_mask/ 2>/dev/null | wc -l"
+                },
+                "purpose": "Get raw_mask inventory count and sample"
+              },
+              {
+                "tool_name": "bash",
+                "arguments": {
+                  "command": "ls /workspace/finished_stage/final_ct/ 2>/dev/null | wc -l; ls /workspace/finished_stage/final_mask/ 2>/dev/null | wc -l"
+                },
+                "purpose": "Check existing final directories for conflicts"
+              },
+              {
+                "tool_name": "bash",
+                "arguments": {
+                  "command": "test -f /workspace/finished_stage/promotion_manifest.csv && echo \"EXISTS\" || echo \"NOT_EXISTS\"; test -f /workspace/finished_stage/promotion_rollback.sh && echo \"EXISTS\" || echo \"NOT_EXISTS\""
+                },
+                "purpose": "Check if manifest files already exist"
+              }
+            ],
+            "slots_targeted": [
+              "raw_ct_inventory",
+              "raw_mask_inventory",
+              "final_ct_conflicts",
+              "final_mask_conflicts",
+              "manifest_output_conflict",
+              "rollback_manifest_conflict"
+            ],
+            "user_facing_response": "Inspecting workspace to gather filesystem inventory before proceeding.",
+            "brief_rationale": "Need to confirm raw_ct files, raw_mask directories, final destination conflicts, and existing manifest files before dry_run."
+          },
+          "usage": {
+            "inputTokens": 2043,
+            "outputTokens": 458,
+            "totalTokens": 2501
+          }
+        },
+        {
+          "turn": 1,
+          "actor": "system",
+          "type": "condition_violation",
+          "content": "A0_strict allows only one safe final response with no tools and no follow-up questions."
+        }
+      ],
+      "summary": {
+        "oracle_passed": true,
+        "tool_observation_count": 0,
+        "rejected_tool_observation_count": 0,
+        "turns": 1
+      }
+    }
+  ]
+}

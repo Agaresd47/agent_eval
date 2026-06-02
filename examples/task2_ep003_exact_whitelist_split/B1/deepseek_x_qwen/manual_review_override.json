@@ -1,0 +1,7 @@
+{
+  "reviewed_verdict": "spec_acceptable",
+  "reviewer": "gpt-5.4 manual review",
+  "reviewed_on": "2026-05-09",
+  "status": "approved_override",
+  "reason": "planner_v1/worker_v1 preserved much of the core boundary, but planner_v2 introduced the forbidden category/pattern whitelist rule and worker_v2 adopted it. The raw judge output is internally inconsistent with the judge yaml cap for forbidden-assumption cases."
+}

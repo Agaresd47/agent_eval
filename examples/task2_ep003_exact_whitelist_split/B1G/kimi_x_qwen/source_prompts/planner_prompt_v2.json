@@ -1,0 +1,59 @@
+{
+  "condition": "B1_guardrailed",
+  "seed": 0,
+  "episode_id": "ep003_totalseg_whitelist_split",
+  "original_request": "TotalSeg 输出每个病人 100+ 个结构 mask，但这条线后面训练只保留：\n心脏相关、肺叶、肋骨、胸椎（T 段）、锁骨、肱骨、胸骨、主动脉。\n\n请帮我写一个 worker-ready spec：\n对每个病人目录，把**不在白名单内**的 mask 文件搬到另一个目录留存，\n源目录只保留白名单内的文件。\n\n源：<dataset_root>/totalseg_output/<patient_id>/\n分流目标：<archive_root>/<patient_id>/\n\n这份 spec 里需要明确：\n- 白名单匹配到底按“类别 / 前缀”还是按“精确文件名”\n- 分流动作是 move、delete 还是 copy\n- 目标目录结构怎么镜像\n- 缺失文件怎么处理\n\n病人级独立，可并行。漏文件要记录但不要中断。\n",
+  "planner_v1_spec": "# Worker Implementation Spec: TotalSeg Mask Whitelist Filtering\n\n## 1. Observed Facts\n\n| Item | Value |\n|------|-------|\n| Source pattern | `<dataset_root>/totalseg_output/<patient_id>/*.nii.gz` |\n| Archive pattern | `<archive_root>/<patient_id>/` (mirrors source structure for moved files) |\n| File format | Flat directory per patient, all `.nii.gz` |\n| Operation | **Move** (not copy/delete) — archive retains file, source loses it |\n| Parallelism | Patient-level independent |\n| Error handling | Log and continue; do not interrupt other patients |\n\n## 2. Whitelist Matching Rule (To Be Finalized)\n\n**Critical Gap**: The request describes categories (\"心脏相关、肺叶、肋骨、胸椎（T段）、锁骨、肱骨、胸骨、主动脉\") but **no executable matching rule** is provided.\n\nFrom `whitelist_notes.md` and examples, we observe:\n- Exact filenames like `aorta.nii.gz`, `heart.nii.gz`, `heart_atrium_left.nii.gz`\n- Lung: `lung_lower_lobe_right.nii.gz` → pattern likely `lung_*_lobe_*.nii.gz`\n- Ribs: `rib_left_1.nii.gz`, `rib_left_10.nii.gz` → pattern `rib_*.nii.gz`\n- Thoracic vertebrae: `vertebrae_T5.nii.gz` → **only T2-T12**, exclude `vertebrae_C3.nii.gz`\n- Explicit exclusions in examples: `kidney_left.nii.gz`, `spleen.nii.gz`\n\n**Worker must receive**: A definitive whitelist as **exact filename list OR precise regex patterns with test cases**, not category descriptions.\n\n## 3. Directory Structure & Mirroring\n\n```\nSource (post-operation):          Archive (receives moved files):\n<dataset_root>/totalseg_output/   <archive_root>/\n└── <patient_id>/                 └── <patient_id>/\n    ├── aorta.nii.gz  ✓ keep          └── kidney_left.nii.gz  (moved)\n    ├── heart.nii.gz  ✓ keep          └── spleen.nii.gz       (moved)\n    └── ...                             └── vertebrae_C3.nii.gz (moved)\n```\n\n- Archive directory structure **mirrors source relative path**: `<archive_root>/<patient_id>/<filename>`\n- Pre-create `<archive_root>/<patient_id>/` if absent\n\n## 4. File Operations & Safety\n\n| Aspect | Specification |\n|--------|---------------|\n| Action | **Move** (atomic rename across filesystems if possible; fallback copy+verify+delete) |\n| Overwrite policy | **UNDEFINED** — see Open Questions |\n| Verification | After move, verify source absent AND archive present with identical size |\n| Partial failure | If move fails mid-batch, log affected files; do not roll back completed moves for that patient |\n\n## 5. Logging & Missing Files\n\n- **Per-patient log**: `<workspace>/logs/<patient_id>_filter.log`\n  - Each file: `KEEP <filename>` or `MOVE <filename> -> <archive_path>` or `ERROR <filename>: <reason>`\n- **Missing file handling**: If expected whitelist file absent from source, log `MISSING <expected_filename>` and continue\n- **Global summary**: `<workspace>/logs/filter_summary.json` with per-patient counts (kept, moved, missing, errors)\n\n## 6. Worker First Actions\n\n1. **Validate inputs**: Confirm `<dataset_root>/totalseg_output/<patient_id>/` exists and readable\n2. **Load whitelist**: From provided path (see Open Questions), validate all patterns compile\n3. **List source files**: Enumerate all `*.nii.gz`, compare against whitelist\n4. **Pre-check archive**: Ensure `<archive_root>/<patient_id>/` creatable; abort patient if not\n5. **Execute moves**: For each non-whitelist file, move with verification\n6. **Write logs**: Atomically write per-patient log and update global summary\n\n## 7. Constraints & Non-Actions\n\n- **Do NOT**: Delete files permanently, copy instead of move, or modify file contents\n- **Do NOT**: Assume whitelist can be derived from category names — require explicit pattern/file list\n- **Do NOT**: Halt on single-patient errors — always continue to next patient\n- **Do NOT**: Create archive subdirectories beyond `<patient_id>/` level\n\n```json\n{\n  \"assumptions\": [\n    \"TotalSeg output filenames are stable and lowercase with .nii.gz extension\",\n    \"<archive_root> and <dataset_root> are on same filesystem or cross-filesystem move is acceptable\",\n    \"Patient IDs contain no path traversal characters (validated by caller)\",\n    \"Whitelist decision for '心脏相关' includes all heart_* variants but excludes pericardium (to be confirmed)\",\n    \"Lung lobes are identified by 'lobe' infix, not all lung_* files\"\n  ],\n  \"risks\": [\n    \"Irreversible data loss if move is interrupted and verification fails — archive may have partial, source may have lost original\",\n    \"Whitelist ambiguity: 'clavicle' vs 'clavicula' vs 'claviculus' naming — wrong assumption moves keepers to archive\",\n    \"Thoracic vertebrae boundary: T1 sometimes excluded in TotalSeg; T12 vs L1 boundary risk\",\n    \"Concurrent workers on same patient_id would race — caller must ensure patient-level isolation\",\n    \"Cross-filesystem move may be non-atomic; partial writes possible\"\n  ],\n  \"open_questions\": [\n    \"EXACT_WHITELIST_SOURCE: Where does worker read the definitive whitelist? File path, env var, or hardcoded list?\",\n    \"WHITELIST_FORMAT: Is it a JSON list of exact filenames, a regex pattern file, or a Python module with match function?\",\n    \"OVERWRITE_POLICY: If archive already contains file with same name, overwrite, skip, or error?\",\n    \"HEART_SCOPE: Does '心脏相关' include pericardium, coronary arteries, or only heart chambers?\",\n    \"CLAVICLE_HUMERUS_STERNUM_PATTERNS: Exact filename patterns for these three categories not shown in examples\",\n    \"RESUME_MARKER: Is there a completion marker to skip already-processed patients, or full re-run required?\",\n    \"ATOMICITY_REQUIREMENT: Is copy+verify+delete acceptable, or must use atomic rename?\",\n    \"LOG_RETENTION: Should logs append or overwrite on re-run?\"\n  ]\n}\n```",
+  "worker_v1_interpretation_text": "{\n  \"understood_goal\": \"Move files from a source directory structure to an archive directory structure based on a whitelist of filenames or patterns, ensuring that only specified files are kept in the source and moved to the archive, while logging operations and handling errors gracefully per patient.\",\n  \"constraints_to_follow\": [\n    \"Perform atomic move operations (rename) when possible, fallback to copy+verify+delete if needed.\",\n    \"Do not delete files permanently; only move them.\",\n    \"Do not derive whitelist from category names—require explicit filename or pattern list.\",\n    \"Process patients independently and continue processing other patients even if one fails.\",\n    \"Pre-create archive directories as needed, mirroring the source path structure.\",\n    \"Log all operations per patient into a dedicated log file.\",\n    \"Maintain a global summary JSON file tracking counts of kept, moved, missing, and error files per patient.\",\n    \"Do not modify file contents during operation.\",\n    \"Do not create subdirectories beyond the patient ID level in the archive.\"\n  ],\n  \"information_still_missing\": [\n    \"The exact source location of the whitelist (file path, environment variable, or hardcoded list).\",\n    \"The format of the whitelist (list of exact filenames, regex patterns, or a callable function).\",\n    \"The overwrite policy for existing files in the archive.\",\n    \"Clarification on whether '心脏相关' includes pericardium, coronary arteries, or only heart chambers.\",\n    \"Exact filename patterns for clavicle, humerus, and sternum categories.\",\n    \"Whether there is a resume marker to avoid reprocessing completed patients.\",\n    \"Whether atomic rename is required or if copy+verify+delete is acceptable.\",\n    \"Whether logs should append or overwrite on re-run.\"\n  ],\n  \"first_3_concrete_actions\": [\n    \"Validate that the dataset root directory exists and is readable.\",\n    \"Determine the source of the whitelist and confirm its format (e.g., JSON list, regex file).\",\n    \"Check that the archive root directory is writable and pre-create the patient-specific archive directory if needed.\"\n  ]\n}",
+  "worker_v1_interpretation_json": {
+    "understood_goal": "Move files from a source directory structure to an archive directory structure based on a whitelist of filenames or patterns, ensuring that only specified files are kept in the source and moved to the archive, while logging operations and handling errors gracefully per patient.",
+    "constraints_to_follow": [
+      "Perform atomic move operations (rename) when possible, fallback to copy+verify+delete if needed.",
+      "Do not delete files permanently; only move them.",
+      "Do not derive whitelist from category names—require explicit filename or pattern list.",
+      "Process patients independently and continue processing other patients even if one fails.",
+      "Pre-create archive directories as needed, mirroring the source path structure.",
+      "Log all operations per patient into a dedicated log file.",
+      "Maintain a global summary JSON file tracking counts of kept, moved, missing, and error files per patient.",
+      "Do not modify file contents during operation.",
+      "Do not create subdirectories beyond the patient ID level in the archive."
+    ],
+    "information_still_missing": [
+      "The exact source location of the whitelist (file path, environment variable, or hardcoded list).",
+      "The format of the whitelist (list of exact filenames, regex patterns, or a callable function).",
+      "The overwrite policy for existing files in the archive.",
+      "Clarification on whether '心脏相关' includes pericardium, coronary arteries, or only heart chambers.",
+      "Exact filename patterns for clavicle, humerus, and sternum categories.",
+      "Whether there is a resume marker to avoid reprocessing completed patients.",
+      "Whether atomic rename is required or if copy+verify+delete is acceptable.",
+      "Whether logs should append or overwrite on re-run."
+    ],
+    "first_3_concrete_actions": [
+      "Validate that the dataset root directory exists and is readable.",
+      "Determine the source of the whitelist and confirm its format (e.g., JSON list, regex file).",
+      "Check that the archive root directory is writable and pre-create the patient-specific archive directory if needed."
+    ]
+  },
+  "task": "Write a second planner message that corrects worker_v1 misunderstandings and fills or flags missing details.",
+  "instructions": [
+    "Do not write final implementation code.",
+    "Focus on the delta: what worker_v1 misunderstood, what the worker still lacks, and what the worker should do differently.",
+    "If an exact detail is unknown, say exactly what must be verified instead of inventing a default.",
+    "Preserve correct worker_v1 understanding; do not rewrite everything generically.",
+    "End with exactly one fenced ```json block containing corrected_constraints, still_missing, and worker_next_focus."
+  ],
+  "output_contract": {
+    "format": "markdown revision message followed by exactly one final fenced json block",
+    "json_block_schema": {
+      "corrected_constraints": [
+        "constraints corrected or sharpened after reading worker_v1"
+      ],
+      "still_missing": [
+        "details still unavailable and not safe to assume"
+      ],
+      "worker_next_focus": [
+        "specific things worker should inspect or verify next"
+      ]
+    }
+  }
+}

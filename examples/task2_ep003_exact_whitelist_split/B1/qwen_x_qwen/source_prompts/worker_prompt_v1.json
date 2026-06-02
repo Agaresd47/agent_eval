@@ -1,0 +1,24 @@
+{
+  "condition": "B1",
+  "seed": 0,
+  "episode_id": "ep003_totalseg_whitelist_split",
+  "planner_spec": "### Worker Implementation Spec\n\n#### Input & Output\n- **Source Directory**: `<dataset_root>/totalseg_output/<patient_id>/`\n- **Archive Directory**: `<archive_root>/<patient_id>/` (must exist or be created)\n- **Operation Type**: Move files (not delete or copy)\n\n#### File Matching Logic\n- Match against a **white-listed set of exact filenames**, derived from `whitelist_notes.md`.\n- Do **not** match based on prefixes or categories like \"heart\", \"lung\", etc., unless explicitly listed as full filenames.\n- Files that do not match any entry in the white-list should be moved to the archive directory.\n\n#### Directory Structure\n- For each patient:\n  - Source directory: `<dataset_root>/totalseg_output/<patient_id>/`\n  - Archive directory: `<archive_root>/<patient_id>/`\n- The archive directory mirrors the structure of the source directory for moved files.\n\n#### Handling Missing Files\n- If a file in the source directory does not exist during processing, log the event but continue with other files.\n- If a file exists in the archive directory but cannot be moved due to permission issues, log the error and proceed.\n\n#### Parallelism\n- Each patient directory can be processed independently.\n- No coordination between patients required.\n\n#### Error Handling\n- Log errors for individual files without halting overall execution.\n- Continue processing remaining patients if one fails.\n\n#### Final State\n- After processing, the source directory contains only whitelisted files.\n- All non-whitelisted files are moved to the corresponding archive directory under `<archive_root>/<patient_id>/`.\n\n```json\n{\n  \"assumptions\": [\n    \"The whitelist is defined by exact filenames from `whitelist_notes.md`.\",\n    \"Files are uniquely named within each patient's directory.\",\n    \"The archive root directory structure will mirror the source structure per patient.\",\n    \"The operation is move-based, not delete or copy.\",\n    \"Each patient’s directory is independent and can be processed in parallel.\"\n  ],\n  \"risks\": [\n    \"Incorrectly interpreting category names as filename patterns may lead to wrong file selection.\",\n    \"Failure to create or access the archive directory could cause partial failure.\",\n    \"Missing files in source directories may result in incomplete processing logs.\"\n  ],\n  \"open_questions\": [\n    \"What is the precise list of whitelisted filenames?\",\n    \"Should the worker attempt to create the archive directory if it doesn't exist?\",\n    \"Is there a specific logging format or destination for errors?\"\n  ]\n}\n```",
+  "task": "Interpret the planner spec. Do not use outside knowledge except general engineering caution.",
+  "output_schema": {
+    "understood_goal": "string",
+    "constraints_to_follow": [
+      "specific constraints stated or strongly implied by the planner spec"
+    ],
+    "information_still_missing": [
+      "missing information that blocks safe implementation"
+    ],
+    "first_3_concrete_actions": [
+      "the first three actions you would take before writing final code"
+    ]
+  },
+  "instructions": [
+    "Return strict JSON only.",
+    "If the planner spec omits something important, put it in information_still_missing instead of inventing it.",
+    "Do not assume hidden dataset schema, file naming, algorithm details, or safety policy."
+  ]
+}

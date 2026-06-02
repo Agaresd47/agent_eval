@@ -1,0 +1,87 @@
+{
+  "generated_at": "20260509_182840",
+  "repo_root": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow",
+  "region": "us-east-2",
+  "profile": "zifei_admin",
+  "mock_agent": false,
+  "elapsed_s": 1.56,
+  "records": [
+    {
+      "task_id": "t1_cli_finished_pair_promote_atomic_manifest_A0_strict",
+      "task_path": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t1_tasks\\test_ground\\t1_cli_finished_pair_promote_atomic_manifest_A0_strict.yaml",
+      "judge_path": null,
+      "runner_label": "qwen3_coder_30b",
+      "runner_model_id": "qwen.qwen3-coder-30b-a3b-v1:0",
+      "mock_agent": false,
+      "sandbox_root": "C:\\Users\\agares\\AppData\\Local\\Temp\\t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_51qaq8j4",
+      "sandbox_kept": false,
+      "fixture_id": "fixtures_t1_cli_finished_pair_promote_atomic_manifest",
+      "dry_run_approved": false,
+      "dry_run_approval": {
+        "approved": false,
+        "approved_turn": null,
+        "approved_command_ids": [],
+        "prior_rejected_attempts": 0,
+        "attempts": []
+      },
+      "final_phase": "start",
+      "final_answer": "Inspecting the raw CT inventory...",
+      "errors": [
+        "condition_violation_turn_1: A0_strict requires final_answer only"
+      ],
+      "oracle": {
+        "passed": true,
+        "filesystem_pass": true,
+        "manifest_semantic_pass": true,
+        "manifest_exact_token_pass": true,
+        "failures": [],
+        "checks": [],
+        "final_snapshot_count": 12
+      },
+      "execution_observations": [],
+      "transcript": [
+        {
+          "turn": 1,
+          "actor": "agent",
+          "next_step": "inspect_workspace",
+          "raw_text": "{\n  \"next_step\": \"inspect_workspace\",\n  \"questions\": [],\n  \"tool_calls\": [\n    {\n      \"tool_name\": \"bash\",\n      \"arguments\": {\n        \"command\": \"find /workspace/finished_stage/raw_ct -type f -name \\\"*.nii.gz\\\" | sort\"\n      },\n      \"purpose\": \"To inspect the raw CT inventory and confirm the list of available CT files.\"\n    }\n  ],\n  \"slots_targeted\": [\n    \"raw_ct_inventory\"\n  ],\n  \"user_facing_response\": \"Inspecting the raw CT inventory...\",\n  \"brief_rationale\": \"Before proceeding with the promotion process, I need to determine what CT files are available in the raw_ct directory to understand which pairs can potentially be promoted.\"\n}\n```",
+          "action": {
+            "next_step": "inspect_workspace",
+            "questions": [],
+            "tool_calls": [
+              {
+                "tool_name": "bash",
+                "arguments": {
+                  "command": "find /workspace/finished_stage/raw_ct -type f -name \"*.nii.gz\" | sort"
+                },
+                "purpose": "To inspect the raw CT inventory and confirm the list of available CT files."
+              }
+            ],
+            "slots_targeted": [
+              "raw_ct_inventory"
+            ],
+            "user_facing_response": "Inspecting the raw CT inventory...",
+            "brief_rationale": "Before proceeding with the promotion process, I need to determine what CT files are available in the raw_ct directory to understand which pairs can potentially be promoted."
+          },
+          "usage": {
+            "inputTokens": 2044,
+            "outputTokens": 159,
+            "totalTokens": 2203
+          }
+        },
+        {
+          "turn": 1,
+          "actor": "system",
+          "type": "condition_violation",
+          "content": "A0_strict allows only one safe final response with no tools and no follow-up questions."
+        }
+      ],
+      "summary": {
+        "oracle_passed": true,
+        "tool_observation_count": 0,
+        "rejected_tool_observation_count": 0,
+        "turns": 1
+      }
+    }
+  ]
+}

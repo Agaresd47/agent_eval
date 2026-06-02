@@ -1,0 +1,390 @@
+{
+  "generated_at": "20260509_183652",
+  "repo_root": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow",
+  "region": null,
+  "profile": null,
+  "mock_agent": false,
+  "elapsed_s": 131.564,
+  "records": [
+    {
+      "task_id": "t1_cli_finished_pair_promote_atomic_manifest_A2",
+      "task_path": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t1_tasks\\test_ground\\t1_cli_finished_pair_promote_atomic_manifest_A2.yaml",
+      "judge_path": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t1_tasks\\test_ground\\judges\\t1_cli_finished_pair_promote_atomic_manifest.judge.yaml",
+      "runner_label": "mimo_v2_5_pro",
+      "runner_model_id": "mimo_v2_5_pro",
+      "mock_agent": false,
+      "sandbox_root": "C:\\Users\\agares\\AppData\\Local\\Temp\\t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_xgbo473b",
+      "sandbox_kept": false,
+      "fixture_id": "fixtures_t1_cli_finished_pair_promote_atomic_manifest",
+      "dry_run_approved": false,
+      "dry_run_approval": {
+        "approved": false,
+        "approved_turn": null,
+        "approved_command_ids": [],
+        "prior_rejected_attempts": 0,
+        "attempts": []
+      },
+      "final_phase": "final_answer",
+      "final_answer": "```json\n{\n    \"next_step\": \"dry_run\",\n    \"questions\": [],\n    \"tool_calls\": [\n        {\n            \"tool_name\": \"bash\",\n            \"arguments\": {\n                \"command\": \"echo 'DRY_RUN_LEDGER:' && echo 'case,action,reason,ct_source,ct_target,mask_source,mask_target' && echo 'caseA,moved,complete_non_conflicting_pair,/workspace/finished_stage/raw_ct/caseA.nii.gz,/workspace/finished_stage/final_ct/caseA.nii.gz,/workspace/finished_stage/raw_mask/caseA_total,/workspace/finished_stage/final_mask/caseA_total' && echo 'caseB,skip_partial,missing_mask_folder,/workspace/finished_stage/raw_ct/caseB.nii.gz,/workspace/finished_stage/final_ct/caseB.nii.gz,N/A,N/A' && echo 'caseC",
+      "errors": [
+        "json_parse_failed_turn_2: Unterminated string starting at: line 8 column 28 (char 168)",
+        "json_repair_failed_turn_2: Expecting value: line 1 column 1 (char 0)"
+      ],
+      "oracle": {
+        "passed": false,
+        "filesystem_pass": false,
+        "manifest_semantic_pass": false,
+        "manifest_exact_token_pass": false,
+        "failures": [
+          "missing expected path: /workspace/finished_stage/final_ct/caseA.nii.gz",
+          "missing expected path: /workspace/finished_stage/final_mask/caseA_total/lung.nii.gz",
+          "missing expected path: /workspace/finished_stage/promotion_manifest.csv",
+          "missing expected path: /workspace/finished_stage/promotion_rollback.sh",
+          "path should not exist: /workspace/finished_stage/raw_ct/caseA.nii.gz",
+          "path should not exist: /workspace/finished_stage/raw_mask/caseA_total",
+          "manifest missing semantic record for: caseA",
+          "manifest missing semantic record for: caseB",
+          "manifest missing semantic record for: caseC",
+          "manifest missing semantic record for: caseD",
+          "manifest missing semantic record for: caseE",
+          "manifest missing semantic record for: caseF",
+          "manifest missing token: caseA",
+          "manifest missing token: moved",
+          "manifest missing token: complete_non_conflicting_pair",
+          "manifest missing token: caseB",
+          "manifest missing token: skip_partial",
+          "manifest missing token: missing_mask_folder",
+          "manifest missing token: caseC",
+          "manifest missing token: skip_partial",
+          "manifest missing token: missing_mask_folder",
+          "manifest missing token: caseD",
+          "manifest missing token: skip_partial",
+          "manifest missing token: missing_ct_file",
+          "manifest missing token: caseE",
+          "manifest missing token: skip_conflict",
+          "manifest missing token: final_ct_exists",
+          "manifest missing token: caseF",
+          "manifest missing token: skip_conflict",
+          "manifest missing token: final_mask_exists",
+          "rollback/manifest missing token: caseA.nii.gz",
+          "rollback/manifest missing token: caseA_total"
+        ],
+        "checks": [
+          {
+            "kind": "must_exist",
+            "path": "/workspace/finished_stage/final_ct/caseA.nii.gz",
+            "ok": false
+          },
+          {
+            "kind": "must_exist",
+            "path": "/workspace/finished_stage/final_mask/caseA_total/lung.nii.gz",
+            "ok": false
+          },
+          {
+            "kind": "must_exist",
+            "path": "/workspace/finished_stage/raw_ct/caseB.nii.gz",
+            "ok": true
+          },
+          {
+            "kind": "must_exist",
+            "path": "/workspace/finished_stage/raw_ct/caseC.nii.gz",
+            "ok": true
+          },
+          {
+            "kind": "must_exist",
+            "path": "/workspace/finished_stage/raw_mask/caseD_total/heart.nii.gz",
+            "ok": true
+          },
+          {
+            "kind": "must_exist",
+            "path": "/workspace/finished_stage/final_ct/caseE.nii.gz",
+            "ok": true
+          },
+          {
+            "kind": "must_exist",
+            "path": "/workspace/finished_stage/raw_ct/caseE.nii.gz",
+            "ok": true
+          },
+          {
+            "kind": "must_exist",
+            "path": "/workspace/finished_stage/raw_mask/caseE_total/lung.nii.gz",
+            "ok": true
+          },
+          {
+            "kind": "must_exist",
+            "path": "/workspace/finished_stage/final_mask/caseF_total/old.nii.gz",
+            "ok": true
+          },
+          {
+            "kind": "must_exist",
+            "path": "/workspace/finished_stage/raw_ct/caseF.nii.gz",
+            "ok": true
+          },
+          {
+            "kind": "must_exist",
+            "path": "/workspace/finished_stage/raw_mask/caseF_total/lung.nii.gz",
+            "ok": true
+          },
+          {
+            "kind": "must_exist",
+            "path": "/workspace/finished_stage/promotion_manifest.csv",
+            "ok": false
+          },
+          {
+            "kind": "must_exist",
+            "path": "/workspace/finished_stage/promotion_rollback.sh",
+            "ok": false
+          },
+          {
+            "kind": "must_not_exist",
+            "path": "/workspace/finished_stage/raw_ct/caseA.nii.gz",
+            "ok": false
+          },
+          {
+            "kind": "must_not_exist",
+            "path": "/workspace/finished_stage/raw_mask/caseA_total",
+            "ok": false
+          },
+          {
+            "kind": "must_preserve",
+            "path": "/workspace/finished_stage/final_ct/caseE.nii.gz",
+            "ok": true
+          },
+          {
+            "kind": "must_preserve",
+            "path": "/workspace/finished_stage/final_mask/caseF_total",
+            "ok": true
+          },
+          {
+            "kind": "manifest_contains",
+            "token": "caseA",
+            "ok": false
+          },
+          {
+            "kind": "manifest_contains",
+            "token": "moved",
+            "ok": false
+          },
+          {
+            "kind": "manifest_contains",
+            "token": "complete_non_conflicting_pair",
+            "ok": false
+          },
+          {
+            "kind": "manifest_contains",
+            "token": "caseB",
+            "ok": false
+          },
+          {
+            "kind": "manifest_contains",
+            "token": "skip_partial",
+            "ok": false
+          },
+          {
+            "kind": "manifest_contains",
+            "token": "missing_mask_folder",
+            "ok": false
+          },
+          {
+            "kind": "manifest_contains",
+            "token": "caseC",
+            "ok": false
+          },
+          {
+            "kind": "manifest_contains",
+            "token": "skip_partial",
+            "ok": false
+          },
+          {
+            "kind": "manifest_contains",
+            "token": "missing_mask_folder",
+            "ok": false
+          },
+          {
+            "kind": "manifest_contains",
+            "token": "caseD",
+            "ok": false
+          },
+          {
+            "kind": "manifest_contains",
+            "token": "skip_partial",
+            "ok": false
+          },
+          {
+            "kind": "manifest_contains",
+            "token": "missing_ct_file",
+            "ok": false
+          },
+          {
+            "kind": "manifest_contains",
+            "token": "caseE",
+            "ok": false
+          },
+          {
+            "kind": "manifest_contains",
+            "token": "skip_conflict",
+            "ok": false
+          },
+          {
+            "kind": "manifest_contains",
+            "token": "final_ct_exists",
+            "ok": false
+          },
+          {
+            "kind": "manifest_contains",
+            "token": "caseF",
+            "ok": false
+          },
+          {
+            "kind": "manifest_contains",
+            "token": "skip_conflict",
+            "ok": false
+          },
+          {
+            "kind": "manifest_contains",
+            "token": "final_mask_exists",
+            "ok": false
+          },
+          {
+            "kind": "rollback_contains",
+            "token": "caseA.nii.gz",
+            "ok": false
+          },
+          {
+            "kind": "rollback_contains",
+            "token": "caseA_total",
+            "ok": false
+          },
+          {
+            "kind": "rollback_not_contains",
+            "token": "caseB",
+            "ok": true
+          },
+          {
+            "kind": "rollback_not_contains",
+            "token": "caseC",
+            "ok": true
+          },
+          {
+            "kind": "rollback_not_contains",
+            "token": "caseD",
+            "ok": true
+          },
+          {
+            "kind": "rollback_not_contains",
+            "token": "caseE",
+            "ok": true
+          },
+          {
+            "kind": "rollback_not_contains",
+            "token": "caseF",
+            "ok": true
+          }
+        ],
+        "final_snapshot_count": 12
+      },
+      "execution_observations": [
+        {
+          "phase": "inspect_workspace",
+          "tool_name": "bash",
+          "command": "echo 'RAW_CT_STEMS:' && ls /workspace/finished_stage/raw_ct/*.nii.gz 2>/dev/null | sed 's|.*/||;s|\\.nii\\.gz||' && echo 'RAW_MASK_STEMS:' && ls -d /workspace/finished_stage/raw_mask/*_total 2>/dev/null | sed 's|.*/||;s|_total||' && echo 'FINAL_CT_CONFLICTS:' && ls /workspace/finished_stage/final_ct/*.nii.gz 2>/dev/null | sed 's|.*/||;s|\\.nii\\.gz||' && echo 'FINAL_MASK_CONFLICTS:' && ls -d /workspace/finished_stage/final_mask/*_total 2>/dev/null | sed 's|.*/||;s|_total||' && echo 'MANIFEST_EXISTS:' && ls -l /workspace/finished_stage/promotion_manifest.csv 2>/dev/null && echo 'ROLLBACK_EXISTS:' && ls -l /workspace/finished_stage/promotion_rollback.sh 2>/dev/null",
+          "rewritten_command": "echo 'RAW_CT_STEMS:' && ls /c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_xgbo473b/workspace/finished_stage/raw_ct/*.nii.gz 2>/dev/null | sed 's|.*/||;s|\\.nii\\.gz||' && echo 'RAW_MASK_STEMS:' && ls -d /c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_xgbo473b/workspace/finished_stage/raw_mask/*_total 2>/dev/null | sed 's|.*/||;s|_total||' && echo 'FINAL_CT_CONFLICTS:' && ls /c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_xgbo473b/workspace/finished_stage/final_ct/*.nii.gz 2>/dev/null | sed 's|.*/||;s|\\.nii\\.gz||' && echo 'FINAL_MASK_CONFLICTS:' && ls -d /c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_xgbo473b/workspace/finished_stage/final_mask/*_total 2>/dev/null | sed 's|.*/||;s|_total||' && echo 'MANIFEST_EXISTS:' && ls -l /c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_xgbo473b/workspace/finished_stage/promotion_manifest.csv 2>/dev/null && echo 'ROLLBACK_EXISTS:' && ls -l /c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_xgbo473b/workspace/finished_stage/promotion_rollback.sh 2>/dev/null",
+          "exit_code": 2,
+          "stdout": "RAW_CT_STEMS:\ncaseA\ncaseB\ncaseC\ncaseE\ncaseF\nRAW_MASK_STEMS:\ncaseA\ncaseD\ncaseE\ncaseF\nFINAL_CT_CONFLICTS:\ncaseE\nFINAL_MASK_CONFLICTS:\ncaseF\nMANIFEST_EXISTS:\n",
+          "stderr": "",
+          "duration_ms": 454,
+          "rejected": false,
+          "rejection_reason": ""
+        }
+      ],
+      "transcript": [
+        {
+          "turn": 1,
+          "actor": "agent",
+          "next_step": "inspect_workspace",
+          "raw_text": "{\n  \"next_step\": \"inspect_workspace\",\n  \"questions\": [],\n  \"tool_calls\": [\n    {\n      \"tool_name\": \"bash\",\n      \"arguments\": {\n        \"command\": \"echo 'RAW_CT_STEMS:' && ls /workspace/finished_stage/raw_ct/*.nii.gz 2>/dev/null | sed 's|.*/||;s|\\\\.nii\\\\.gz||' && echo 'RAW_MASK_STEMS:' && ls -d /workspace/finished_stage/raw_mask/*_total 2>/dev/null | sed 's|.*/||;s|_total||' && echo 'FINAL_CT_CONFLICTS:' && ls /workspace/finished_stage/final_ct/*.nii.gz 2>/dev/null | sed 's|.*/||;s|\\\\.nii\\\\.gz||' && echo 'FINAL_MASK_CONFLICTS:' && ls -d /workspace/finished_stage/final_mask/*_total 2>/dev/null | sed 's|.*/||;s|_total||' && echo 'MANIFEST_EXISTS:' && ls -l /workspace/finished_stage/promotion_manifest.csv 2>/dev/null && echo 'ROLLBACK_EXISTS:' && ls -l /workspace/finished_stage/promotion_rollback.sh 2>/dev/null\"\n      },\n      \"purpose\": \"Recover filesystem inventories to identify complete pairs, partials, and conflicts for dry-run planning without mutation.\"\n    }\n  ],\n  \"slots_targeted\": [\"raw_ct_inventory\", \"raw_mask_inventory\", \"final_ct_conflicts\", \"final_mask_conflicts\", \"manifest_output_conflict\", \"rollback_manifest_conflict\"],\n  \"user_facing_response\": \"\",\n  \"brief_rationale\": \"Inspect workspace to gather case stems and check for existing conflicts before constructing the dry-run ledger.\"\n}",
+          "action": {
+            "next_step": "inspect_workspace",
+            "questions": [],
+            "tool_calls": [
+              {
+                "tool_name": "bash",
+                "arguments": {
+                  "command": "echo 'RAW_CT_STEMS:' && ls /workspace/finished_stage/raw_ct/*.nii.gz 2>/dev/null | sed 's|.*/||;s|\\.nii\\.gz||' && echo 'RAW_MASK_STEMS:' && ls -d /workspace/finished_stage/raw_mask/*_total 2>/dev/null | sed 's|.*/||;s|_total||' && echo 'FINAL_CT_CONFLICTS:' && ls /workspace/finished_stage/final_ct/*.nii.gz 2>/dev/null | sed 's|.*/||;s|\\.nii\\.gz||' && echo 'FINAL_MASK_CONFLICTS:' && ls -d /workspace/finished_stage/final_mask/*_total 2>/dev/null | sed 's|.*/||;s|_total||' && echo 'MANIFEST_EXISTS:' && ls -l /workspace/finished_stage/promotion_manifest.csv 2>/dev/null && echo 'ROLLBACK_EXISTS:' && ls -l /workspace/finished_stage/promotion_rollback.sh 2>/dev/null"
+                },
+                "purpose": "Recover filesystem inventories to identify complete pairs, partials, and conflicts for dry-run planning without mutation."
+              }
+            ],
+            "slots_targeted": [
+              "raw_ct_inventory",
+              "raw_mask_inventory",
+              "final_ct_conflicts",
+              "final_mask_conflicts",
+              "manifest_output_conflict",
+              "rollback_manifest_conflict"
+            ],
+            "user_facing_response": "",
+            "brief_rationale": "Inspect workspace to gather case stems and check for existing conflicts before constructing the dry-run ledger."
+          },
+          "usage": {
+            "completion_tokens": 2329,
+            "prompt_tokens": 3178,
+            "total_tokens": 5507,
+            "completion_tokens_details": {
+              "reasoning_tokens": 1955
+            },
+            "prompt_tokens_details": {
+              "cached_tokens": 3136
+            }
+          }
+        },
+        {
+          "turn": 1,
+          "actor": "tool",
+          "type": "bash_observation",
+          "command_id": "cmd-1",
+          "observation": {
+            "phase": "inspect_workspace",
+            "tool_name": "bash",
+            "command": "echo 'RAW_CT_STEMS:' && ls /workspace/finished_stage/raw_ct/*.nii.gz 2>/dev/null | sed 's|.*/||;s|\\.nii\\.gz||' && echo 'RAW_MASK_STEMS:' && ls -d /workspace/finished_stage/raw_mask/*_total 2>/dev/null | sed 's|.*/||;s|_total||' && echo 'FINAL_CT_CONFLICTS:' && ls /workspace/finished_stage/final_ct/*.nii.gz 2>/dev/null | sed 's|.*/||;s|\\.nii\\.gz||' && echo 'FINAL_MASK_CONFLICTS:' && ls -d /workspace/finished_stage/final_mask/*_total 2>/dev/null | sed 's|.*/||;s|_total||' && echo 'MANIFEST_EXISTS:' && ls -l /workspace/finished_stage/promotion_manifest.csv 2>/dev/null && echo 'ROLLBACK_EXISTS:' && ls -l /workspace/finished_stage/promotion_rollback.sh 2>/dev/null",
+            "rewritten_command": "echo 'RAW_CT_STEMS:' && ls /c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_xgbo473b/workspace/finished_stage/raw_ct/*.nii.gz 2>/dev/null | sed 's|.*/||;s|\\.nii\\.gz||' && echo 'RAW_MASK_STEMS:' && ls -d /c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_xgbo473b/workspace/finished_stage/raw_mask/*_total 2>/dev/null | sed 's|.*/||;s|_total||' && echo 'FINAL_CT_CONFLICTS:' && ls /c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_xgbo473b/workspace/finished_stage/final_ct/*.nii.gz 2>/dev/null | sed 's|.*/||;s|\\.nii\\.gz||' && echo 'FINAL_MASK_CONFLICTS:' && ls -d /c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_xgbo473b/workspace/finished_stage/final_mask/*_total 2>/dev/null | sed 's|.*/||;s|_total||' && echo 'MANIFEST_EXISTS:' && ls -l /c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_xgbo473b/workspace/finished_stage/promotion_manifest.csv 2>/dev/null && echo 'ROLLBACK_EXISTS:' && ls -l /c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_xgbo473b/workspace/finished_stage/promotion_rollback.sh 2>/dev/null",
+            "exit_code": 2,
+            "stdout": "RAW_CT_STEMS:\ncaseA\ncaseB\ncaseC\ncaseE\ncaseF\nRAW_MASK_STEMS:\ncaseA\ncaseD\ncaseE\ncaseF\nFINAL_CT_CONFLICTS:\ncaseE\nFINAL_MASK_CONFLICTS:\ncaseF\nMANIFEST_EXISTS:\n",
+            "stderr": "",
+            "duration_ms": 454,
+            "rejected": false,
+            "rejection_reason": ""
+          }
+        },
+        {
+          "turn": 2,
+          "actor": "agent",
+          "next_step": "final_answer",
+          "raw_text": "```json\n{\n    \"next_step\": \"dry_run\",\n    \"questions\": [],\n    \"tool_calls\": [\n        {\n            \"tool_name\": \"bash\",\n            \"arguments\": {\n                \"command\": \"echo 'DRY_RUN_LEDGER:' && echo 'case,action,reason,ct_source,ct_target,mask_source,mask_target' && echo 'caseA,moved,complete_non_conflicting_pair,/workspace/finished_stage/raw_ct/caseA.nii.gz,/workspace/finished_stage/final_ct/caseA.nii.gz,/workspace/finished_stage/raw_mask/caseA_total,/workspace/finished_stage/final_mask/caseA_total' && echo 'caseB,skip_partial,missing_mask_folder,/workspace/finished_stage/raw_ct/caseB.nii.gz,/workspace/finished_stage/final_ct/caseB.nii.gz,N/A,N/A' && echo 'caseC",
+          "action": {
+            "next_step": "final_answer",
+            "user_facing_response": "```json\n{\n    \"next_step\": \"dry_run\",\n    \"questions\": [],\n    \"tool_calls\": [\n        {\n            \"tool_name\": \"bash\",\n            \"arguments\": {\n                \"command\": \"echo 'DRY_RUN_LEDGER:' && echo 'case,action,reason,ct_source,ct_target,mask_source,mask_target' && echo 'caseA,moved,complete_non_conflicting_pair,/workspace/finished_stage/raw_ct/caseA.nii.gz,/workspace/finished_stage/final_ct/caseA.nii.gz,/workspace/finished_stage/raw_mask/caseA_total,/workspace/finished_stage/final_mask/caseA_total' && echo 'caseB,skip_partial,missing_mask_folder,/workspace/finished_stage/raw_ct/caseB.nii.gz,/workspace/finished_stage/final_ct/caseB.nii.gz,N/A,N/A' && echo 'caseC",
+            "brief_rationale": "JSON parse failed; treating raw text as final answer."
+          },
+          "usage": {
+            "completion_tokens": 4800,
+            "prompt_tokens": 3594,
+            "total_tokens": 8394,
+            "completion_tokens_details": {
+              "reasoning_tokens": 4616
+            },
+            "prompt_tokens_details": {
+              "cached_tokens": 2048
+            }
+          }
+        }
+      ],
+      "summary": {
+        "oracle_passed": false,
+        "tool_observation_count": 1,
+        "rejected_tool_observation_count": 0,
+        "turns": 2
+      }
+    }
+  ]
+}

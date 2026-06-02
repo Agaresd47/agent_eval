@@ -1,45 +1,44 @@
-# agent_eval
+# Agent 边界纪律评测
 
-一个面向中国大厂 `Agent Dev / Agent Eval` 岗位的轻量评测项目。
+一套面向「文件 / CLI / 委派类 Agent」的边界纪律评测脚手架。
 
-这个仓库的目标不是做完整产品，而是提供一套面试官可以直接拉起、快速理解的评测原型，用来展示你是否能把 Agent 能力拆成可验证、可复现、可扩展的评测结构。
+评测想回答的问题：模型在信息不完整、边界未确认时的工程判断力——会不会先主动澄清和查证，而不是把空白补成默认事实往下做。
 
-当前公开版重点覆盖两类问题：
+代码层面把 `task / judge / fixture / runner` 拆开，方便扩成更大的 hidden eval；rubric、condition、judge 都在 yaml 里，加任务不动 Python。
 
-- `T1`：高风险文件操作任务里，模型什么时候该追问，什么时候该检查，什么时候才应该执行
-- `T2`：planner 写给 worker 的任务说明，是否能在多轮交接后变得更清晰、更安全
+## 评测覆盖
 
-## 这个仓库适合展示什么
+三条线沿一条递进展开：先看纯问答下能不能识别信息缺口，再看拿到真实执行权限时能不能守纪律，最后看任务交给下游 worker 时边界能不能完整传递。
 
-- 能否把模糊的 Agent 行为问题，落成结构化评测任务
-- 能否把 `clarification / inspection / execution` 三段行为拆开建模
-- 能否设计 planner-worker handoff 的评测口径
-- 能否把 `task / judge / fixture / runner` 解耦，而不是把逻辑都堆进 prompt
+- **T1 Chat（信息缺口处理）**
+  模型拿到信息留有缺口的任务时，会不会先把边界问清楚、查清楚，再决定继续执行。任务覆盖目录重组、批量去重、导出清理等高风险文件操作。
+
+- **T1 CLI（执行纪律）**
+  模型有真实 shell 执行权限时，会不会守住 `inspect → dry-run → approve → execute → verify` 闭环。每个变更操作要落 manifest 和 rollback，verify 是闭环收尾。
+
+- **T2 Episodes（任务委派）**
+  planner-worker 交接里，边界会不会被写坏或在复核里修回来。每题跑 `planner_v1 → worker_v1 → planner_v2 → worker_v2` 四步，由 judge 分别给两次 worker 输出打分。
+
+每条线都设了多个任务条件（A0_strict / A0_interactive / A1 / A2 或 B1 / B1G），同一道题在不同信息暴露和约束下重测，差异本身就是 finding。
 
 ## 仓库结构
 
-- `TASKS.md`
-  - 面试题背景和讨论方向
-- `configs/public/`
-  - 对外展示用的最小配置
-- `data/t1_chat/`
-  - `T1` 对话式评测任务与 judge
-- `data/t1_cli/`
-  - `T1` CLI/sandbox 评测任务与 judge
-- `data/t2_episodes/`
-  - `T2` planner-worker episodes 与 judge
-- `fixtures/`
-  - 任务依赖的样例文件和目录
-- `rules/`
-  - 评测规则、rubric 与共享定义
-- `scripts/task/task1/t1_matrix_runner.py`
-  - `T1` read-only runner
-- `scripts/task/task1/run_sandbox_eval.py`
-  - `T1` CLI sandbox runner
-- `scripts/task/task2/t2_matrix_runner.py`
-  - `T2` planner-worker runner
-- `tests/run_tests.py`
-  - 对外 smoke cases
+```
+agent/         planner 的 ReAct loop 与工具表
+configs/       judge / 模型 / 公开 demo 配置
+data/
+  t1_chat/         T1 Chat 任务与 judge
+  t1_cli/          T1 CLI 任务与 judge
+  t2_episodes/     T2 planner-worker episodes 与 judge
+engine/        核心 runner、DSL、节点定义
+examples/      三道展示题的完整 run 结果（不用配 key 也能看）
+fixtures/      任务依赖的样例目录和文件
+rules/         评分规则、rubric 与共享定义
+scripts/task/  T1/T2 矩阵 runner
+tests/         smoke cases 与单元测试
+```
+
+不想跑也想看实际效果，直接看 [examples/](examples/)——三条评测线各一道展示题，含全部 condition × 全部模型 × 多次重复的 run，以及 judge 误判已知 case 的 audit log。
 
 ## 快速开始
 
@@ -51,7 +50,7 @@ copy .env.example .env
 make smoke
 ```
 
-如果你不使用 `make`：
+不用 `make` 直接跑：
 
 ```bash
 python tests/run_tests.py
@@ -60,18 +59,14 @@ python -m unittest discover -s tests -p "test_*.py"
 
 ## 环境变量
 
-仅跑 `smoke / dry-run` 不需要模型 key。
+`smoke` 和 `dry-run` 不需要任何 key。
 
-真正跑 `live matrix` 时，默认需要：
+跑 live matrix 需要：
 
-- `OPENAI_API_KEY`
-  - 用于 judge 调用
-- `EVAL_API_KEY`
-- `EVAL_BASE_URL`
-- `EVAL_MODEL_NAME`
-  - 用于默认公开 runner `provider_stub_chat`
+- `OPENAI_API_KEY` —— judge 调用
+- `EVAL_API_KEY` / `EVAL_BASE_URL` / `EVAL_MODEL_NAME` —— 被测模型，走 OpenAI-compatible 接口
 
-最简单的接法是接一个 OpenAI-compatible 接口，例如：
+最简一份 `.env`：
 
 ```env
 EVAL_BASE_URL=https://api.openai.com/v1
@@ -79,43 +74,41 @@ EVAL_MODEL_NAME=gpt-4.1-mini
 EVAL_API_KEY=your_api_key
 ```
 
-如果你想切到别的 provider，可以改 [configs/models.yaml](</C:/Users/agares/OneDrive/0 求职/面试/agent_eval/configs/models.yaml>)。
+切到别的 provider 改 [configs/models.yaml](configs/models.yaml)。
 
 ## 常用命令
 
-- `make smoke`
-  - 跑公开样例和单测，不需要 key
-- `make t1-dry`
-  - 跑 `T1` read-only dry-run
-- `make t1-live`
-  - 跑默认 `T1 Chat` 演示配置
-- `make t1-cli-mock`
-  - 跑 `T1 CLI` mock-agent 路径，不需要 key
-- `make t1-cli-live`
-  - 跑 `T1 CLI` live 路径
-- `make t2-dry`
-  - 跑 `T2` dry-run
-- `make t2-live`
-  - 跑默认 `T2` 演示配置
+| 命令 | 说明 | 需要 key |
+| --- | --- | --- |
+| `make smoke` | 公开样例 + 单测 | 否 |
+| `make t1-dry` | T1 Chat read-only dry-run | 否 |
+| `make t1-cli-mock` | T1 CLI mock-agent 路径 | 否 |
+| `make t1-live` | T1 Chat 默认演示配置 | 是 |
+| `make t1-cli-live` | T1 CLI 默认演示配置 | 是 |
+| `make t2-dry` | T2 dry-run | 否 |
+| `make t2-live` | T2 默认演示配置 | 是 |
 
-输出会写到 `run_result/`。
+输出落到 `run_result/`。
 
 ## 默认公开配置
 
-这个仓库故意把公开配置做得很小，方便面试官上手：
+公开配置故意做小，方便上手：
 
-- [configs/public/t1_chat_demo.yaml](</C:/Users/agares/OneDrive/0 求职/面试/agent_eval/configs/public/t1_chat_demo.yaml>)
-  - 两个 `T1 Chat` 任务
-- [configs/public/t1_cli_demo.yaml](</C:/Users/agares/OneDrive/0 求职/面试/agent_eval/configs/public/t1_cli_demo.yaml>)
-  - 两个 `T1 CLI` 任务
-- [configs/public/t2_demo.yaml](</C:/Users/agares/OneDrive/0 求职/面试/agent_eval/configs/public/t2_demo.yaml>)
-  - 两个 `T2` episode
+- [configs/public/t1_chat_demo.yaml](configs/public/t1_chat_demo.yaml) —— 两个 T1 Chat 任务
+- [configs/public/t1_cli_demo.yaml](configs/public/t1_cli_demo.yaml) —— 两个 T1 CLI 任务
+- [configs/public/t2_demo.yaml](configs/public/t2_demo.yaml) —— 两个 T2 episode
 
-如果你想扩成更大的矩阵，直接复制这些配置，再加 task / episode / model pair 即可。
+要扩成大矩阵，复制这些配置、加 task / episode / model pair 即可。
 
-## 面试时可以怎么讲
+## 设计取舍
 
-- `T1` 的重点不是“模型会不会答”，而是“模型会不会在信息不足时克制地问和查”
-- `T1 Chat` 和 `T1 CLI` 分开，是因为二者的风险面、工具约束和 judge 口径本质不同
-- `T2` 的重点不是“worker 最后能不能写出代码”，而是“planner 传递的信息边界是否稳定”
-- 这个仓库的核心设计点，是把 `task`、`judge`、`fixture`、`runner` 分开，方便后续扩成 hidden eval
+- **task / judge / fixture / runner 解耦**：rubric 和 condition 都在 yaml 里，加任务和加模型不动 Python；同一道题换条件就是改一行。
+- **condition 是一等公民**：A0_strict、A0_interactive、A1、A2 不是不同的题，是同一道题在不同信息暴露和约束下重测，差异本身就是评测信号。
+- **闭环判分而不是终态判分**：T1 CLI 看 `inspect / dry-run / execute / verify` 各环节的合分，终态文件系统对了但纪律环节失败仍会扣分。
+- **judge 是 LLM + rubric**，不是字符串匹配；rubric 在 [rules/](rules/) 与各 `data/*/judges/` 下，可以替换或加多 judge 投票。
+
+## 当前局限
+
+- 公开仓库不包含完整 run result。任务规模、N、模型清单与解读见配套展示页。
+- LLM judge 存在已知偏差，当前打分流程包含作者人工复核与少量 manual adjustment；下一版计划补多 judge 投票、人工盲审、逐步评分降噪。
+- 任务原型来自作者本人在医学影像 ML 方向的真实数据流水线（nnU-Net 训练布局、metadata 子集切分等），领域偏窄但任务形态在文件 / CLI / 委派类 agent 上具有代表性。

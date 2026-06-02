@@ -1,0 +1,59 @@
+{
+  "condition": "B1",
+  "seed": 0,
+  "episode_id": "ep003_totalseg_whitelist_split",
+  "original_request": "TotalSeg 输出每个病人 100+ 个结构 mask，但这条线后面训练只保留：\n心脏相关、肺叶、肋骨、胸椎（T 段）、锁骨、肱骨、胸骨、主动脉。\n\n请帮我写一个 worker-ready spec：\n对每个病人目录，把**不在白名单内**的 mask 文件搬到另一个目录留存，\n源目录只保留白名单内的文件。\n\n源：<dataset_root>/totalseg_output/<patient_id>/\n分流目标：<archive_root>/<patient_id>/\n\n这份 spec 里需要明确：\n- 白名单匹配到底按“类别 / 前缀”还是按“精确文件名”\n- 分流动作是 move、delete 还是 copy\n- 目标目录结构怎么镜像\n- 缺失文件怎么处理\n\n病人级独立，可并行。漏文件要记录但不要中断。\n",
+  "planner_v1_spec": "# TotalSeg Mask Whitelist Filter Worker Spec\n\n## Objective\nProcess patient directories under `<dataset_root>/totalseg_output/` to retain only masks belonging to a specific anatomical whitelist and move all other masks to an archive directory. The operation must be patient-level independent and parallelizable.\n\n## Input Context\n*   **Source Root:** `<dataset_root>/totalseg_output/`\n*   **Archive Root:** `<archive_root>/`\n*   **Whitelist Reference:** `<workspace>/whitelist_notes.md` (Contains category descriptions and examples, not a complete executable regex list).\n\n## Operational Logic\n\n### 1. Whitelist Matching Strategy\n*   **Mechanism:** The worker must implement a matching logic that interprets the content of `<workspace>/whitelist_notes.md`.\n*   **Constraint:** Do not treat the file names in the notes as a literal whitelist. The notes describe *categories* (e.g., \"heart related\", \"vertebrae T segment\") and provide examples. The worker must map these categories to the specific file naming conventions used in the dataset (e.g., `heart.nii.gz`, `vertebrae_T5.nii.gz`).\n*   **Specific Exclusion:** Explicitly exclude cervical (`vertebrae_C*`) and lumbar (`vertebrae_L*`) vertebrae. Only retain thoracic vertebrae (`vertebrae_T2` through `vertebrae_T12`).\n\n### 2. File Action\n*   **Operation:** `move` (or `rename`).\n*   **Behavior:** Files matching the whitelist remain in the source directory. Files *not* matching the whitelist are moved to the archive directory.\n\n### 3. Directory Structure Mirroring\n*   **Source:** `<dataset_root>/totalseg_output/<patient_id>/` (Flat structure of `.nii.gz` files).\n*   **Archive:** `<archive_root>/<patient_id>/` (Flat structure mirroring the source).\n*   **Behavior:** The worker should create the `<archive_root>/<patient_id>/` directory if it does not exist.\n\n### 4. Error Handling & Logging\n*   **Missing Files:** If a file listed in the file index is missing during processing, log the event but do not interrupt the processing of the current patient or the global batch.\n*   **Empty Directories:** If a patient directory contains no files, log the event and proceed to the next patient.\n\n## Output Contract\nThe worker should produce a JSON block containing:\n*   `assumptions`: Facts inferred from the prompt.\n*   `risks`: Constraints or potential pitfalls.\n*   `open_questions`: Information still required for implementation.\n\n```json\n{\n  \"assumptions\": [\n    \"The worker has read access to the source directory and write access to the archive directory.\",\n    \"The file extension is always .nii.gz.\",\n    \"The patient IDs in the source root match the directory structure under the archive root.\",\n    \"The whitelist logic must be derived from the descriptive text in whitelist_notes.md, not just the file names listed in the notes.\",\n    \"The operation is destructive to the source directory (files are moved, not copied).\"\n  ],\n  \"risks\": [\n    \"Ambiguity in mapping 'heart related' to specific file names (e.g., heart.nii.gz vs heart_atrium_left.nii.gz).\",\n    \"The whitelist_notes.md might be incomplete, leading to false positives (whitelist items not in the dataset) or false negatives (dataset items not in the whitelist).\",\n    \"If the worker uses a simple prefix match (e.g., 'heart_*'), it might incorrectly match non-whitelist files if the naming convention is not strictly prefix-based.\",\n    \"Parallel execution might cause race conditions if the archive directory creation is not atomic.\",\n    \"The worker must handle the specific exclusion of cervical/lumbar vertebrae correctly, as they might share the 'vertebrae' prefix.\"\n  ],\n  \"open_questions\": [\n    \"What is the exact mapping rule to convert the category descriptions in whitelist_notes.md into file name patterns?\",\n    \"Is the whitelist strictly defined by the content of whitelist_notes.md, or is there an external configuration file?\",\n    \"Should the worker handle the case where the source directory is empty or contains no .nii.gz files?\",\n    \"What is the exact naming convention for thoracic vertebrae (e.g., T1, T2... T12)?\",\n    \"Is the operation intended to be idempotent (safe to run multiple times)?\"\n  ]\n}\n```",
+  "worker_v1_interpretation_text": "{\n  \"understood_goal\": \"Process patient directories under `<dataset_root>/totalseg_output/` to filter and move mask files based on a whitelist described in `<workspace>/whitelist_notes.md`. Retain only masks that belong to specified anatomical categories, excluding cervical and lumbar vertebrae, and move all others to an archive directory while maintaining directory structure.\",\n  \"constraints_to_follow\": [\n    \"The operation must be patient-level independent and parallelizable.\",\n    \"Files matching the whitelist remain in the source directory; non-matching files are moved to the archive directory.\",\n    \"The whitelist matching logic must interpret the content of `<workspace>/whitelist_notes.md` rather than using literal filenames.\",\n    \"Explicitly exclude cervical (`vertebrae_C*`) and lumbar (`vertebrae_L*`) vertebrae from the whitelist.\",\n    \"Only retain thoracic vertebrae (`vertebrae_T2` through `vertebrae_T12`).\",\n    \"Directory structure must be mirrored between source and archive: `<dataset_root>/totalseg_output/<patient_id>/` and `<archive_root>/<patient_id>/`.\",\n    \"If a file is missing during processing, log the event but continue processing.\",\n    \"If a patient directory is empty, log the event and proceed.\",\n    \"The worker must have read access to the source and write access to the archive.\",\n    \"All files are assumed to have the `.nii.gz` extension.\"\n  ],\n  \"information_still_missing\": [\n    \"Exact mapping rules from category descriptions in `whitelist_notes.md` to specific file name patterns.\",\n    \"Whether the whitelist is fully defined by `whitelist_notes.md` or requires additional configuration.\",\n    \"Clarification on whether the operation should be idempotent (safe to run multiple times).\",\n    \"Exact naming convention for thoracic vertebrae (e.g., T1, T2... T12) beyond what's implied.\",\n    \"Confirmation on handling of edge cases such as empty source directories or missing files in the context of the full batch.\"\n  ],\n  \"first_3_concrete_actions\": [\n    \"Read and parse the content of `<workspace>/whitelist_notes.md` to extract category descriptions and associated examples.\",\n    \"Identify and validate the specific file naming patterns that correspond to each anatomical category mentioned, ensuring exclusion of cervical and lumbar vertebrae.\",\n    \"Verify the existence of the source and archive root paths and ensure proper permissions for reading and writing.\"\n  ]\n}",
+  "worker_v1_interpretation_json": {
+    "understood_goal": "Process patient directories under `<dataset_root>/totalseg_output/` to filter and move mask files based on a whitelist described in `<workspace>/whitelist_notes.md`. Retain only masks that belong to specified anatomical categories, excluding cervical and lumbar vertebrae, and move all others to an archive directory while maintaining directory structure.",
+    "constraints_to_follow": [
+      "The operation must be patient-level independent and parallelizable.",
+      "Files matching the whitelist remain in the source directory; non-matching files are moved to the archive directory.",
+      "The whitelist matching logic must interpret the content of `<workspace>/whitelist_notes.md` rather than using literal filenames.",
+      "Explicitly exclude cervical (`vertebrae_C*`) and lumbar (`vertebrae_L*`) vertebrae from the whitelist.",
+      "Only retain thoracic vertebrae (`vertebrae_T2` through `vertebrae_T12`).",
+      "Directory structure must be mirrored between source and archive: `<dataset_root>/totalseg_output/<patient_id>/` and `<archive_root>/<patient_id>/`.",
+      "If a file is missing during processing, log the event but continue processing.",
+      "If a patient directory is empty, log the event and proceed.",
+      "The worker must have read access to the source and write access to the archive.",
+      "All files are assumed to have the `.nii.gz` extension."
+    ],
+    "information_still_missing": [
+      "Exact mapping rules from category descriptions in `whitelist_notes.md` to specific file name patterns.",
+      "Whether the whitelist is fully defined by `whitelist_notes.md` or requires additional configuration.",
+      "Clarification on whether the operation should be idempotent (safe to run multiple times).",
+      "Exact naming convention for thoracic vertebrae (e.g., T1, T2... T12) beyond what's implied.",
+      "Confirmation on handling of edge cases such as empty source directories or missing files in the context of the full batch."
+    ],
+    "first_3_concrete_actions": [
+      "Read and parse the content of `<workspace>/whitelist_notes.md` to extract category descriptions and associated examples.",
+      "Identify and validate the specific file naming patterns that correspond to each anatomical category mentioned, ensuring exclusion of cervical and lumbar vertebrae.",
+      "Verify the existence of the source and archive root paths and ensure proper permissions for reading and writing."
+    ]
+  },
+  "task": "Write a second planner message that corrects worker_v1 misunderstandings and fills or flags missing details.",
+  "instructions": [
+    "Do not write final implementation code.",
+    "Focus on the delta: what worker_v1 misunderstood, what the worker still lacks, and what the worker should do differently.",
+    "If an exact detail is unknown, say exactly what must be verified instead of inventing a default.",
+    "Do not turn category words, examples, prefixes, ranges, or semantic groupings into exact executable membership rules unless the prompt already provides the authoritative rule.",
+    "Do not upgrade a missing artifact into a guessed source of truth. If the worker still lacks the definitive whitelist, exact schema, or exact mapping, keep that artifact unresolved.",
+    "Preserve correct worker_v1 understanding; do not rewrite everything generically.",
+    "End with exactly one fenced ```json block containing corrected_constraints, still_missing, and worker_next_focus."
+  ],
+  "output_contract": {
+    "format": "markdown revision message followed by exactly one final fenced json block",
+    "json_block_schema": {
+      "corrected_constraints": [
+        "constraints corrected or sharpened after reading worker_v1"
+      ],
+      "still_missing": [
+        "details still unavailable and not safe to assume"
+      ],
+      "worker_next_focus": [
+        "specific things worker should inspect or verify next"
+      ]
+    }
+  }
+}

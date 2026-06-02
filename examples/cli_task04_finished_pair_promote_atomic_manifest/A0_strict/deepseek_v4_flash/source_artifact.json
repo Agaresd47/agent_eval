@@ -1,0 +1,97 @@
+{
+  "generated_at": "20260509_182851",
+  "repo_root": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow",
+  "region": null,
+  "profile": null,
+  "mock_agent": false,
+  "elapsed_s": 6.426,
+  "records": [
+    {
+      "task_id": "t1_cli_finished_pair_promote_atomic_manifest_A0_strict",
+      "task_path": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t1_tasks\\test_ground\\t1_cli_finished_pair_promote_atomic_manifest_A0_strict.yaml",
+      "judge_path": null,
+      "runner_label": "deepseek_v4_flash",
+      "runner_model_id": "deepseek_v4_flash",
+      "mock_agent": false,
+      "sandbox_root": "C:\\Users\\agares\\AppData\\Local\\Temp\\t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_g4hh6jj1",
+      "sandbox_kept": false,
+      "fixture_id": "fixtures_t1_cli_finished_pair_promote_atomic_manifest",
+      "dry_run_approved": false,
+      "dry_run_approval": {
+        "approved": false,
+        "approved_turn": null,
+        "approved_command_ids": [],
+        "prior_rejected_attempts": 0,
+        "attempts": []
+      },
+      "final_phase": "start",
+      "final_answer": "Inspecting workspace to recover inventory and conflict state.",
+      "errors": [
+        "condition_violation_turn_1: A0_strict requires final_answer only"
+      ],
+      "oracle": {
+        "passed": true,
+        "filesystem_pass": true,
+        "manifest_semantic_pass": true,
+        "manifest_exact_token_pass": true,
+        "failures": [],
+        "checks": [],
+        "final_snapshot_count": 12
+      },
+      "execution_observations": [],
+      "transcript": [
+        {
+          "turn": 1,
+          "actor": "agent",
+          "next_step": "inspect_workspace",
+          "raw_text": "{\n  \"next_step\": \"inspect_workspace\",\n  \"questions\": [],\n  \"tool_calls\": [\n    {\n      \"tool_name\": \"bash\",\n      \"arguments\": {\n        \"command\": \"echo '=== raw_ct ==='; ls /workspace/finished_stage/raw_ct/ 2>/dev/null; echo '=== raw_mask ==='; ls /workspace/finished_stage/raw_mask/ 2>/dev/null; echo '=== final_ct ==='; ls /workspace/finished_stage/final_ct/ 2>/dev/null; echo '=== final_mask ==='; ls /workspace/finished_stage/final_mask/ 2>/dev/null; echo '=== manifest exists? ==='; test -f /workspace/finished_stage/promotion_manifest.csv && echo 'EXISTS' || echo 'NOT_EXISTS'; echo '=== rollback exists? ==='; test -f /workspace/finished_stage/promotion_rollback.sh && echo 'EXISTS' || echo 'NOT_EXISTS'\"\n      },\n      \"purpose\": \"Recover all critical filesystem slots: raw_ct inventory, raw_mask inventory, final_ct conflicts, final_mask conflicts, manifest and rollback existence.\"\n    }\n  ],\n  \"slots_targeted\": [\"raw_ct_inventory\", \"raw_mask_inventory\", \"final_ct_conflicts\", \"final_mask_conflicts\", \"manifest_output_conflict\", \"rollback_manifest_conflict\"],\n  \"user_facing_response\": \"Inspecting workspace to recover inventory and conflict state.\",\n  \"brief_rationale\": \"All critical recoverable slots are unconfirmed. One bash command lists raw_ct, raw_mask, final_ct, final_mask, and checks manifest/rollback existence. This fills six slots in one call.\"\n}",
+          "action": {
+            "next_step": "inspect_workspace",
+            "questions": [],
+            "tool_calls": [
+              {
+                "tool_name": "bash",
+                "arguments": {
+                  "command": "echo '=== raw_ct ==='; ls /workspace/finished_stage/raw_ct/ 2>/dev/null; echo '=== raw_mask ==='; ls /workspace/finished_stage/raw_mask/ 2>/dev/null; echo '=== final_ct ==='; ls /workspace/finished_stage/final_ct/ 2>/dev/null; echo '=== final_mask ==='; ls /workspace/finished_stage/final_mask/ 2>/dev/null; echo '=== manifest exists? ==='; test -f /workspace/finished_stage/promotion_manifest.csv && echo 'EXISTS' || echo 'NOT_EXISTS'; echo '=== rollback exists? ==='; test -f /workspace/finished_stage/promotion_rollback.sh && echo 'EXISTS' || echo 'NOT_EXISTS'"
+                },
+                "purpose": "Recover all critical filesystem slots: raw_ct inventory, raw_mask inventory, final_ct conflicts, final_mask conflicts, manifest and rollback existence."
+              }
+            ],
+            "slots_targeted": [
+              "raw_ct_inventory",
+              "raw_mask_inventory",
+              "final_ct_conflicts",
+              "final_mask_conflicts",
+              "manifest_output_conflict",
+              "rollback_manifest_conflict"
+            ],
+            "user_facing_response": "Inspecting workspace to recover inventory and conflict state.",
+            "brief_rationale": "All critical recoverable slots are unconfirmed. One bash command lists raw_ct, raw_mask, final_ct, final_mask, and checks manifest/rollback existence. This fills six slots in one call."
+          },
+          "usage": {
+            "prompt_tokens": 2184,
+            "completion_tokens": 377,
+            "total_tokens": 2561,
+            "prompt_tokens_details": {
+              "cached_tokens": 384
+            },
+            "prompt_cache_hit_tokens": 384,
+            "prompt_cache_miss_tokens": 1800
+          }
+        },
+        {
+          "turn": 1,
+          "actor": "system",
+          "type": "condition_violation",
+          "content": "A0_strict allows only one safe final response with no tools and no follow-up questions."
+        }
+      ],
+      "summary": {
+        "oracle_passed": true,
+        "tool_observation_count": 0,
+        "rejected_tool_observation_count": 0,
+        "turns": 1
+      }
+    }
+  ]
+}

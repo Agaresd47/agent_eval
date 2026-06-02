@@ -1,0 +1,56 @@
+{
+  "condition": "B1",
+  "seed": 0,
+  "episode_id": "ep003_totalseg_whitelist_split",
+  "original_request": "TotalSeg 输出每个病人 100+ 个结构 mask，但这条线后面训练只保留：\n心脏相关、肺叶、肋骨、胸椎（T 段）、锁骨、肱骨、胸骨、主动脉。\n\n请帮我写一个 worker-ready spec：\n对每个病人目录，把**不在白名单内**的 mask 文件搬到另一个目录留存，\n源目录只保留白名单内的文件。\n\n源：<dataset_root>/totalseg_output/<patient_id>/\n分流目标：<archive_root>/<patient_id>/\n\n这份 spec 里需要明确：\n- 白名单匹配到底按“类别 / 前缀”还是按“精确文件名”\n- 分流动作是 move、delete 还是 copy\n- 目标目录结构怎么镜像\n- 缺失文件怎么处理\n\n病人级独立，可并行。漏文件要记录但不要中断。\n",
+  "planner_v1_spec": "# Worker Specification: TotalSeg Whitelist File Segregation\n\n## Objective\nFor each patient directory under `<dataset_root>/totalseg_output/<patient_id>/`, move all `.nii.gz` files **not** in the provided whitelist to `<archive_root>/<patient_id>/`. The source directory retains only whitelisted files.\n\n## Inputs\n- `dataset_root`: Path to the root of TotalSeg output.\n- `archive_root`: Path to the root for archived (non-whitelisted) files.\n- `whitelist`: A **complete, exact set of filenames** (e.g., `{\"aorta.nii.gz\", \"heart.nii.gz\", ...}`) to retain. **Not** a set of patterns or categories.\n\n## Processing Steps (Per Patient)\n1. **Enumerate**: List all `.nii.gz` files in the source patient directory.\n2. **Classify**: For each file:\n   - If filename is in `whitelist`: **Keep** in source.\n   - If filename is **not** in `whitelist`: **Move** to the corresponding archive directory.\n3. **Archive Structure**: Mirror the patient directory structure. Create `<archive_root>/<patient_id>/` if it does not exist.\n4. **Move Operation**: Use atomic move (rename) if source and archive are on the same filesystem; otherwise, copy-then-delete.\n5. **Missing Files**: If a whitelisted file is absent from the source, log a warning but continue processing other files and patients.\n6. **Logging**: Record each moved file and any missing whitelisted files. Do not halt on errors for individual files or patients.\n\n## Constraints & Rules\n- **Whitelist Matching**: Exact filename match only. No prefix, pattern, or category-based matching.\n- **Action**: Move (not copy or delete). The goal is to segregate, not duplicate or destroy.\n- **Idempotency**: Re-running should not move files already in archive or re-move whitelisted files.\n- **Parallelism**: Patient directories are independent; process them in parallel.\n- **Error Handling**: Log and continue. Do not let one patient's failure block others.\n\n## Assumptions\n- All mask files are `.nii.gz` and reside directly in the patient directory (no subdirectories).\n- The `whitelist` is provided as a definitive, exhaustive list of filenames to keep.\n- The archive root is writable and has sufficient space.\n- The worker has permissions to read source and write to archive.\n\n## Risks\n- **Incomplete Whitelist**: If the whitelist is missing entries, valid files will be incorrectly moved to archive.\n- **Filesystem Differences**: Moving across filesystems may be slower and non-atomic.\n- **Concurrent Modification**: If other processes write to the source directory during execution, files may be missed or duplicated.\n- **Large Data Volume**: Moving many files may require careful resource management (e.g., open file handles).\n\n## Open Questions\n1. **Exact Whitelist**: What is the complete, explicit list of filenames to retain? The provided `whitelist_notes.md` is insufficient.\n2. **File Extensions**: Are there any non-`.nii.gz` files in the source directories that should be ignored or handled?\n3. **Archive Overwrite Policy**: If a file already exists in the archive (e.g., from a previous run), should it be overwritten, skipped, or cause an error?\n4. **Logging Destination**: Where should logs (moved files, missing files, errors) be written?\n5. **Completion Marker**: How should the worker signal successful completion for a patient (e.g., a marker file, exit code)?\n\n```json\n{\n  \"assumptions\": [\n    \"All mask files are .nii.gz and located directly in the patient directory.\",\n    \"The whitelist is provided as a complete set of exact filenames.\",\n    \"The archive root is on a writable filesystem with sufficient space.\",\n    \"The worker has read permissions on source and write permissions on archive.\"\n  ],\n  \"risks\": [\n    \"An incomplete whitelist will cause incorrect file segregation.\",\n    \"Moving files across filesystems may be slow and non-atomic.\",\n    \"Concurrent writes to source directories could lead to missed or duplicated files.\",\n    \"Large data volumes may require careful resource management to avoid exhaustion.\"\n  ],\n  \"open_questions\": [\n    \"What is the exact, exhaustive list of filenames in the whitelist?\",\n    \"Are there any non-.nii.gz files in the source directories that need handling?\",\n    \"What is the policy if a file already exists in the archive (overwrite/skip/error)?\",\n    \"Where should operational logs be written?\",\n    \"How should successful completion of a patient be indicated?\"\n  ]\n}\n```",
+  "worker_v1_interpretation_text": "{\n  \"understood_goal\": \"For each patient directory under the TotalSeg output root, move all .nii.gz files that are not in the provided whitelist to an archive directory, while keeping only the whitelisted files in the source directory.\",\n  \"constraints_to_follow\": [\n    \"Whitelist matching must be exact filename match only.\",\n    \"Only .nii.gz files are considered; other extensions are ignored.\",\n    \"Move operation must be atomic if source and archive are on the same filesystem; otherwise, use copy-then-delete.\",\n    \"Processing of patient directories is independent and can be done in parallel.\",\n    \"Log each moved file and any missing whitelisted files without halting on errors.\",\n    \"Re-running the process should not re-move files already in the archive or re-keep whitelisted files.\",\n    \"If a whitelisted file is missing from the source, log a warning but continue processing.\"\n  ],\n  \"information_still_missing\": [\n    \"The exact, exhaustive list of filenames in the whitelist.\",\n    \"The value of `dataset_root` and `archive_root` paths.\",\n    \"Policy for handling existing files in the archive (overwrite/skip/error).\",\n    \"Location where operational logs should be written.\",\n    \"Mechanism for signaling successful completion per patient (e.g., marker file, exit code).\"\n  ],\n  \"first_3_concrete_actions\": [\n    \"Request the exact whitelist file or list of filenames to be retained.\",\n    \"Confirm the values of `dataset_root` and `archive_root` paths.\",\n    \"Clarify the logging destination and the mechanism for indicating successful completion per patient.\"\n  ]\n}",
+  "worker_v1_interpretation_json": {
+    "understood_goal": "For each patient directory under the TotalSeg output root, move all .nii.gz files that are not in the provided whitelist to an archive directory, while keeping only the whitelisted files in the source directory.",
+    "constraints_to_follow": [
+      "Whitelist matching must be exact filename match only.",
+      "Only .nii.gz files are considered; other extensions are ignored.",
+      "Move operation must be atomic if source and archive are on the same filesystem; otherwise, use copy-then-delete.",
+      "Processing of patient directories is independent and can be done in parallel.",
+      "Log each moved file and any missing whitelisted files without halting on errors.",
+      "Re-running the process should not re-move files already in the archive or re-keep whitelisted files.",
+      "If a whitelisted file is missing from the source, log a warning but continue processing."
+    ],
+    "information_still_missing": [
+      "The exact, exhaustive list of filenames in the whitelist.",
+      "The value of `dataset_root` and `archive_root` paths.",
+      "Policy for handling existing files in the archive (overwrite/skip/error).",
+      "Location where operational logs should be written.",
+      "Mechanism for signaling successful completion per patient (e.g., marker file, exit code)."
+    ],
+    "first_3_concrete_actions": [
+      "Request the exact whitelist file or list of filenames to be retained.",
+      "Confirm the values of `dataset_root` and `archive_root` paths.",
+      "Clarify the logging destination and the mechanism for indicating successful completion per patient."
+    ]
+  },
+  "task": "Write a second planner message that corrects worker_v1 misunderstandings and fills or flags missing details.",
+  "instructions": [
+    "Do not write final implementation code.",
+    "Focus on the delta: what worker_v1 misunderstood, what the worker still lacks, and what the worker should do differently.",
+    "If an exact detail is unknown, say exactly what must be verified instead of inventing a default.",
+    "Do not turn category words, examples, prefixes, ranges, or semantic groupings into exact executable membership rules unless the prompt already provides the authoritative rule.",
+    "Do not upgrade a missing artifact into a guessed source of truth. If the worker still lacks the definitive whitelist, exact schema, or exact mapping, keep that artifact unresolved.",
+    "Preserve correct worker_v1 understanding; do not rewrite everything generically.",
+    "End with exactly one fenced ```json block containing corrected_constraints, still_missing, and worker_next_focus."
+  ],
+  "output_contract": {
+    "format": "markdown revision message followed by exactly one final fenced json block",
+    "json_block_schema": {
+      "corrected_constraints": [
+        "constraints corrected or sharpened after reading worker_v1"
+      ],
+      "still_missing": [
+        "details still unavailable and not safe to assume"
+      ],
+      "worker_next_focus": [
+        "specific things worker should inspect or verify next"
+      ]
+    }
+  }
+}

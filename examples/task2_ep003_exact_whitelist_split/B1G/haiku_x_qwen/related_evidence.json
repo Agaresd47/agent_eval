@@ -1,0 +1,110 @@
+[
+  {
+    "condition": "B1_guardrailed",
+    "run_status": "completed",
+    "generated_at": "20260505_103807",
+    "source_run_relpath": "run_result/T2_pilot_V1/output/t2_matrix_20260505_103807",
+    "source_record_indices": [
+      0
+    ],
+    "verdicts": [
+      "spec_weak"
+    ],
+    "handoff_scores": [
+      5
+    ],
+    "worker_scores": [
+      7
+    ]
+  },
+  {
+    "condition": "B1_guardrailed",
+    "run_status": "completed",
+    "generated_at": "20260505_104047",
+    "source_run_relpath": "run_result/T2_pilot_V1/output/t2_matrix_20260505_104047",
+    "source_record_indices": [
+      0
+    ],
+    "verdicts": [
+      "spec_strong"
+    ],
+    "handoff_scores": [
+      9
+    ],
+    "worker_scores": [
+      9
+    ]
+  },
+  {
+    "condition": "B1_guardrailed",
+    "run_status": "completed",
+    "generated_at": "20260505_104232",
+    "source_run_relpath": "run_result/T2_pilot_V1/output/t2_matrix_20260505_104232",
+    "source_record_indices": [
+      0
+    ],
+    "verdicts": [
+      "spec_weak"
+    ],
+    "handoff_scores": [
+      5
+    ],
+    "worker_scores": [
+      6
+    ]
+  },
+  {
+    "condition": "B1_guardrailed",
+    "run_status": "completed",
+    "generated_at": "20260505_104505",
+    "source_run_relpath": "run_result/T2_pilot_V1/output/t2_matrix_20260505_104505",
+    "source_record_indices": [
+      0
+    ],
+    "verdicts": [
+      "spec_acceptable"
+    ],
+    "handoff_scores": [
+      6
+    ],
+    "worker_scores": [
+      6
+    ]
+  },
+  {
+    "condition": "B1",
+    "run_status": "completed",
+    "generated_at": "20260508_202538",
+    "source_run_relpath": "run_result/T2_fill/output/t2_matrix_20260508_202538",
+    "source_record_indices": [
+      0
+    ],
+    "verdicts": [
+      "spec_unsafe"
+    ],
+    "handoff_scores": [
+      2
+    ],
+    "worker_scores": [
+      3
+    ]
+  },
+  {
+    "condition": "B1",
+    "run_status": "completed",
+    "generated_at": "20260508_205311",
+    "source_run_relpath": "run_result/T2_fill/output/t2_matrix_20260508_205311",
+    "source_record_indices": [
+      0
+    ],
+    "verdicts": [
+      "spec_weak"
+    ],
+    "handoff_scores": [
+      6
+    ],
+    "worker_scores": [
+      7
+    ]
+  }
+]

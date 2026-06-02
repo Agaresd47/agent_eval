@@ -1,0 +1,196 @@
+{
+  "episode_id": "ep003_totalseg_whitelist_split",
+  "condition": "B1",
+  "seed": 0,
+  "pair_label": "qwen_x_qwen",
+  "planner_label": "qwen3_coder_30b",
+  "worker_label": "qwen3_coder_30b",
+  "planner_visible_request": "TotalSeg 输出每个病人 100+ 个结构 mask，但这条线后面训练只保留：\n心脏相关、肺叶、肋骨、胸椎（T 段）、锁骨、肱骨、胸骨、主动脉。\n\n请帮我写一个 worker-ready spec：\n对每个病人目录，把**不在白名单内**的 mask 文件搬到另一个目录留存，\n源目录只保留白名单内的文件。\n\n源：<dataset_root>/totalseg_output/<patient_id>/\n分流目标：<archive_root>/<patient_id>/\n\n这份 spec 里需要明确：\n- 白名单匹配到底按“类别 / 前缀”还是按“精确文件名”\n- 分流动作是 move、delete 还是 copy\n- 目标目录结构怎么镜像\n- 缺失文件怎么处理\n\n病人级独立，可并行。漏文件要记录但不要中断。\n",
+  "gold_task_goal": "Produce a worker-ready spec for whitelist-driven TotalSeg file triage. The useful signal is whether the planner preserves the real boundary: exact whitelist-driven move semantics with mirrored archive structure, while keeping unresolved exact whitelist material explicit instead of inventing a convenient prefix/category rule.\n",
+  "gold_constraints": [
+    "Treat the whitelist as exact filename membership, not category words or prefix matching.",
+    "Preserve the action boundary: move non-whitelist files into the archive mirror; do not delete them and do not copy them by default.",
+    "Preserve mirrored patient-level structure: `<archive_root>/<patient_id>/<file>.nii.gz`.",
+    "Use the visible examples to avoid false generalization: `rib_left_1.nii.gz` and `rib_left_10.nii.gz` are distinct exact filenames; `vertebrae_T5.nii.gz` is in-scope while `vertebrae_C3.nii.gz` is not.",
+    "If the full whitelist has not been fully materialized from visible context, explicitly leave it as missing information or a required handoff artifact instead of guessing.",
+    "Missing source files should be logged and skipped without aborting the whole run."
+  ],
+  "gold_relevant_files": [
+    "<dataset_root>/totalseg_output/<patient_id>/",
+    "<archive_root>/<patient_id>/",
+    "<workspace>/whitelist_notes.md",
+    "<archive_root>/missing_files.log"
+  ],
+  "judge_only_rubric": {
+    "critical_constraints_min_for_acceptable": 4,
+    "critical_constraints_min_for_strong": 5,
+    "score_caps": {
+      "max_spec_score_if_no_gold_constraint_captured": 3,
+      "max_spec_score_if_forbidden_assumption_introduced": 5,
+      "max_worker_score_if_missing_info_empty_under_weak_spec": 6
+    },
+    "positive_signals": [
+      "Planner anchors the worker on the real T2 boundary: exact whitelist membership, move-not-delete semantics, mirrored archive structure, and logged skip behavior.",
+      "Planner uses the visible filename examples to block bad generalization instead of encouraging broad prefix heuristics.",
+      "Planner separates grounded facts from the still-missing exact whitelist artifact.",
+      "Planner v2 corrects worker_v1 if it drifts toward category/prefix matching or delete semantics.",
+      "Worker keeps the missing whitelist artifact in `information_still_missing` rather than silently inventing expansion rules."
+    ],
+    "negative_signals": [
+      "Planner gives the worker a convenient but wrong default, especially prefix/category matching or delete semantics.",
+      "Planner spends effort on side-policy trivia while leaving the whitelist/move/mirror boundary vague.",
+      "Worker_v2 remains confidently wrong about exact matching, move semantics, or mirrored archive layout after planner_v2."
+    ]
+  },
+  "episode_gold_extras": {},
+  "expected_v1_pitfalls": [
+    "Planner collapses the task into category/prefix filtering such as `rib_*` or `heart_*` without preserving exact whitelist membership as the real boundary.",
+    "Planner turns triage into delete/cleanup semantics instead of move-to-archive semantics.",
+    "Planner acts as if the full whitelist is already known and worker-safe when the visible context only supports a partial expansion.",
+    "Worker copies a vague handoff and starts deriving whitelist rules from category words instead of raising the missing exact list."
+  ],
+  "decoys": [
+    "A response may sound concrete because it lists regexes, glob patterns, or concurrency details while still leaving the whitelist boundary wrong.",
+    "A response may treat archive as a trash folder and propose deletion after verification even though the task is framed as keep-and-triage."
+  ],
+  "forbidden_assumptions": [
+    "Do not accept category-only, prefix-only, or regex-only expansion as a safe substitute for an exact whitelist unless the planner explicitly marks it as an unresolved approximation.",
+    "Do not reward extra resume markers, overwrite policy, or logging verbosity unless they replace or distort the core whitelist/move/mirror boundary.",
+    "Do not accept delete semantics or hard cleanup defaults when the visible task boundary is move-to-archive."
+  ],
+  "planner_v1_response_text": "### Worker Implementation Spec\n\n#### Input & Output\n- **Source Directory**: `<dataset_root>/totalseg_output/<patient_id>/`\n- **Archive Directory**: `<archive_root>/<patient_id>/` (must exist or be created)\n- **Operation Type**: Move files (not delete or copy)\n\n#### File Matching Logic\n- Match against a **white-listed set of exact filenames**, derived from `whitelist_notes.md`.\n- Do **not** match based on prefixes or categories like \"heart\", \"lung\", etc., unless explicitly listed as full filenames.\n- Files that do not match any entry in the white-list should be moved to the archive directory.\n\n#### Directory Structure\n- For each patient:\n  - Source directory: `<dataset_root>/totalseg_output/<patient_id>/`\n  - Archive directory: `<archive_root>/<patient_id>/`\n- The archive directory mirrors the structure of the source directory for moved files.\n\n#### Handling Missing Files\n- If a file in the source directory does not exist during processing, log the event but continue with other files.\n- If a file exists in the archive directory but cannot be moved due to permission issues, log the error and proceed.\n\n#### Parallelism\n- Each patient directory can be processed independently.\n- No coordination between patients required.\n\n#### Error Handling\n- Log errors for individual files without halting overall execution.\n- Continue processing remaining patients if one fails.\n\n#### Final State\n- After processing, the source directory contains only whitelisted files.\n- All non-whitelisted files are moved to the corresponding archive directory under `<archive_root>/<patient_id>/`.\n\n```json\n{\n  \"assumptions\": [\n    \"The whitelist is defined by exact filenames from `whitelist_notes.md`.\",\n    \"Files are uniquely named within each patient's directory.\",\n    \"The archive root directory structure will mirror the source structure per patient.\",\n    \"The operation is move-based, not delete or copy.\",\n    \"Each patient’s directory is independent and can be processed in parallel.\"\n  ],\n  \"risks\": [\n    \"Incorrectly interpreting category names as filename patterns may lead to wrong file selection.\",\n    \"Failure to create or access the archive directory could cause partial failure.\",\n    \"Missing files in source directories may result in incomplete processing logs.\"\n  ],\n  \"open_questions\": [\n    \"What is the precise list of whitelisted filenames?\",\n    \"Should the worker attempt to create the archive directory if it doesn't exist?\",\n    \"Is there a specific logging format or destination for errors?\"\n  ]\n}\n```",
+  "worker_v1_response_text": "{\n  \"understood_goal\": \"Move files from the source directory to an archive directory based on a whitelist of exact filenames. Only files matching the whitelist should remain in the source directory; all others should be moved to the archive directory.\",\n  \"constraints_to_follow\": [\n    \"Match files exactly against a whitelist defined in `whitelist_notes.md`.\",\n    \"Only move files, not copy or delete.\",\n    \"Process each patient directory independently.\",\n    \"Log errors for missing or inaccessible files but do not halt execution.\",\n    \"Ensure the archive directory exists or is created before moving files.\",\n    \"Maintain mirrored directory structures between source and archive.\",\n    \"Do not interpret category names (e.g., 'heart', 'lung') as patterns unless they appear as full filenames in the whitelist.\"\n  ],\n  \"information_still_missing\": [\n    \"The precise list of whitelisted filenames from `whitelist_notes.md`.\",\n    \"Whether the worker should attempt to create the archive directory if it does not already exist.\",\n    \"The specific logging format or destination for errors encountered during processing.\"\n  ],\n  \"first_3_concrete_actions\": [\n    \"Verify whether the archive directory exists for each patient; create it if necessary (or confirm behavior for missing directories).\",\n    \"Retrieve or parse the exact list of whitelisted filenames from `whitelist_notes.md`.\",\n    \"Define how errors will be logged (format, destination) to ensure compliance with error handling requirements.\"\n  ]\n}",
+  "worker_v1_response_json": {
+    "understood_goal": "Move files from the source directory to an archive directory based on a whitelist of exact filenames. Only files matching the whitelist should remain in the source directory; all others should be moved to the archive directory.",
+    "constraints_to_follow": [
+      "Match files exactly against a whitelist defined in `whitelist_notes.md`.",
+      "Only move files, not copy or delete.",
+      "Process each patient directory independently.",
+      "Log errors for missing or inaccessible files but do not halt execution.",
+      "Ensure the archive directory exists or is created before moving files.",
+      "Maintain mirrored directory structures between source and archive.",
+      "Do not interpret category names (e.g., 'heart', 'lung') as patterns unless they appear as full filenames in the whitelist."
+    ],
+    "information_still_missing": [
+      "The precise list of whitelisted filenames from `whitelist_notes.md`.",
+      "Whether the worker should attempt to create the archive directory if it does not already exist.",
+      "The specific logging format or destination for errors encountered during processing."
+    ],
+    "first_3_concrete_actions": [
+      "Verify whether the archive directory exists for each patient; create it if necessary (or confirm behavior for missing directories).",
+      "Retrieve or parse the exact list of whitelisted filenames from `whitelist_notes.md`.",
+      "Define how errors will be logged (format, destination) to ensure compliance with error handling requirements."
+    ]
+  },
+  "planner_v2_response_text": "### Planner Message\n\nThe worker's interpretation has correctly identified the core logic and constraints, but there are a few key points that need clarification or correction:\n\n1. **File Matching Rule**: The worker correctly states that matching is done via exact filenames from `whitelist_notes.md`. However, it's important to emphasize that **no pattern-matching or category inference** should occur — even if a file name includes terms like “heart” or “lung,” unless those exact strings appear in the whitelist.\n\n2. **Directory Creation Behavior**: While the worker assumes that the archive directory should be created if missing, this assumption isn’t confirmed in the original prompt. It must be explicitly verified whether the system expects the worker to create directories or if it's guaranteed that they already exist.\n\n3. **Error Logging Specification**: The worker needs to know the **logging format and destination** for errors. This is not specified in the prompt, so we cannot assume defaults.\n\n4. **Handling of Missing Files**: The worker correctly notes that missing files should be logged but not interrupt processing. However, since the task says \"漏文件要记录但不要中断\" (missing files should be logged but not interrupt), it implies that the system may expect some form of reporting or tracking mechanism for such cases.\n\n5. **Whitelist Definition Source**: The exact list of whitelisted filenames is still pending confirmation from `whitelist_notes.md`, which is outside the scope of this prompt.\n\n---\n\n```json\n{\n  \"corrected_constraints\": [\n    \"Match files strictly against exact filenames listed in `whitelist_notes.md`; do not infer matches based on semantic categories or prefixes.\",\n    \"Only perform move operations; do not copy or delete.\",\n    \"Each patient directory is independent and can be processed in parallel.\",\n    \"Log errors for missing or inaccessible files without halting execution.\",\n    \"Do not make assumptions about creating archive directories unless explicitly allowed by the environment setup.\",\n    \"Maintain mirrored directory structures between source and archive paths.\"\n  ],\n  \"still_missing\": [\n    \"The precise list of whitelisted filenames from `whitelist_notes.md`.\",\n    \"Whether the worker is expected to create the archive directory if it does not exist.\",\n    \"The specific logging format or destination for error messages during file operations.\"\n  ],\n  \"worker_next_focus\": [\n    \"Confirm the exact list of whitelisted filenames from `whitelist_notes.md`.\",\n    \"Verify whether the worker should attempt to create the archive directory if it does not exist.\",\n    \"Clarify the logging strategy for errors (format, output location, etc.) to ensure compliance with system expectations.\"\n  ]\n}\n```",
+  "worker_v2_response_text": "{\n  \"understood_goal\": \"Move files from the source directory to an archive directory based on a whitelist of exact filenames. Only files matching the whitelist should remain in the source directory; all others should be moved to the archive directory.\",\n  \"constraints_to_follow\": [\n    \"Match files strictly against exact filenames listed in `whitelist_notes.md`; do not infer matches based on semantic categories or prefixes.\",\n    \"Only perform move operations; do not copy or delete.\",\n    \"Each patient directory is independent and can be processed in parallel.\",\n    \"Log errors for missing or inaccessible files without halting execution.\",\n    \"Do not make assumptions about creating archive directories unless explicitly allowed by the environment setup.\",\n    \"Maintain mirrored directory structures between source and archive paths.\"\n  ],\n  \"information_still_missing\": [\n    \"The precise list of whitelisted filenames from `whitelist_notes.md`.\",\n    \"Whether the worker is expected to create the archive directory if it does not exist.\",\n    \"The specific logging format or destination for error messages during file operations.\"\n  ],\n  \"first_3_concrete_actions\": [\n    \"Confirm the exact list of whitelisted filenames from `whitelist_notes.md`.\",\n    \"Verify whether the worker should attempt to create the archive directory if it does not exist.\",\n    \"Clarify the logging strategy for errors (format, output location, etc.) to ensure compliance with system expectations.\"\n  ],\n  \"understanding_delta\": [\n    \"Reinforced the strict requirement for exact filename matching, rejecting any inference from semantic categories or prefixes.\",\n    \"Emphasized that no assumptions should be made regarding directory creation—this must be clarified.\",\n    \"Stated that error logging specifics (format and destination) are not defined and must be confirmed.\"\n  ]\n}",
+  "worker_v2_response_json": {
+    "understood_goal": "Move files from the source directory to an archive directory based on a whitelist of exact filenames. Only files matching the whitelist should remain in the source directory; all others should be moved to the archive directory.",
+    "constraints_to_follow": [
+      "Match files strictly against exact filenames listed in `whitelist_notes.md`; do not infer matches based on semantic categories or prefixes.",
+      "Only perform move operations; do not copy or delete.",
+      "Each patient directory is independent and can be processed in parallel.",
+      "Log errors for missing or inaccessible files without halting execution.",
+      "Do not make assumptions about creating archive directories unless explicitly allowed by the environment setup.",
+      "Maintain mirrored directory structures between source and archive paths."
+    ],
+    "information_still_missing": [
+      "The precise list of whitelisted filenames from `whitelist_notes.md`.",
+      "Whether the worker is expected to create the archive directory if it does not exist.",
+      "The specific logging format or destination for error messages during file operations."
+    ],
+    "first_3_concrete_actions": [
+      "Confirm the exact list of whitelisted filenames from `whitelist_notes.md`.",
+      "Verify whether the worker should attempt to create the archive directory if it does not exist.",
+      "Clarify the logging strategy for errors (format, output location, etc.) to ensure compliance with system expectations."
+    ],
+    "understanding_delta": [
+      "Reinforced the strict requirement for exact filename matching, rejecting any inference from semantic categories or prefixes.",
+      "Emphasized that no assumptions should be made regarding directory creation—this must be clarified.",
+      "Stated that error logging specifics (format and destination) are not defined and must be confirmed."
+    ]
+  },
+  "final_worker_response_text": "{\n  \"understood_goal\": \"Move files from the source directory to an archive directory based on a whitelist of exact filenames. Only files matching the whitelist should remain in the source directory; all others should be moved to the archive directory.\",\n  \"constraints_to_follow\": [\n    \"Match files strictly against exact filenames listed in `whitelist_notes.md`; do not infer matches based on semantic categories or prefixes.\",\n    \"Only perform move operations; do not copy or delete.\",\n    \"Each patient directory is independent and can be processed in parallel.\",\n    \"Log errors for missing or inaccessible files without halting execution.\",\n    \"Do not make assumptions about creating archive directories unless explicitly allowed by the environment setup.\",\n    \"Maintain mirrored directory structures between source and archive paths.\"\n  ],\n  \"information_still_missing\": [\n    \"The precise list of whitelisted filenames from `whitelist_notes.md`.\",\n    \"Whether the worker is expected to create the archive directory if it does not exist.\",\n    \"The specific logging format or destination for error messages during file operations.\"\n  ],\n  \"first_3_concrete_actions\": [\n    \"Confirm the exact list of whitelisted filenames from `whitelist_notes.md`.\",\n    \"Verify whether the worker should attempt to create the archive directory if it does not exist.\",\n    \"Clarify the logging strategy for errors (format, output location, etc.) to ensure compliance with system expectations.\"\n  ],\n  \"understanding_delta\": [\n    \"Reinforced the strict requirement for exact filename matching, rejecting any inference from semantic categories or prefixes.\",\n    \"Emphasized that no assumptions should be made regarding directory creation—this must be clarified.\",\n    \"Stated that error logging specifics (format and destination) are not defined and must be confirmed.\"\n  ]\n}",
+  "final_worker_response_json": {
+    "understood_goal": "Move files from the source directory to an archive directory based on a whitelist of exact filenames. Only files matching the whitelist should remain in the source directory; all others should be moved to the archive directory.",
+    "constraints_to_follow": [
+      "Match files strictly against exact filenames listed in `whitelist_notes.md`; do not infer matches based on semantic categories or prefixes.",
+      "Only perform move operations; do not copy or delete.",
+      "Each patient directory is independent and can be processed in parallel.",
+      "Log errors for missing or inaccessible files without halting execution.",
+      "Do not make assumptions about creating archive directories unless explicitly allowed by the environment setup.",
+      "Maintain mirrored directory structures between source and archive paths."
+    ],
+    "information_still_missing": [
+      "The precise list of whitelisted filenames from `whitelist_notes.md`.",
+      "Whether the worker is expected to create the archive directory if it does not exist.",
+      "The specific logging format or destination for error messages during file operations."
+    ],
+    "first_3_concrete_actions": [
+      "Confirm the exact list of whitelisted filenames from `whitelist_notes.md`.",
+      "Verify whether the worker should attempt to create the archive directory if it does not exist.",
+      "Clarify the logging strategy for errors (format, output location, etc.) to ensure compliance with system expectations."
+    ],
+    "understanding_delta": [
+      "Reinforced the strict requirement for exact filename matching, rejecting any inference from semantic categories or prefixes.",
+      "Emphasized that no assumptions should be made regarding directory creation—this must be clarified.",
+      "Stated that error logging specifics (format and destination) are not defined and must be confirmed."
+    ]
+  },
+  "deterministic_contract_checks": {
+    "planner_non_empty": true,
+    "planner_has_json_tail": true,
+    "planner_json_tail_repaired": false,
+    "format_penalty_points": 0,
+    "worker_json_parse_ok": true,
+    "worker_required_fields_present": true,
+    "violations": [],
+    "planner_v2_has_json_tail": true,
+    "planner_v2_json_tail_repaired": false,
+    "worker_v2_json_parse_ok": true,
+    "worker_v2_required_fields_present": true
+  },
+  "judge_instructions": [
+    "Evaluate information flow, not whether final code was produced.",
+    "Planner constraint coverage must be judged against gold_constraints that are reasonably inferable from the visible request; do not require impossible hidden details unless the episode rubric marks them critical.",
+    "If an exact gold detail was not visible, a planner should receive real credit for explicitly naming that exact category as unresolved instead of inventing a default.",
+    "Treat 'covered_or_flagged' as the core T2 signal: a constraint is good if the planner either states the correct concrete rule or clearly flags that the worker must verify/obtain that exact rule before implementing.",
+    "Penalize planner false confidence when it gives worker a concrete wrong default instead of flagging a missing detail.",
+    "Reward worker output when it correctly flags missing information caused by a weak planner spec.",
+    "If planner_v2 and worker_v2 are present, evaluate the rumination loop: did worker_v1 expose a misunderstanding, did planner_v2 address it, and did worker_v2 become more accurate or safer?",
+    "Do not reward planner_v2 for merely restating planner_v1. Reward targeted correction of worker_v1 misunderstandings and sharper missing-info boundaries.",
+    "When two worker rounds are present, final handoff_performance_score should mainly reflect worker_v2 understanding plus the improvement from worker_v1 to worker_v2.",
+    "Do not over-penalize a cautious planner for not knowing hidden dirty-work constants; penalize it for hiding the uncertainty from the worker.",
+    "Treat missing fenced planner JSON tail as a light formatting penalty only when the content is otherwise usable; do not let format alone dominate the benchmark score.",
+    "Score each dimension 0-2 and total to 0-10.",
+    "Set handoff_performance_score as the main benchmark score for the planner-as-signal-sender. It should primarily reflect whether the qwen worker can form a correct, safe interpretation from this planner spec. Use worker_score as the baseline, then cap it if the planner introduced an unsafe false assumption.",
+    "Return strict JSON only."
+  ],
+  "output_schema": {
+    "planner_constraint_coverage_score": "0-2",
+    "planner_risk_flagging_score": "0-2",
+    "worker_v1_score": "0-10",
+    "planner_revision_score": "0-10",
+    "worker_v2_score": "0-10",
+    "understanding_delta_score": "0-10",
+    "spec_score": "0-10",
+    "worker_score": "0-10",
+    "handoff_performance_score": "0-10 main score for planner signal quality",
+    "format_penalty_applied": "0-2 mild deduction for protocol misses such as absent fenced json tail",
+    "final_verdict": "spec_strong | spec_acceptable | spec_weak | spec_unsafe",
+    "covered_or_flagged_constraints": [
+      "gold constraints either correctly stated or clearly exposed as unresolved exact details"
+    ],
+    "covered_gold_constraints": [
+      "gold constraints captured by planner or worker"
+    ],
+    "missed_gold_constraints": [
+      "important gold constraints omitted or mishandled"
+    ],
+    "forbidden_assumptions_made": [
+      "wrong assumptions made by planner or worker"
+    ],
+    "separation_notes": "why this cell should or should not separate models",
+    "concise_rationale": "short evidence-based explanation"
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "condition": "B1",
+  "seed": 0,
+  "episode_id": "ep003_totalseg_whitelist_split",
+  "original_request": "TotalSeg 输出每个病人 100+ 个结构 mask，但这条线后面训练只保留：\n心脏相关、肺叶、肋骨、胸椎（T 段）、锁骨、肱骨、胸骨、主动脉。\n\n请帮我写一个 worker-ready spec：\n对每个病人目录，把**不在白名单内**的 mask 文件搬到另一个目录留存，\n源目录只保留白名单内的文件。\n\n源：<dataset_root>/totalseg_output/<patient_id>/\n分流目标：<archive_root>/<patient_id>/\n\n这份 spec 里需要明确：\n- 白名单匹配到底按“类别 / 前缀”还是按“精确文件名”\n- 分流动作是 move、delete 还是 copy\n- 目标目录结构怎么镜像\n- 缺失文件怎么处理\n\n病人级独立，可并行。漏文件要记录但不要中断。\n",
+  "planner_v1_spec": "## Worker-Ready Spec: TotalSeg White-List File Split\n\n### 1. Objective\nFor each patient directory under `<dataset_root>/totalseg_output/<patient_id>/`, move all mask files **not in the whitelist** to a corresponding archive directory `<archive_root>/<patient_id>/`. After the operation, the source directory should contain only whitelisted files, and the archive directory should mirror the moved files.\n\n### 2. Whitelist Matching Rule\n- **Matching is by exact filename** (including extension `.nii.gz`), not by prefix, category, or pattern.\n- The whitelist is a **fixed set of exact filenames** that must be provided as a complete list. The file `<workspace>/whitelist_notes.md` contains only category descriptions and a few example filenames; it is **not** a complete executable whitelist.\n- The worker must **not** infer or expand the whitelist from category names (e.g., \"rib\", \"heart\", \"vertebrae_T\"). Only the exact filenames in the final whitelist are considered whitelisted.\n- Based on the visible file index and the request, the following exact filenames are known to be whitelisted (this is a partial list; the full whitelist must be provided):\n  - `aorta.nii.gz`\n  - `heart.nii.gz`\n  - `heart_atrium_left.nii.gz`\n  - `lung_lower_lobe_right.nii.gz`\n  - `rib_left_1.nii.gz`\n  - `rib_left_10.nii.gz`\n  - `vertebrae_T5.nii.gz`\n- Known non-whitelisted files from the index (to be moved):\n  - `vertebrae_C3.nii.gz`\n  - `kidney_left.nii.gz`\n  - `spleen.nii.gz`\n\n### 3. Action: Move\n- The operation is **move** (not copy or delete). Files are relocated from source to archive.\n- After move, the source directory retains only whitelisted files; the archive directory contains the moved files.\n- The archive is a retention location, not a trash bin.\n\n### 4. Target Directory Structure\n- The archive directory mirrors the source structure: `<archive_root>/<patient_id>/` is a flat directory (same as source) containing only the moved files.\n- No subdirectory nesting is required beyond the patient ID level.\n\n### 5. Missing File Handling\n- If a whitelisted file is missing from the source, log a warning but **do not** stop processing that patient or the entire run.\n- If a non-whitelisted file is missing, it is irrelevant (nothing to move).\n- Logging should include patient ID and filename.\n\n### 6. Parallelism\n- Patients are independent. The worker may process patients in parallel.\n\n### 7. Error Handling\n- Any file move failure (e.g., permission, disk full) should be logged per file, and the worker should continue with remaining files for that patient.\n- Do not halt the entire process for a single patient or file error.\n\n### 8. Inputs Required (Not Provided in Prompt)\n- **Complete whitelist**: A list of exact filenames (e.g., from a CSV or text file) that defines which files to keep. The `whitelist_notes.md` is insufficient.\n- **Exact paths**: `<dataset_root>` and `<archive_root>` are placeholders; actual paths must be supplied.\n- **Patient list**: The set of patient IDs to process.\n\n```json\n{\n  \"assumptions\": [\n    \"The whitelist is a fixed set of exact filenames, not patterns or categories.\",\n    \"All files are .nii.gz and reside flat in the patient directory.\",\n    \"The archive directory for each patient already exists or can be created by the worker.\",\n    \"The move operation is safe (no overwrite conflicts) because each file exists only once in source.\",\n    \"The worker has read/write permissions on both source and archive directories.\"\n  ],\n  \"risks\": [\n    \"Using whitelist_notes.md as the whitelist would cause incorrect file retention (e.g., keeping kidney_left.nii.gz or missing vertebrae_T2..T12).\",\n    \"If the whitelist is incomplete, some whitelisted files may be moved to archive by mistake.\",\n    \"Parallel processing may cause race conditions if two patients share a file (unlikely but should be avoided by design).\",\n    \"Disk space must be sufficient for the move (no extra copy needed, but archive must have space).\"\n  ],\n  \"open_questions\": [\n    \"What is the exact complete whitelist of filenames?\",\n    \"What are the actual values for <dataset_root> and <archive_root>?\",\n    \"How should the patient list be obtained (e.g., directory listing, a file)?\",\n    \"Should the worker create the archive patient directory if it does not exist?\",\n    \"What is the logging format and destination?\",\n    \"Is there a maximum number of parallel workers allowed?\",\n    \"Should the worker verify that no files remain in source after move that are not in the whitelist?\"\n  ]\n}\n```",
+  "worker_v1_interpretation_text": "{\n  \"understood_goal\": \"For each patient directory under a specified dataset root, move mask files that are not in a given whitelist to a corresponding archive directory under a specified archive root, ensuring the source directory retains only whitelisted files.\",\n  \"constraints_to_follow\": [\n    \"Matching of whitelist entries is by exact filename including extension (.nii.gz).\",\n    \"Only the exact filenames listed in the complete whitelist are considered whitelisted.\",\n    \"Files must be moved, not copied or deleted.\",\n    \"Archive directories must mirror the source structure at the patient ID level.\",\n    \"Processing of patients is independent and may be done in parallel.\",\n    \"Errors during file moves should be logged individually without halting the process.\",\n    \"Missing whitelisted files should be logged as warnings but not stop processing.\",\n    \"No overwrite conflicts are expected since each file exists only once in source.\"\n  ],\n  \"information_still_missing\": [\n    \"The complete list of exact filenames that constitute the whitelist.\",\n    \"The actual path values for <dataset_root> and <archive_root>.\",\n    \"The method or source for obtaining the list of patient IDs to process.\",\n    \"Whether the worker should create the archive directory if it does not exist.\",\n    \"The logging format and destination for warnings and errors.\",\n    \"Any limits on the number of parallel workers allowed.\",\n    \"Confirmation on whether post-move verification of source directory contents is required.\"\n  ],\n  \"first_3_concrete_actions\": [\n    \"Request the complete whitelist of exact filenames from the user or designated source.\",\n    \"Confirm the actual paths for <dataset_root> and <archive_root> with the user.\",\n    \"Determine how the list of patient IDs will be sourced (e.g., directory listing, input file).\"\n  ]\n}",
+  "worker_v1_interpretation_json": {
+    "understood_goal": "For each patient directory under a specified dataset root, move mask files that are not in a given whitelist to a corresponding archive directory under a specified archive root, ensuring the source directory retains only whitelisted files.",
+    "constraints_to_follow": [
+      "Matching of whitelist entries is by exact filename including extension (.nii.gz).",
+      "Only the exact filenames listed in the complete whitelist are considered whitelisted.",
+      "Files must be moved, not copied or deleted.",
+      "Archive directories must mirror the source structure at the patient ID level.",
+      "Processing of patients is independent and may be done in parallel.",
+      "Errors during file moves should be logged individually without halting the process.",
+      "Missing whitelisted files should be logged as warnings but not stop processing.",
+      "No overwrite conflicts are expected since each file exists only once in source."
+    ],
+    "information_still_missing": [
+      "The complete list of exact filenames that constitute the whitelist.",
+      "The actual path values for <dataset_root> and <archive_root>.",
+      "The method or source for obtaining the list of patient IDs to process.",
+      "Whether the worker should create the archive directory if it does not exist.",
+      "The logging format and destination for warnings and errors.",
+      "Any limits on the number of parallel workers allowed.",
+      "Confirmation on whether post-move verification of source directory contents is required."
+    ],
+    "first_3_concrete_actions": [
+      "Request the complete whitelist of exact filenames from the user or designated source.",
+      "Confirm the actual paths for <dataset_root> and <archive_root> with the user.",
+      "Determine how the list of patient IDs will be sourced (e.g., directory listing, input file)."
+    ]
+  },
+  "task": "Write a second planner message that corrects worker_v1 misunderstandings and fills or flags missing details.",
+  "instructions": [
+    "Do not write final implementation code.",
+    "Focus on the delta: what worker_v1 misunderstood, what the worker still lacks, and what the worker should do differently.",
+    "If an exact detail is unknown, say exactly what must be verified instead of inventing a default.",
+    "Do not turn category words, examples, prefixes, ranges, or semantic groupings into exact executable membership rules unless the prompt already provides the authoritative rule.",
+    "Do not upgrade a missing artifact into a guessed source of truth. If the worker still lacks the definitive whitelist, exact schema, or exact mapping, keep that artifact unresolved.",
+    "Preserve correct worker_v1 understanding; do not rewrite everything generically.",
+    "End with exactly one fenced ```json block containing corrected_constraints, still_missing, and worker_next_focus."
+  ],
+  "output_contract": {
+    "format": "markdown revision message followed by exactly one final fenced json block",
+    "json_block_schema": {
+      "corrected_constraints": [
+        "constraints corrected or sharpened after reading worker_v1"
+      ],
+      "still_missing": [
+        "details still unavailable and not safe to assume"
+      ],
+      "worker_next_focus": [
+        "specific things worker should inspect or verify next"
+      ]
+    }
+  }
+}

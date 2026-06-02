@@ -1,0 +1,56 @@
+[
+  {
+    "condition": "B1_guardrailed",
+    "run_status": "completed",
+    "generated_at": "20260508_200616",
+    "source_run_relpath": "run_result/T2_fill/output/t2_matrix_20260508_200616",
+    "source_record_indices": [
+      0
+    ],
+    "verdicts": [
+      "spec_weak"
+    ],
+    "handoff_scores": [
+      1
+    ],
+    "worker_scores": [
+      1
+    ]
+  },
+  {
+    "condition": "B1",
+    "run_status": "completed",
+    "generated_at": "20260508_202538",
+    "source_run_relpath": "run_result/T2_fill/output/t2_matrix_20260508_202538",
+    "source_record_indices": [
+      4
+    ],
+    "verdicts": [
+      "spec_acceptable"
+    ],
+    "handoff_scores": [
+      7
+    ],
+    "worker_scores": [
+      8
+    ]
+  },
+  {
+    "condition": "B1",
+    "run_status": "completed",
+    "generated_at": "20260508_205201",
+    "source_run_relpath": "run_result/T2_fill/output/t2_matrix_20260508_205201",
+    "source_record_indices": [
+      0
+    ],
+    "verdicts": [
+      "spec_strong"
+    ],
+    "handoff_scores": [
+      8
+    ],
+    "worker_scores": [
+      6
+    ]
+  }
+]

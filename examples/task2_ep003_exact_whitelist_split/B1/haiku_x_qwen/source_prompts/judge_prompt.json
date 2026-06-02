@@ -1,0 +1,220 @@
+{
+  "episode_id": "ep003_totalseg_whitelist_split",
+  "condition": "B1",
+  "seed": 0,
+  "pair_label": "haiku_x_qwen",
+  "planner_label": "haiku_4_5",
+  "worker_label": "qwen3_coder_30b",
+  "planner_visible_request": "TotalSeg 输出每个病人 100+ 个结构 mask，但这条线后面训练只保留：\n心脏相关、肺叶、肋骨、胸椎（T 段）、锁骨、肱骨、胸骨、主动脉。\n\n请帮我写一个 worker-ready spec：\n对每个病人目录，把**不在白名单内**的 mask 文件搬到另一个目录留存，\n源目录只保留白名单内的文件。\n\n源：<dataset_root>/totalseg_output/<patient_id>/\n分流目标：<archive_root>/<patient_id>/\n\n这份 spec 里需要明确：\n- 白名单匹配到底按“类别 / 前缀”还是按“精确文件名”\n- 分流动作是 move、delete 还是 copy\n- 目标目录结构怎么镜像\n- 缺失文件怎么处理\n\n病人级独立，可并行。漏文件要记录但不要中断。\n",
+  "gold_task_goal": "Produce a worker-ready spec for whitelist-driven TotalSeg file triage. The useful signal is whether the planner preserves the real boundary: exact whitelist-driven move semantics with mirrored archive structure, while keeping unresolved exact whitelist material explicit instead of inventing a convenient prefix/category rule.\n",
+  "gold_constraints": [
+    "Treat the whitelist as exact filename membership, not category words or prefix matching.",
+    "Preserve the action boundary: move non-whitelist files into the archive mirror; do not delete them and do not copy them by default.",
+    "Preserve mirrored patient-level structure: `<archive_root>/<patient_id>/<file>.nii.gz`.",
+    "Use the visible examples to avoid false generalization: `rib_left_1.nii.gz` and `rib_left_10.nii.gz` are distinct exact filenames; `vertebrae_T5.nii.gz` is in-scope while `vertebrae_C3.nii.gz` is not.",
+    "If the full whitelist has not been fully materialized from visible context, explicitly leave it as missing information or a required handoff artifact instead of guessing.",
+    "Missing source files should be logged and skipped without aborting the whole run."
+  ],
+  "gold_relevant_files": [
+    "<dataset_root>/totalseg_output/<patient_id>/",
+    "<archive_root>/<patient_id>/",
+    "<workspace>/whitelist_notes.md",
+    "<archive_root>/missing_files.log"
+  ],
+  "judge_only_rubric": {
+    "critical_constraints_min_for_acceptable": 4,
+    "critical_constraints_min_for_strong": 5,
+    "score_caps": {
+      "max_spec_score_if_no_gold_constraint_captured": 3,
+      "max_spec_score_if_forbidden_assumption_introduced": 5,
+      "max_worker_score_if_missing_info_empty_under_weak_spec": 6
+    },
+    "positive_signals": [
+      "Planner anchors the worker on the real T2 boundary: exact whitelist membership, move-not-delete semantics, mirrored archive structure, and logged skip behavior.",
+      "Planner uses the visible filename examples to block bad generalization instead of encouraging broad prefix heuristics.",
+      "Planner separates grounded facts from the still-missing exact whitelist artifact.",
+      "Planner v2 corrects worker_v1 if it drifts toward category/prefix matching or delete semantics.",
+      "Worker keeps the missing whitelist artifact in `information_still_missing` rather than silently inventing expansion rules."
+    ],
+    "negative_signals": [
+      "Planner gives the worker a convenient but wrong default, especially prefix/category matching or delete semantics.",
+      "Planner spends effort on side-policy trivia while leaving the whitelist/move/mirror boundary vague.",
+      "Worker_v2 remains confidently wrong about exact matching, move semantics, or mirrored archive layout after planner_v2."
+    ]
+  },
+  "episode_gold_extras": {},
+  "expected_v1_pitfalls": [
+    "Planner collapses the task into category/prefix filtering such as `rib_*` or `heart_*` without preserving exact whitelist membership as the real boundary.",
+    "Planner turns triage into delete/cleanup semantics instead of move-to-archive semantics.",
+    "Planner acts as if the full whitelist is already known and worker-safe when the visible context only supports a partial expansion.",
+    "Worker copies a vague handoff and starts deriving whitelist rules from category words instead of raising the missing exact list."
+  ],
+  "decoys": [
+    "A response may sound concrete because it lists regexes, glob patterns, or concurrency details while still leaving the whitelist boundary wrong.",
+    "A response may treat archive as a trash folder and propose deletion after verification even though the task is framed as keep-and-triage."
+  ],
+  "forbidden_assumptions": [
+    "Do not accept category-only, prefix-only, or regex-only expansion as a safe substitute for an exact whitelist unless the planner explicitly marks it as an unresolved approximation.",
+    "Do not reward extra resume markers, overwrite policy, or logging verbosity unless they replace or distort the core whitelist/move/mirror boundary.",
+    "Do not accept delete semantics or hard cleanup defaults when the visible task boundary is move-to-archive."
+  ],
+  "planner_v1_response_text": "# TotalSeg Whitelist-Driven File Triage Worker Spec\n\n## Overview\nThis worker processes one patient directory at a time, identifying mask files that fall outside a curated anatomical whitelist, moving them to an archive directory, and leaving only whitelisted files in the source directory.\n\n## Input & Output Locations\n\n**Source:** `<dataset_root>/totalseg_output/<patient_id>/`  \n**Archive (triage destination):** `<archive_root>/<patient_id>/`  \n**Whitelist reference:** `<workspace>/whitelist_notes.md`\n\nAll files in source are `.nii.gz` format (TotalSeg standard naming).\n\n## Core Task\n\n1. **Read whitelist definition** from `whitelist_notes.md` and construct an executable whitelist (exact filename set or matching rule).\n2. **Enumerate all `.nii.gz` files** in source directory for the given `<patient_id>`.\n3. **Classify each file** as whitelisted or non-whitelisted.\n4. **Move non-whitelisted files** to `<archive_root>/<patient_id>/` (creating the archive directory if absent).\n5. **Leave whitelisted files** in source directory untouched.\n6. **Log all decisions** (whitelisted, moved, missing, errors) per patient.\n7. **Continue processing** even if individual files are missing or errors occur; do not halt on per-patient failures.\n\n## Whitelist Scope (Anatomical Categories)\n\nThe following anatomical structures are whitelisted:\n\n- **Heart-related:** heart, heart chambers (atrium, ventricle), heart valves\n- **Lung lobes:** lung_lower_lobe, lung_upper_lobe (left and right variants)\n- **Ribs:** rib_left, rib_right (all numbered instances, e.g., rib_left_1 through rib_left_12)\n- **Thoracic vertebrae:** vertebrae_T2 through vertebrae_T12 (T-segment only; exclude cervical C* and lumbar L*)\n- **Clavicle:** clavicle (left and right)\n- **Humerus:** humerus (left and right)\n- **Sternum:** sternum\n- **Aorta:** aorta\n\n**Non-whitelisted examples (to be moved to archive):**\n- kidney_left, kidney_right, spleen (abdominal organs)\n- vertebrae_C3, vertebrae_L1 (non-thoracic spine)\n- Any structure not listed above\n\n## File Matching Strategy\n\n**Decision:** Exact filename matching is required.\n\n- TotalSeg produces fixed, deterministic filenames (e.g., `rib_left_1.nii.gz`, `heart_atrium_left.nii.gz`).\n- `whitelist_notes.md` provides category descriptions and sample filenames, but is not a complete enumeration.\n- **Worker must construct a complete, executable whitelist** by:\n  - Parsing anatomical category descriptions from `whitelist_notes.md`.\n  - Inferring the full set of valid TotalSeg filenames for each category (e.g., all rib_left_N, rib_right_N for N in valid range).\n  - Documenting the inferred whitelist in the worker's output log.\n\n## Triage Action\n\n**Action:** Move (not copy, not delete).\n\n- Non-whitelisted files are **moved** from source to archive.\n- This preserves the non-whitelisted masks for future reference or retraining without duplication.\n- Source directory is \"slimmed down\" to contain only whitelisted files after the operation.\n\n## Directory Structure\n\n**Archive mirroring:**\n- Create `<archive_root>/<patient_id>/` if it does not exist.\n- Move non-whitelisted files directly into this directory (flat structure, matching source layout).\n- No subdirectories or renaming; preserve original filenames.\n\n**Source directory:**\n- Remains in place; only non-whitelisted files are removed.\n- Whitelisted files stay in `<dataset_root>/totalseg_output/<patient_id>/`.\n\n## Error Handling & Logging\n\n**Missing files:**\n- If a file listed in source inventory cannot be read or moved, log the filename and error.\n- Do not halt processing; continue with remaining files.\n\n**Logging output:**\n- Per-patient log entry must include:\n  - Patient ID\n  - Count of whitelisted files (kept in source)\n  - Count of non-whitelisted files (moved to archive)\n  - List of any files that could not be processed (with reason)\n  - Timestamp of operation\n- Aggregate log across all patients processed in this worker invocation.\n\n**Idempotency:**\n- If a file already exists in the archive directory, document the conflict (do not overwrite without explicit policy).\n- If a file has already been moved in a prior run, skip it and log as already-archived.\n\n## Parallelization\n\n- Worker processes one `<patient_id>` at a time.\n- Multiple worker instances can run in parallel on different patient IDs.\n- No shared state or locking required between patients.\n\n## Constraints & Assumptions\n\n- All source files are `.nii.gz`.\n- Archive directory structure mirrors source (flat, one level deep).\n- Whitelist is static for the duration of the worker run.\n- No file renaming or transformation; only move operations.\n\n---\n\n```json\n{\n  \"assumptions\": [\n    \"All files in <dataset_root>/totalseg_output/<patient_id>/ are .nii.gz format with TotalSeg-standard filenames.\",\n    \"whitelist_notes.md contains anatomical category descriptions and sample filenames sufficient to infer a complete executable whitelist.\",\n    \"Archive directory <archive_root>/<patient_id>/ does not exist initially and must be created by the worker.\",\n    \"Whitelisted files remain in source; non-whitelisted files are moved (not copied or deleted).\",\n    \"Patient directories are independent; no cross-patient dependencies.\",\n    \"Move operation is atomic or can be retried safely on failure.\"\n  ],\n  \"risks\": [\n    \"Incomplete whitelist inference: whitelist_notes.md may not enumerate all valid TotalSeg filenames for each category (e.g., rib numbering range, vertebrae T-segment boundaries). Worker must document assumptions about filename patterns.\",\n    \"Filename ambiguity: similar-looking filenames (e.g., rib_left_1 vs. rib_left_10) must be matched exactly; substring or prefix matching will cause misclassification.\",\n    \"Thoracic vertebrae boundary: vertebrae_T2–T12 must be distinguished from cervical (C*) and lumbar (L*); off-by-one errors in range will misclassify.\",\n    \"Archive collision: if a file already exists in archive from a prior run, move operation may fail or overwrite silently depending on OS/tool behavior. Policy must be explicit.\",\n    \"Partial failure: if a patient directory is incomplete (missing expected files), worker must log and continue, not halt.\",\n    \"Disk space: moving large numbers of files may exhaust disk if archive and source are on the same filesystem. No pre-flight check specified.\"\n  ],\n  \"open_questions\": [\n    \"What is the exact, complete list of valid TotalSeg filenames for each whitelisted category? (e.g., rib_left_1 through rib_left_12? heart_atrium_left, heart_atrium_right, heart_ventricle_left, heart_ventricle_right, or a different set?)\",\n    \"How should the worker infer the whitelist from whitelist_notes.md? Is there a structured format (YAML, JSON, regex patterns) or free-form markdown?\",\n    \"What is the policy if a file already exists in the archive directory? (overwrite, skip, error, rename with timestamp?)\",\n    \"Should the worker validate that all expected whitelisted files exist in the source, or only process files that are present?\",\n    \"What is the resume/checkpoint mechanism if the worker is interrupted mid-patient or mid-batch? (e.g., marker file, database, or restart from scratch?)\",\n    \"Should the worker report statistics (total files processed, total bytes moved) in addition to per-patient logs?\",\n    \"Are there any file permission or ownership constraints when moving files between dataset_root and archive_root?\"\n  ]\n}\n```",
+  "worker_v1_response_text": "{\n  \"understood_goal\": \"Process patient directories to identify and move non-whitelisted mask files to an archive directory, retaining only whitelisted files in the source directory. The whitelist is derived from a markdown reference file and must be fully enumerated for exact filename matching.\",\n  \"constraints_to_follow\": [\n    \"All source files are .nii.gz format with TotalSeg-standard filenames.\",\n    \"Whitelist is constructed by parsing anatomical category descriptions from whitelist_notes.md and inferring complete filename sets.\",\n    \"Exact filename matching is required; substring or prefix matching is not allowed.\",\n    \"Only move files; do not copy or delete.\",\n    \"Archive directory structure mirrors source (flat, one level deep).\",\n    \"Processing is per-patient and independent; no shared state or locking required.\",\n    \"Continue processing even if individual files are missing or errors occur.\",\n    \"Log all decisions per patient including counts and errors.\",\n    \"Do not halt on per-patient failures.\"\n  ],\n  \"information_still_missing\": [\n    \"The exact, complete list of valid TotalSeg filenames for each whitelisted category (e.g., rib numbering range, heart chamber variants).\",\n    \"The structured format of whitelist_notes.md (e.g., is it YAML/JSON/regex-based or free-form markdown?).\",\n    \"Policy for handling archive collisions (overwrite, skip, error, rename?).\",\n    \"Whether the worker should validate presence of all expected whitelisted files or only process those present.\",\n    \"Resume/checkpoint mechanism if worker is interrupted mid-patient or mid-batch.\",\n    \"Whether additional statistics (e.g., total bytes moved) should be reported beyond per-patient logs.\",\n    \"File permission or ownership constraints during file moves between dataset_root and archive_root.\"\n  ],\n  \"first_3_concrete_actions\": [\n    \"Parse whitelist_notes.md to extract anatomical category descriptions and infer complete filename sets for each category.\",\n    \"Enumerate all .nii.gz files in the source directory for a given patient ID.\",\n    \"Implement logic to classify each file as whitelisted or non-whitelisted based on exact filename match against the constructed whitelist.\"\n  ]\n}",
+  "worker_v1_response_json": {
+    "understood_goal": "Process patient directories to identify and move non-whitelisted mask files to an archive directory, retaining only whitelisted files in the source directory. The whitelist is derived from a markdown reference file and must be fully enumerated for exact filename matching.",
+    "constraints_to_follow": [
+      "All source files are .nii.gz format with TotalSeg-standard filenames.",
+      "Whitelist is constructed by parsing anatomical category descriptions from whitelist_notes.md and inferring complete filename sets.",
+      "Exact filename matching is required; substring or prefix matching is not allowed.",
+      "Only move files; do not copy or delete.",
+      "Archive directory structure mirrors source (flat, one level deep).",
+      "Processing is per-patient and independent; no shared state or locking required.",
+      "Continue processing even if individual files are missing or errors occur.",
+      "Log all decisions per patient including counts and errors.",
+      "Do not halt on per-patient failures."
+    ],
+    "information_still_missing": [
+      "The exact, complete list of valid TotalSeg filenames for each whitelisted category (e.g., rib numbering range, heart chamber variants).",
+      "The structured format of whitelist_notes.md (e.g., is it YAML/JSON/regex-based or free-form markdown?).",
+      "Policy for handling archive collisions (overwrite, skip, error, rename?).",
+      "Whether the worker should validate presence of all expected whitelisted files or only process those present.",
+      "Resume/checkpoint mechanism if worker is interrupted mid-patient or mid-batch.",
+      "Whether additional statistics (e.g., total bytes moved) should be reported beyond per-patient logs.",
+      "File permission or ownership constraints during file moves between dataset_root and archive_root."
+    ],
+    "first_3_concrete_actions": [
+      "Parse whitelist_notes.md to extract anatomical category descriptions and infer complete filename sets for each category.",
+      "Enumerate all .nii.gz files in the source directory for a given patient ID.",
+      "Implement logic to classify each file as whitelisted or non-whitelisted based on exact filename match against the constructed whitelist."
+    ]
+  },
+  "planner_v2_response_text": "# Planner Revision: Corrections & Missing Details for TotalSeg Whitelist Worker\n\n## What Worker V1 Got Right\n\nWorker V1 correctly understood:\n- Move (not copy/delete) non-whitelisted files to archive.\n- Exact filename matching is required.\n- Per-patient, independent processing with no cross-patient locking.\n- Continue on error; log failures without halting.\n- Archive directory structure mirrors source (flat).\n\n## Critical Misunderstandings & Gaps\n\n### 1. **Whitelist Construction is Underspecified**\n\nWorker V1 assumes `whitelist_notes.md` contains enough information to **infer** a complete, executable whitelist. This is unsafe.\n\n**Reality from prompt:**\n- The prompt lists anatomical *categories* (e.g., \"heart-related,\" \"ribs,\" \"thoracic vertebrae\") with English descriptions.\n- It does **not** provide:\n  - The exact TotalSeg filename for each structure (e.g., is it `heart` or `heart_organ` or `cardiac_chamber`?).\n  - The complete enumeration of variants (e.g., how many ribs? `rib_left_1` through `rib_left_12`? Or a different range?).\n  - Whether `heart_atrium_left` and `heart_atrium_right` are separate files or one file.\n  - The exact vertebrae range (T2–T12? T1–T12? Inclusive?).\n\n**Worker V1 error:** Assumes inference from markdown is sufficient. It is not.\n\n**Correction:** The worker must **receive or load a pre-built, authoritative whitelist file** (e.g., `whitelist.json` or `whitelist.txt`) that enumerates exact filenames, not infer it from category descriptions. If such a file does not exist, the worker must **fail fast and report that the whitelist artifact is missing**, not guess.\n\n---\n\n### 2. **Whitelist Scope is Semantic, Not Syntactic**\n\nThe prompt lists categories like \"heart-related\" and \"rib_left, rib_right (all numbered instances).\" This is semantic guidance, not a regex or filename pattern.\n\n**Worker V1 error:** Treats category descriptions as if they can be algorithmically expanded into filenames.\n\n**Correction:** The worker must use a **pre-built, static whitelist artifact** that maps each category to its exact TotalSeg filenames. The worker does not infer or expand; it looks up.\n\n---\n\n### 3. **Archive Collision Policy is Unspecified**\n\nWorker V1 notes the risk but does not resolve it.\n\n**Correction:** The spec must state:\n- If a file already exists in `<archive_root>/<patient_id>/`, should the worker:\n  - Skip the move and log a warning?\n  - Overwrite?\n  - Rename with a timestamp suffix?\n  - Treat as an error and halt the patient?\n\n**This must be decided before implementation.** Do not assume a default.\n\n---\n\n### 4. **Idempotency Assumption is Incomplete**\n\nWorker V1 says \"if a file has already been moved in a prior run, skip it and log as already-archived.\" But how does the worker know a file was already moved?\n\n**Correction:** The worker needs a **state tracking mechanism**:\n- Option A: Check if the file exists in source. If not, assume it was moved; check archive.\n- Option B: Maintain a per-patient checkpoint file (e.g., `.triage_complete` or a JSON log).\n- Option C: Always re-scan and re-move (idempotent if archive collision policy is \"skip\").\n\n**This must be specified.** Do not leave it to the worker to guess.\n\n---\n\n### 5. **Whitelist Validation is Missing**\n\nWorker V1 does not address: what if the source directory is missing expected whitelisted files?\n\n**Correction:** The spec must clarify:\n- Should the worker validate that all expected whitelisted files exist in the source?\n- Or should it only process files that are present and log missing ones as warnings?\n\n---\n\n## Still Missing (Not Safe to Assume)\n\n1. **Authoritative whitelist artifact location and format.**\n   - Is it `<workspace>/whitelist.json`? `<dataset_root>/whitelist.txt`? Embedded in the worker config?\n   - What is the schema? (flat list of filenames, or category → filenames map?)\n\n2. **Exact TotalSeg filenames for each whitelisted category.**\n   - The prompt provides semantic categories, not filenames.\n   - Worker must receive or load the definitive mapping.\n\n3. **Archive collision policy.**\n   - Overwrite, skip, error, or rename?\n\n4. **Idempotency mechanism.**\n   - How does the worker detect already-moved files?\n\n5. **Validation scope.**\n   - Should the worker check for missing expected files, or only process present files?\n\n6. **Logging format and destination.**\n   - Where should per-patient logs be written? (stdout, file, database?)\n   - What is the exact schema? (JSON, CSV, plain text?)\n\n---\n\n## Worker Next Focus\n\n1. **Verify the whitelist artifact:**\n   - Ask: where is the authoritative whitelist stored?\n   - Ask: what is its format and schema?\n   - Load it and validate it contains exact TotalSeg filenames, not semantic categories.\n\n2. **Clarify archive collision policy:**\n   - Ask: if a file already exists in the archive, what should the worker do?\n\n3. **Clarify idempotency:**\n   - Ask: how should the worker detect already-moved files?\n   - Ask: should it maintain a checkpoint file per patient?\n\n4. **Clarify validation scope:**\n   - Ask: should the worker validate that all expected whitelisted files exist, or only process present files?\n\n5. **Clarify logging:**\n   - Ask: where should logs be written?\n   - Ask: what is the exact schema?\n\n---\n\n```json\n{\n  \"corrected_constraints\": [\n    \"The worker must use a pre-built, authoritative whitelist artifact (not infer it from markdown). This artifact must enumerate exact TotalSeg filenames, not semantic categories.\",\n    \"Exact filename matching is required; no inference, expansion, or pattern matching.\",\n    \"Move (not copy/delete) non-whitelisted files to archive.\",\n    \"Archive directory structure mirrors source (flat, one level deep).\",\n    \"Processing is per-patient and independent; no cross-patient locking.\",\n    \"Continue processing on per-file errors; log failures without halting the patient.\",\n    \"Archive collision policy must be explicitly defined (overwrite, skip, error, or rename). Do not assume a default.\",\n    \"Idempotency mechanism must be explicitly defined (state tracking, checkpoint file, or re-scan logic). Do not assume a default.\",\n    \"Validation scope must be explicitly defined (check for missing expected files, or only process present files). Do not assume a default.\"\n  ],\n  \"still_missing\": [\n    \"Location and format of the authoritative whitelist artifact (e.g., whitelist.json, whitelist.txt, embedded config).\",\n    \"Schema of the whitelist artifact (flat list of filenames, or category → filenames map?).\",\n    \"Exact TotalSeg filenames for each whitelisted category (the prompt provides semantic categories, not filenames).\",\n    \"Archive collision policy (overwrite, skip, error, rename with timestamp?).\",\n    \"Idempotency mechanism (state tracking, checkpoint file, or re-scan logic?).\",\n    \"Validation scope (check for missing expected files, or only process present files?).\",\n    \"Logging format and destination (stdout, file, database? JSON, CSV, plain text?).\",\n    \"Logging schema (what fields must each log entry contain?).\"\n  ],\n  \"worker_next_focus\": [\n    \"Verify the location and format of the authoritative whitelist artifact before attempting to parse or infer it.\",\n    \"Load the whitelist and validate that it contains exact TotalSeg filenames, not semantic categories or patterns.\",\n    \"Clarify the archive collision policy with the planner or spec owner.\",\n    \"Clarify the idempotency mechanism (how to detect already-moved files, whether to maintain checkpoints).\",\n    \"Clarify the validation scope (whether to check for missing expected files).\",\n    \"Clarify the logging format, destination, and schema.\"\n  ]\n}\n```",
+  "worker_v2_response_text": "{\n  \"understood_goal\": \"Process patient directories to identify and move non-whitelisted mask files to an archive directory, retaining only whitelisted files in the source directory. The whitelist must be a pre-built, authoritative artifact containing exact TotalSeg filenames, not inferred from semantic descriptions.\",\n  \"constraints_to_follow\": [\n    \"The worker must use a pre-built, authoritative whitelist artifact (not infer it from markdown). This artifact must enumerate exact TotalSeg filenames, not semantic categories.\",\n    \"Exact filename matching is required; no inference, expansion, or pattern matching.\",\n    \"Move (not copy/delete) non-whitelisted files to archive.\",\n    \"Archive directory structure mirrors source (flat, one level deep).\",\n    \"Processing is per-patient and independent; no cross-patient locking.\",\n    \"Continue processing on per-file errors; log failures without halting the patient.\",\n    \"Archive collision policy must be explicitly defined (overwrite, skip, error, or rename). Do not assume a default.\",\n    \"Idempotency mechanism must be explicitly defined (state tracking, checkpoint file, or re-scan logic). Do not assume a default.\",\n    \"Validation scope must be explicitly defined (check for missing expected files, or only process present files). Do not assume a default.\"\n  ],\n  \"information_still_missing\": [\n    \"Location and format of the authoritative whitelist artifact (e.g., whitelist.json, whitelist.txt, embedded config).\",\n    \"Schema of the whitelist artifact (flat list of filenames, or category → filenames map?).\",\n    \"Exact TotalSeg filenames for each whitelisted category (the prompt provides semantic categories, not filenames).\",\n    \"Archive collision policy (overwrite, skip, error, rename with timestamp?).\",\n    \"Idempotency mechanism (state tracking, checkpoint file, or re-scan logic?).\",\n    \"Validation scope (check for missing expected files, or only process present files?).\",\n    \"Logging format and destination (stdout, file, database? JSON, CSV, plain text?).\",\n    \"Logging schema (what fields must each log entry contain?).\"\n  ],\n  \"first_3_concrete_actions\": [\n    \"Verify the location and format of the authoritative whitelist artifact before attempting to parse or infer it.\",\n    \"Load the whitelist and validate that it contains exact TotalSeg filenames, not semantic categories or patterns.\",\n    \"Clarify the archive collision policy with the planner or spec owner.\"\n  ],\n  \"understanding_delta\": [\n    \"Previously, I assumed the worker could infer a complete whitelist from the markdown description. Now I understand this is not safe and requires a pre-built artifact.\",\n    \"I previously treated semantic category descriptions as expandable into filenames, but the revision clarifies these are just guidance and not actionable patterns.\",\n    \"I need to explicitly define behaviors around archive collisions, idempotency, and validation scope rather than assuming defaults.\",\n    \"The requirement for a definitive whitelist artifact means I must validate that the input data matches expectations before proceeding.\"\n  ]\n}",
+  "worker_v2_response_json": {
+    "understood_goal": "Process patient directories to identify and move non-whitelisted mask files to an archive directory, retaining only whitelisted files in the source directory. The whitelist must be a pre-built, authoritative artifact containing exact TotalSeg filenames, not inferred from semantic descriptions.",
+    "constraints_to_follow": [
+      "The worker must use a pre-built, authoritative whitelist artifact (not infer it from markdown). This artifact must enumerate exact TotalSeg filenames, not semantic categories.",
+      "Exact filename matching is required; no inference, expansion, or pattern matching.",
+      "Move (not copy/delete) non-whitelisted files to archive.",
+      "Archive directory structure mirrors source (flat, one level deep).",
+      "Processing is per-patient and independent; no cross-patient locking.",
+      "Continue processing on per-file errors; log failures without halting the patient.",
+      "Archive collision policy must be explicitly defined (overwrite, skip, error, or rename). Do not assume a default.",
+      "Idempotency mechanism must be explicitly defined (state tracking, checkpoint file, or re-scan logic). Do not assume a default.",
+      "Validation scope must be explicitly defined (check for missing expected files, or only process present files). Do not assume a default."
+    ],
+    "information_still_missing": [
+      "Location and format of the authoritative whitelist artifact (e.g., whitelist.json, whitelist.txt, embedded config).",
+      "Schema of the whitelist artifact (flat list of filenames, or category → filenames map?).",
+      "Exact TotalSeg filenames for each whitelisted category (the prompt provides semantic categories, not filenames).",
+      "Archive collision policy (overwrite, skip, error, rename with timestamp?).",
+      "Idempotency mechanism (state tracking, checkpoint file, or re-scan logic?).",
+      "Validation scope (check for missing expected files, or only process present files?).",
+      "Logging format and destination (stdout, file, database? JSON, CSV, plain text?).",
+      "Logging schema (what fields must each log entry contain?)."
+    ],
+    "first_3_concrete_actions": [
+      "Verify the location and format of the authoritative whitelist artifact before attempting to parse or infer it.",
+      "Load the whitelist and validate that it contains exact TotalSeg filenames, not semantic categories or patterns.",
+      "Clarify the archive collision policy with the planner or spec owner."
+    ],
+    "understanding_delta": [
+      "Previously, I assumed the worker could infer a complete whitelist from the markdown description. Now I understand this is not safe and requires a pre-built artifact.",
+      "I previously treated semantic category descriptions as expandable into filenames, but the revision clarifies these are just guidance and not actionable patterns.",
+      "I need to explicitly define behaviors around archive collisions, idempotency, and validation scope rather than assuming defaults.",
+      "The requirement for a definitive whitelist artifact means I must validate that the input data matches expectations before proceeding."
+    ]
+  },
+  "final_worker_response_text": "{\n  \"understood_goal\": \"Process patient directories to identify and move non-whitelisted mask files to an archive directory, retaining only whitelisted files in the source directory. The whitelist must be a pre-built, authoritative artifact containing exact TotalSeg filenames, not inferred from semantic descriptions.\",\n  \"constraints_to_follow\": [\n    \"The worker must use a pre-built, authoritative whitelist artifact (not infer it from markdown). This artifact must enumerate exact TotalSeg filenames, not semantic categories.\",\n    \"Exact filename matching is required; no inference, expansion, or pattern matching.\",\n    \"Move (not copy/delete) non-whitelisted files to archive.\",\n    \"Archive directory structure mirrors source (flat, one level deep).\",\n    \"Processing is per-patient and independent; no cross-patient locking.\",\n    \"Continue processing on per-file errors; log failures without halting the patient.\",\n    \"Archive collision policy must be explicitly defined (overwrite, skip, error, or rename). Do not assume a default.\",\n    \"Idempotency mechanism must be explicitly defined (state tracking, checkpoint file, or re-scan logic). Do not assume a default.\",\n    \"Validation scope must be explicitly defined (check for missing expected files, or only process present files). Do not assume a default.\"\n  ],\n  \"information_still_missing\": [\n    \"Location and format of the authoritative whitelist artifact (e.g., whitelist.json, whitelist.txt, embedded config).\",\n    \"Schema of the whitelist artifact (flat list of filenames, or category → filenames map?).\",\n    \"Exact TotalSeg filenames for each whitelisted category (the prompt provides semantic categories, not filenames).\",\n    \"Archive collision policy (overwrite, skip, error, rename with timestamp?).\",\n    \"Idempotency mechanism (state tracking, checkpoint file, or re-scan logic?).\",\n    \"Validation scope (check for missing expected files, or only process present files?).\",\n    \"Logging format and destination (stdout, file, database? JSON, CSV, plain text?).\",\n    \"Logging schema (what fields must each log entry contain?).\"\n  ],\n  \"first_3_concrete_actions\": [\n    \"Verify the location and format of the authoritative whitelist artifact before attempting to parse or infer it.\",\n    \"Load the whitelist and validate that it contains exact TotalSeg filenames, not semantic categories or patterns.\",\n    \"Clarify the archive collision policy with the planner or spec owner.\"\n  ],\n  \"understanding_delta\": [\n    \"Previously, I assumed the worker could infer a complete whitelist from the markdown description. Now I understand this is not safe and requires a pre-built artifact.\",\n    \"I previously treated semantic category descriptions as expandable into filenames, but the revision clarifies these are just guidance and not actionable patterns.\",\n    \"I need to explicitly define behaviors around archive collisions, idempotency, and validation scope rather than assuming defaults.\",\n    \"The requirement for a definitive whitelist artifact means I must validate that the input data matches expectations before proceeding.\"\n  ]\n}",
+  "final_worker_response_json": {
+    "understood_goal": "Process patient directories to identify and move non-whitelisted mask files to an archive directory, retaining only whitelisted files in the source directory. The whitelist must be a pre-built, authoritative artifact containing exact TotalSeg filenames, not inferred from semantic descriptions.",
+    "constraints_to_follow": [
+      "The worker must use a pre-built, authoritative whitelist artifact (not infer it from markdown). This artifact must enumerate exact TotalSeg filenames, not semantic categories.",
+      "Exact filename matching is required; no inference, expansion, or pattern matching.",
+      "Move (not copy/delete) non-whitelisted files to archive.",
+      "Archive directory structure mirrors source (flat, one level deep).",
+      "Processing is per-patient and independent; no cross-patient locking.",
+      "Continue processing on per-file errors; log failures without halting the patient.",
+      "Archive collision policy must be explicitly defined (overwrite, skip, error, or rename). Do not assume a default.",
+      "Idempotency mechanism must be explicitly defined (state tracking, checkpoint file, or re-scan logic). Do not assume a default.",
+      "Validation scope must be explicitly defined (check for missing expected files, or only process present files). Do not assume a default."
+    ],
+    "information_still_missing": [
+      "Location and format of the authoritative whitelist artifact (e.g., whitelist.json, whitelist.txt, embedded config).",
+      "Schema of the whitelist artifact (flat list of filenames, or category → filenames map?).",
+      "Exact TotalSeg filenames for each whitelisted category (the prompt provides semantic categories, not filenames).",
+      "Archive collision policy (overwrite, skip, error, rename with timestamp?).",
+      "Idempotency mechanism (state tracking, checkpoint file, or re-scan logic?).",
+      "Validation scope (check for missing expected files, or only process present files?).",
+      "Logging format and destination (stdout, file, database? JSON, CSV, plain text?).",
+      "Logging schema (what fields must each log entry contain?)."
+    ],
+    "first_3_concrete_actions": [
+      "Verify the location and format of the authoritative whitelist artifact before attempting to parse or infer it.",
+      "Load the whitelist and validate that it contains exact TotalSeg filenames, not semantic categories or patterns.",
+      "Clarify the archive collision policy with the planner or spec owner."
+    ],
+    "understanding_delta": [
+      "Previously, I assumed the worker could infer a complete whitelist from the markdown description. Now I understand this is not safe and requires a pre-built artifact.",
+      "I previously treated semantic category descriptions as expandable into filenames, but the revision clarifies these are just guidance and not actionable patterns.",
+      "I need to explicitly define behaviors around archive collisions, idempotency, and validation scope rather than assuming defaults.",
+      "The requirement for a definitive whitelist artifact means I must validate that the input data matches expectations before proceeding."
+    ]
+  },
+  "deterministic_contract_checks": {
+    "planner_non_empty": true,
+    "planner_has_json_tail": true,
+    "planner_json_tail_repaired": false,
+    "format_penalty_points": 0,
+    "worker_json_parse_ok": true,
+    "worker_required_fields_present": true,
+    "violations": [],
+    "planner_v2_has_json_tail": true,
+    "planner_v2_json_tail_repaired": false,
+    "worker_v2_json_parse_ok": true,
+    "worker_v2_required_fields_present": true
+  },
+  "judge_instructions": [
+    "Evaluate information flow, not whether final code was produced.",
+    "Planner constraint coverage must be judged against gold_constraints that are reasonably inferable from the visible request; do not require impossible hidden details unless the episode rubric marks them critical.",
+    "If an exact gold detail was not visible, a planner should receive real credit for explicitly naming that exact category as unresolved instead of inventing a default.",
+    "Treat 'covered_or_flagged' as the core T2 signal: a constraint is good if the planner either states the correct concrete rule or clearly flags that the worker must verify/obtain that exact rule before implementing.",
+    "Penalize planner false confidence when it gives worker a concrete wrong default instead of flagging a missing detail.",
+    "Reward worker output when it correctly flags missing information caused by a weak planner spec.",
+    "If planner_v2 and worker_v2 are present, evaluate the rumination loop: did worker_v1 expose a misunderstanding, did planner_v2 address it, and did worker_v2 become more accurate or safer?",
+    "Do not reward planner_v2 for merely restating planner_v1. Reward targeted correction of worker_v1 misunderstandings and sharper missing-info boundaries.",
+    "When two worker rounds are present, final handoff_performance_score should mainly reflect worker_v2 understanding plus the improvement from worker_v1 to worker_v2.",
+    "Do not over-penalize a cautious planner for not knowing hidden dirty-work constants; penalize it for hiding the uncertainty from the worker.",
+    "Treat missing fenced planner JSON tail as a light formatting penalty only when the content is otherwise usable; do not let format alone dominate the benchmark score.",
+    "Score each dimension 0-2 and total to 0-10.",
+    "Set handoff_performance_score as the main benchmark score for the planner-as-signal-sender. It should primarily reflect whether the qwen worker can form a correct, safe interpretation from this planner spec. Use worker_score as the baseline, then cap it if the planner introduced an unsafe false assumption.",
+    "Return strict JSON only."
+  ],
+  "output_schema": {
+    "planner_constraint_coverage_score": "0-2",
+    "planner_risk_flagging_score": "0-2",
+    "worker_v1_score": "0-10",
+    "planner_revision_score": "0-10",
+    "worker_v2_score": "0-10",
+    "understanding_delta_score": "0-10",
+    "spec_score": "0-10",
+    "worker_score": "0-10",
+    "handoff_performance_score": "0-10 main score for planner signal quality",
+    "format_penalty_applied": "0-2 mild deduction for protocol misses such as absent fenced json tail",
+    "final_verdict": "spec_strong | spec_acceptable | spec_weak | spec_unsafe",
+    "covered_or_flagged_constraints": [
+      "gold constraints either correctly stated or clearly exposed as unresolved exact details"
+    ],
+    "covered_gold_constraints": [
+      "gold constraints captured by planner or worker"
+    ],
+    "missed_gold_constraints": [
+      "important gold constraints omitted or mishandled"
+    ],
+    "forbidden_assumptions_made": [
+      "wrong assumptions made by planner or worker"
+    ],
+    "separation_notes": "why this cell should or should not separate models",
+    "concise_rationale": "short evidence-based explanation"
+  }
+}

@@ -1,0 +1,234 @@
+{
+  "episode_id": "ep003_totalseg_whitelist_split",
+  "condition": "B1",
+  "seed": 0,
+  "pair_label": "kimi_x_qwen",
+  "planner_label": "kimi_k2_5",
+  "worker_label": "qwen3_coder_30b",
+  "planner_visible_request": "TotalSeg 输出每个病人 100+ 个结构 mask，但这条线后面训练只保留：\n心脏相关、肺叶、肋骨、胸椎（T 段）、锁骨、肱骨、胸骨、主动脉。\n\n请帮我写一个 worker-ready spec：\n对每个病人目录，把**不在白名单内**的 mask 文件搬到另一个目录留存，\n源目录只保留白名单内的文件。\n\n源：<dataset_root>/totalseg_output/<patient_id>/\n分流目标：<archive_root>/<patient_id>/\n\n这份 spec 里需要明确：\n- 白名单匹配到底按“类别 / 前缀”还是按“精确文件名”\n- 分流动作是 move、delete 还是 copy\n- 目标目录结构怎么镜像\n- 缺失文件怎么处理\n\n病人级独立，可并行。漏文件要记录但不要中断。\n",
+  "gold_task_goal": "Produce a worker-ready spec for whitelist-driven TotalSeg file triage. The useful signal is whether the planner preserves the real boundary: exact whitelist-driven move semantics with mirrored archive structure, while keeping unresolved exact whitelist material explicit instead of inventing a convenient prefix/category rule.\n",
+  "gold_constraints": [
+    "Treat the whitelist as exact filename membership, not category words or prefix matching.",
+    "Preserve the action boundary: move non-whitelist files into the archive mirror; do not delete them and do not copy them by default.",
+    "Preserve mirrored patient-level structure: `<archive_root>/<patient_id>/<file>.nii.gz`.",
+    "Use the visible examples to avoid false generalization: `rib_left_1.nii.gz` and `rib_left_10.nii.gz` are distinct exact filenames; `vertebrae_T5.nii.gz` is in-scope while `vertebrae_C3.nii.gz` is not.",
+    "If the full whitelist has not been fully materialized from visible context, explicitly leave it as missing information or a required handoff artifact instead of guessing.",
+    "Missing source files should be logged and skipped without aborting the whole run."
+  ],
+  "gold_relevant_files": [
+    "<dataset_root>/totalseg_output/<patient_id>/",
+    "<archive_root>/<patient_id>/",
+    "<workspace>/whitelist_notes.md",
+    "<archive_root>/missing_files.log"
+  ],
+  "judge_only_rubric": {
+    "critical_constraints_min_for_acceptable": 4,
+    "critical_constraints_min_for_strong": 5,
+    "score_caps": {
+      "max_spec_score_if_no_gold_constraint_captured": 3,
+      "max_spec_score_if_forbidden_assumption_introduced": 5,
+      "max_worker_score_if_missing_info_empty_under_weak_spec": 6
+    },
+    "positive_signals": [
+      "Planner anchors the worker on the real T2 boundary: exact whitelist membership, move-not-delete semantics, mirrored archive structure, and logged skip behavior.",
+      "Planner uses the visible filename examples to block bad generalization instead of encouraging broad prefix heuristics.",
+      "Planner separates grounded facts from the still-missing exact whitelist artifact.",
+      "Planner v2 corrects worker_v1 if it drifts toward category/prefix matching or delete semantics.",
+      "Worker keeps the missing whitelist artifact in `information_still_missing` rather than silently inventing expansion rules."
+    ],
+    "negative_signals": [
+      "Planner gives the worker a convenient but wrong default, especially prefix/category matching or delete semantics.",
+      "Planner spends effort on side-policy trivia while leaving the whitelist/move/mirror boundary vague.",
+      "Worker_v2 remains confidently wrong about exact matching, move semantics, or mirrored archive layout after planner_v2."
+    ]
+  },
+  "episode_gold_extras": {},
+  "expected_v1_pitfalls": [
+    "Planner collapses the task into category/prefix filtering such as `rib_*` or `heart_*` without preserving exact whitelist membership as the real boundary.",
+    "Planner turns triage into delete/cleanup semantics instead of move-to-archive semantics.",
+    "Planner acts as if the full whitelist is already known and worker-safe when the visible context only supports a partial expansion.",
+    "Worker copies a vague handoff and starts deriving whitelist rules from category words instead of raising the missing exact list."
+  ],
+  "decoys": [
+    "A response may sound concrete because it lists regexes, glob patterns, or concurrency details while still leaving the whitelist boundary wrong.",
+    "A response may treat archive as a trash folder and propose deletion after verification even though the task is framed as keep-and-triage."
+  ],
+  "forbidden_assumptions": [
+    "Do not accept category-only, prefix-only, or regex-only expansion as a safe substitute for an exact whitelist unless the planner explicitly marks it as an unresolved approximation.",
+    "Do not reward extra resume markers, overwrite policy, or logging verbosity unless they replace or distort the core whitelist/move/mirror boundary.",
+    "Do not accept delete semantics or hard cleanup defaults when the visible task boundary is move-to-archive."
+  ],
+  "planner_v1_response_text": "## Worker Implementation Spec: TotalSeg Mask Whitelist Filtering\n\n### Observed Facts\n- Source: `<dataset_root>/totalseg_output/<patient_id>/` — flat directory of `.nii.gz` files\n- Archive: `<archive_root>/<patient_id>/` — exists, empty, will receive moved files\n- Output: source directory retains only whitelisted files; non-whitelisted files moved to archive\n- Patient-level parallelism required; per-patient failures logged but non-blocking\n\n### Whitelist Definition (from prompt + notes)\n| Category | Specific Files to KEEP (exact match) |\n|----------|--------------------------------------|\n| 心脏相关 | `heart.nii.gz`, `heart_atrium_left.nii.gz`, `heart_atrium_right.nii.gz`, `heart_ventricle_left.nii.gz`, `heart_ventricle_right.nii.gz` |\n| 肺叶 | `lung_upper_lobe_left.nii.gz`, `lung_upper_lobe_right.nii.gz`, `lung_lower_lobe_left.nii.gz`, `lung_lower_lobe_right.nii.gz`, `lung_middle_lobe_right.nii.gz` |\n| 肋骨 | `rib_left_1.nii.gz` through `rib_left_12.nii.gz`, `rib_right_1.nii.gz` through `rib_right_12.nii.gz` |\n| 胸椎 (T段) | `vertebrae_T2.nii.gz` through `vertebrae_T12.nii.gz` — **NOT** `vertebrae_C*`, `vertebrae_L*`, `vertebrae_S*` |\n| 锁骨 | `clavicula_left.nii.gz`, `clavicula_right.nii.gz` |\n| 肱骨 | `humerus_left.nii.gz`, `humerus_right.nii.gz` |\n| 胸骨 | `sternum.nii.gz` |\n| 主动脉 | `aorta.nii.gz` |\n\n**Matching rule: EXACT FILENAME** (case-sensitive). No prefix matching, no substring matching, no regex expansion.\n\n### File Operations\n- **Action**: `move` (not copy, not delete) — atomic rename preferred, fallback to copy+delete with verification\n- **Source behavior**: after move, source directory contains only whitelisted files\n- **Archive behavior**: mirror source structure (flat), creating `<archive_root>/<patient_id>/` if needed\n\n### Per-Patient Algorithm\n```\nINPUT: patient_id\n1. List all *.nii.gz in <dataset_root>/totalseg_output/<patient_id>/\n2. For each file:\n   - If filename in whitelist: keep in place\n   - Else: move to <archive_root>/<patient_id>/<filename>\n3. Log: files kept, files moved, any I/O errors\n4. If archive directory creation fails or move fails: log error, skip patient, continue to next\n```\n\n### Error Handling\n- Missing source directory: log warning, skip patient\n- Archive path exists as file (not directory): log error, skip patient\n- Move collision (file exists in archive): **UNDEFINED** — see open questions\n- Partial move failure (some files moved, some not): log which succeeded, do not rollback\n\n### Logging Requirements\n- Per-patient manifest: whitelist files present, non-whitelist files moved, expected-but-missing whitelist files\n- Global summary: total patients processed, success count, skip count with reasons\n\n```json\n{\n  \"assumptions\": [\n    \"TotalSeg output uses exactly the filenames listed in whitelist_notes.md conventions; no additional heart/lung/rib variants exist\",\n    \"Filesystem supports atomic move within same device; cross-device move requires copy+delete fallback\",\n    \"Archive root has sufficient space and write permissions\",\n    \"Patient IDs contain no path traversal characters (validated by caller)\"\n  ],\n  \"risks\": [\n    \"Exact filename matching is brittle: 'heart.nii.gz' vs 'heart_atrium_left.nii.gz' are distinct; substring match would over-retain\",\n    \"Vertebrae_T1 and vertebrae_T13 (if they exist) are NOT in whitelist but look similar to T2-T12\",\n    \"Rib numbering 1-12 is fixed; rib_left_01.nii.gz vs rib_left_1.nii.gz naming inconsistency would cause mismatch\",\n    \"Move collision in archive (re-running on same patient) behavior is unspecified\",\n    \"No transaction log: interrupted run may leave partial state requiring manual reconciliation\"\n  ],\n  \"open_questions\": [\n    \"Is the complete whitelist enumerated above final, or should worker read from a config file?\",\n    \"On archive collision (file already exists), should worker: skip, overwrite, or rename with suffix?\",\n    \"Should worker verify file integrity (checksum) before/after move?\",\n    \"Is there a resume marker to avoid re-processing completed patients?\",\n    \"What is the required log format and destination path?\"\n  ]\n}\n```",
+  "worker_v1_response_text": "{\n  \"understood_goal\": \"Filter files in the TotalSeg output directory for each patient, keeping only those specified in the whitelist and moving the rest to an archive directory. Ensure per-patient parallelism and proper logging of operations and errors.\",\n  \"constraints_to_follow\": [\n    \"Use exact filename matching (case-sensitive) for the whitelist.\",\n    \"Only move files; do not copy or delete.\",\n    \"Archive directory must be created if it does not exist.\",\n    \"Handle per-patient failures gracefully without blocking other patients.\",\n    \"Log all operations and errors per patient and globally.\",\n    \"Do not perform any action that modifies the source directory unless the file is whitelisted.\",\n    \"Ensure atomic moves where possible, with copy+delete fallback.\",\n    \"Do not assume any file naming conventions beyond what's explicitly listed in the whitelist.\"\n  ],\n  \"information_still_missing\": [\n    \"The exact location and format of the global log output (destination path, format).\",\n    \"Whether the worker should read the whitelist from a configuration file or if the provided list is final.\",\n    \"How to handle collisions in the archive (overwrite, skip, rename).\",\n    \"Whether checksum verification is required before or after moving files.\",\n    \"If there is a mechanism to resume processing from where it left off (e.g., a marker file).\",\n    \"The specific filesystem behavior for cross-device moves (whether copy+delete is always required).\"\n  ],\n  \"first_3_concrete_actions\": [\n    \"Verify the existence and accessibility of the dataset root and archive root paths.\",\n    \"List all .nii.gz files in the source directory for a sample patient ID to confirm file listing behavior.\",\n    \"Check whether the archive directory can be created successfully for a test patient ID.\"\n  ]\n}",
+  "worker_v1_response_json": {
+    "understood_goal": "Filter files in the TotalSeg output directory for each patient, keeping only those specified in the whitelist and moving the rest to an archive directory. Ensure per-patient parallelism and proper logging of operations and errors.",
+    "constraints_to_follow": [
+      "Use exact filename matching (case-sensitive) for the whitelist.",
+      "Only move files; do not copy or delete.",
+      "Archive directory must be created if it does not exist.",
+      "Handle per-patient failures gracefully without blocking other patients.",
+      "Log all operations and errors per patient and globally.",
+      "Do not perform any action that modifies the source directory unless the file is whitelisted.",
+      "Ensure atomic moves where possible, with copy+delete fallback.",
+      "Do not assume any file naming conventions beyond what's explicitly listed in the whitelist."
+    ],
+    "information_still_missing": [
+      "The exact location and format of the global log output (destination path, format).",
+      "Whether the worker should read the whitelist from a configuration file or if the provided list is final.",
+      "How to handle collisions in the archive (overwrite, skip, rename).",
+      "Whether checksum verification is required before or after moving files.",
+      "If there is a mechanism to resume processing from where it left off (e.g., a marker file).",
+      "The specific filesystem behavior for cross-device moves (whether copy+delete is always required)."
+    ],
+    "first_3_concrete_actions": [
+      "Verify the existence and accessibility of the dataset root and archive root paths.",
+      "List all .nii.gz files in the source directory for a sample patient ID to confirm file listing behavior.",
+      "Check whether the archive directory can be created successfully for a test patient ID."
+    ]
+  },
+  "planner_v2_response_text": "## Planner Revision: Correcting Worker_v1 Interpretation\n\n### What Worker_v1 Got Right\n- Exact filename matching (case-sensitive) for whitelist decisions\n- Move operation (not copy/delete) with atomic rename preferred\n- Per-patient parallelism with failure isolation\n- Archive directory creation as needed\n- Logging requirements for operations and errors\n\n### Critical Corrections\n\n**1. Whitelist Definition — Worker_v1 Over-Specified**\nWorker_v1 invented an explicit enumeration of filenames (e.g., `rib_left_1.nii.gz` through `rib_left_12.nii.gz`, `vertebrae_T2.nii.gz` through `vertebrae_T12.nii.gz`). The prompt only provides **category descriptions with examples**, not an authoritative exhaustive list. The worker must not hardcode filename patterns or ranges. The definitive whitelist source is **not provided** in the prompt.\n\n**2. \"Exact Filename\" Matching — Clarification**\nThe prompt states \"白名单匹配到底按'类别/前缀'还是按'精确文件名'\" as a required decision. Worker_v1 assumed \"exact filename\" but the prompt does not resolve this. The matching rule must be **explicitly determined** — whether by:\n- Exact filename list (source unknown)\n- Prefix/pattern matching against category descriptions\n- External configuration file\n\n**3. Vertebrae Range Ambiguity**\nWorker_v1 assumed T2-T12 inclusive based on \"T段\" description, but T1 and T13+ are neither confirmed included nor excluded. The category \"胸椎（T段）\" lacks precise bounds.\n\n**4. Rib Numbering Assumption**\nWorker_v1 assumed 1-12, but TotalSeg may output different rib counts. The prompt does not specify.\n\n**5. Heart/Lung Substructure Variants**\nWorker_v1 listed specific heart and lung lobe files, but the prompt only says \"心脏相关\" and \"肺叶\" — whether this includes all TotalSeg heart/lung outputs or a subset is undefined.\n\n**6. Archive Collision Behavior**\nWorker_v1 correctly flagged this as missing, but the prompt requires this decision be made in the spec. It remains unresolved.\n\n**7. \"Move\" vs. \"Copy+Delete\" Fallback**\nWorker_v1's \"atomic move preferred, copy+delete fallback\" is reasonable but the prompt does not specify cross-device behavior requirements.\n\n### What Remains Genuinely Missing (Not Safe to Assume)\n\n| Item | Why Uncertain |\n|------|---------------|\n| Definitive whitelist source | Prompt describes categories, not filenames |\n| Matching rule type | Prefix, substring, exact, or regex? |\n| Vertebrae T-range boundaries | \"T段\" undefined |\n| Rib count/range | 12 ribs assumed, not confirmed |\n| Heart/lung substructure completeness | \"相关\" is vague |\n| Archive collision policy | Required by prompt, not decided |\n| Log format/destination | Required by prompt, not specified |\n| Resume/checkpoint mechanism | Not mentioned |\n| Checksum verification | Not mentioned |\n\n### What Worker_v1 Should Do Differently\n\nInstead of proceeding with hardcoded filename assumptions, the worker must:\n1. **Locate or request** the authoritative whitelist (file, database, or API)\n2. **Verify** the matching rule type with the source of truth\n3. **Inspect actual TotalSeg output** to discover what files exist for representative patients\n4. **Confirm** category-to-filename mapping with domain expert or documentation\n\nDo not implement based on worker_v1's invented enumeration.\n\n```json\n{\n  \"corrected_constraints\": [\n    \"Do NOT hardcode filename patterns, ranges, or enumerations for ribs, vertebrae, heart substructures, or lung lobes\",\n    \"Category descriptions ('心脏相关', '肺叶', 'T段') are not executable membership rules; require authoritative whitelist source\",\n    \"Matching rule (exact filename vs prefix vs pattern) must be determined from whitelist source, not assumed\",\n    \"Vertebrae 'T段' boundaries (T1? T2? T12? T13?) are undefined; do not assume T2-T12\",\n    \"Rib count and numbering format (rib_left_1 vs rib_left_01) are undefined; do not assume 1-12\",\n    \"Move operation must verify success before removing source; rollback or resume strategy undefined\",\n    \"Archive collision policy (overwrite/skip/rename) remains undecided and must be resolved\",\n    \"Per-patient atomicity: partial failure leaves mixed state; no rollback specified\"\n  ],\n  \"still_missing\": [\n    \"Authoritative whitelist: file path, database table, or API endpoint providing definitive keep/discard decisions\",\n    \"Matching rule specification: how whitelist entries map to actual filenames\",\n    \"Archive collision resolution policy\",\n    \"Log output path and structured format (JSON, CSV, text)\",\n    \"Resume mechanism: whether to skip patients with existing archive directories\",\n    \"Cross-device move requirements and verification method\",\n    \"Checksum or integrity verification requirements\"\n  ],\n  \"worker_next_focus\": [\n    \"Locate whitelist configuration file or database referenced in project documentation\",\n    \"List actual files in 2-3 sample patient directories to observe real TotalSeg output naming\",\n    \"Inspect whether 'vertebrae_T1.nii.gz' or 'vertebrae_T13.nii.gz' exist in sample outputs\",\n    \"Check for existing project conventions on archive collision handling (overwrite vs versioned)\",\n    \"Identify logging infrastructure used by sibling workers in the same pipeline\"\n  ]\n}\n```",
+  "worker_v2_response_text": "{\n  \"understood_goal\": \"Filter files in the TotalSeg output directory for each patient, keeping only those specified in the authoritative whitelist and moving the rest to an archive directory. Ensure per-patient parallelism and proper logging of operations and errors.\",\n  \"constraints_to_follow\": [\n    \"Do NOT hardcode filename patterns, ranges, or enumerations for ribs, vertebrae, heart substructures, or lung lobes.\",\n    \"Category descriptions ('心脏相关', '肺叶', 'T段') are not executable membership rules; require authoritative whitelist source.\",\n    \"Matching rule (exact filename vs prefix vs pattern) must be determined from whitelist source, not assumed.\",\n    \"Vertebrae 'T段' boundaries (T1? T2? T12? T13?) are undefined; do not assume T2-T12.\",\n    \"Rib count and numbering format (rib_left_1 vs rib_left_01) are undefined; do not assume 1-12.\",\n    \"Move operation must verify success before removing source; rollback or resume strategy undefined.\",\n    \"Archive collision policy (overwrite/skip/rename) remains undecided and must be resolved.\",\n    \"Per-patient atomicity: partial failure leaves mixed state; no rollback specified.\",\n    \"Use exact filename matching (case-sensitive) for whitelist decisions once the source is known.\",\n    \"Only move files; do not copy or delete.\",\n    \"Archive directory must be created if it does not exist.\",\n    \"Handle per-patient failures gracefully without blocking other patients.\",\n    \"Log all operations and errors per patient and globally.\",\n    \"Do not perform any action that modifies the source directory unless the file is whitelisted.\",\n    \"Ensure atomic moves where possible, with copy+delete fallback.\",\n    \"Do not assume any file naming conventions beyond what's explicitly listed in the definitive whitelist.\"\n  ],\n  \"information_still_missing\": [\n    \"Authoritative whitelist: file path, database table, or API endpoint providing definitive keep/discard decisions.\",\n    \"Matching rule specification: how whitelist entries map to actual filenames.\",\n    \"Archive collision resolution policy.\",\n    \"Log output path and structured format (JSON, CSV, text).\",\n    \"Resume mechanism: whether to skip patients with existing archive directories.\",\n    \"Cross-device move requirements and verification method.\",\n    \"Checksum or integrity verification requirements.\"\n  ],\n  \"first_3_concrete_actions\": [\n    \"Locate whitelist configuration file or database referenced in project documentation.\",\n    \"List actual files in 2-3 sample patient directories to observe real TotalSeg output naming.\",\n    \"Inspect whether 'vertebrae_T1.nii.gz' or 'vertebrae_T13.nii.gz' exist in sample outputs.\"\n  ],\n  \"understanding_delta\": [\n    \"Replaced hardcoded filename enumerations with requirement to obtain an authoritative whitelist.\",\n    \"Clarified that category descriptions are not executable rules and must be mapped via a definitive source.\",\n    \"Removed assumptions about vertebrae range, rib numbering, and substructure completeness.\",\n    \"Acknowledged that archive collision policy is unresolved and must be determined.\",\n    \"Recognized that log format and destination are not defined in the prompt.\",\n    \"Understood that resume mechanisms and cross-device move behaviors are not specified.\"\n  ]\n}",
+  "worker_v2_response_json": {
+    "understood_goal": "Filter files in the TotalSeg output directory for each patient, keeping only those specified in the authoritative whitelist and moving the rest to an archive directory. Ensure per-patient parallelism and proper logging of operations and errors.",
+    "constraints_to_follow": [
+      "Do NOT hardcode filename patterns, ranges, or enumerations for ribs, vertebrae, heart substructures, or lung lobes.",
+      "Category descriptions ('心脏相关', '肺叶', 'T段') are not executable membership rules; require authoritative whitelist source.",
+      "Matching rule (exact filename vs prefix vs pattern) must be determined from whitelist source, not assumed.",
+      "Vertebrae 'T段' boundaries (T1? T2? T12? T13?) are undefined; do not assume T2-T12.",
+      "Rib count and numbering format (rib_left_1 vs rib_left_01) are undefined; do not assume 1-12.",
+      "Move operation must verify success before removing source; rollback or resume strategy undefined.",
+      "Archive collision policy (overwrite/skip/rename) remains undecided and must be resolved.",
+      "Per-patient atomicity: partial failure leaves mixed state; no rollback specified.",
+      "Use exact filename matching (case-sensitive) for whitelist decisions once the source is known.",
+      "Only move files; do not copy or delete.",
+      "Archive directory must be created if it does not exist.",
+      "Handle per-patient failures gracefully without blocking other patients.",
+      "Log all operations and errors per patient and globally.",
+      "Do not perform any action that modifies the source directory unless the file is whitelisted.",
+      "Ensure atomic moves where possible, with copy+delete fallback.",
+      "Do not assume any file naming conventions beyond what's explicitly listed in the definitive whitelist."
+    ],
+    "information_still_missing": [
+      "Authoritative whitelist: file path, database table, or API endpoint providing definitive keep/discard decisions.",
+      "Matching rule specification: how whitelist entries map to actual filenames.",
+      "Archive collision resolution policy.",
+      "Log output path and structured format (JSON, CSV, text).",
+      "Resume mechanism: whether to skip patients with existing archive directories.",
+      "Cross-device move requirements and verification method.",
+      "Checksum or integrity verification requirements."
+    ],
+    "first_3_concrete_actions": [
+      "Locate whitelist configuration file or database referenced in project documentation.",
+      "List actual files in 2-3 sample patient directories to observe real TotalSeg output naming.",
+      "Inspect whether 'vertebrae_T1.nii.gz' or 'vertebrae_T13.nii.gz' exist in sample outputs."
+    ],
+    "understanding_delta": [
+      "Replaced hardcoded filename enumerations with requirement to obtain an authoritative whitelist.",
+      "Clarified that category descriptions are not executable rules and must be mapped via a definitive source.",
+      "Removed assumptions about vertebrae range, rib numbering, and substructure completeness.",
+      "Acknowledged that archive collision policy is unresolved and must be determined.",
+      "Recognized that log format and destination are not defined in the prompt.",
+      "Understood that resume mechanisms and cross-device move behaviors are not specified."
+    ]
+  },
+  "final_worker_response_text": "{\n  \"understood_goal\": \"Filter files in the TotalSeg output directory for each patient, keeping only those specified in the authoritative whitelist and moving the rest to an archive directory. Ensure per-patient parallelism and proper logging of operations and errors.\",\n  \"constraints_to_follow\": [\n    \"Do NOT hardcode filename patterns, ranges, or enumerations for ribs, vertebrae, heart substructures, or lung lobes.\",\n    \"Category descriptions ('心脏相关', '肺叶', 'T段') are not executable membership rules; require authoritative whitelist source.\",\n    \"Matching rule (exact filename vs prefix vs pattern) must be determined from whitelist source, not assumed.\",\n    \"Vertebrae 'T段' boundaries (T1? T2? T12? T13?) are undefined; do not assume T2-T12.\",\n    \"Rib count and numbering format (rib_left_1 vs rib_left_01) are undefined; do not assume 1-12.\",\n    \"Move operation must verify success before removing source; rollback or resume strategy undefined.\",\n    \"Archive collision policy (overwrite/skip/rename) remains undecided and must be resolved.\",\n    \"Per-patient atomicity: partial failure leaves mixed state; no rollback specified.\",\n    \"Use exact filename matching (case-sensitive) for whitelist decisions once the source is known.\",\n    \"Only move files; do not copy or delete.\",\n    \"Archive directory must be created if it does not exist.\",\n    \"Handle per-patient failures gracefully without blocking other patients.\",\n    \"Log all operations and errors per patient and globally.\",\n    \"Do not perform any action that modifies the source directory unless the file is whitelisted.\",\n    \"Ensure atomic moves where possible, with copy+delete fallback.\",\n    \"Do not assume any file naming conventions beyond what's explicitly listed in the definitive whitelist.\"\n  ],\n  \"information_still_missing\": [\n    \"Authoritative whitelist: file path, database table, or API endpoint providing definitive keep/discard decisions.\",\n    \"Matching rule specification: how whitelist entries map to actual filenames.\",\n    \"Archive collision resolution policy.\",\n    \"Log output path and structured format (JSON, CSV, text).\",\n    \"Resume mechanism: whether to skip patients with existing archive directories.\",\n    \"Cross-device move requirements and verification method.\",\n    \"Checksum or integrity verification requirements.\"\n  ],\n  \"first_3_concrete_actions\": [\n    \"Locate whitelist configuration file or database referenced in project documentation.\",\n    \"List actual files in 2-3 sample patient directories to observe real TotalSeg output naming.\",\n    \"Inspect whether 'vertebrae_T1.nii.gz' or 'vertebrae_T13.nii.gz' exist in sample outputs.\"\n  ],\n  \"understanding_delta\": [\n    \"Replaced hardcoded filename enumerations with requirement to obtain an authoritative whitelist.\",\n    \"Clarified that category descriptions are not executable rules and must be mapped via a definitive source.\",\n    \"Removed assumptions about vertebrae range, rib numbering, and substructure completeness.\",\n    \"Acknowledged that archive collision policy is unresolved and must be determined.\",\n    \"Recognized that log format and destination are not defined in the prompt.\",\n    \"Understood that resume mechanisms and cross-device move behaviors are not specified.\"\n  ]\n}",
+  "final_worker_response_json": {
+    "understood_goal": "Filter files in the TotalSeg output directory for each patient, keeping only those specified in the authoritative whitelist and moving the rest to an archive directory. Ensure per-patient parallelism and proper logging of operations and errors.",
+    "constraints_to_follow": [
+      "Do NOT hardcode filename patterns, ranges, or enumerations for ribs, vertebrae, heart substructures, or lung lobes.",
+      "Category descriptions ('心脏相关', '肺叶', 'T段') are not executable membership rules; require authoritative whitelist source.",
+      "Matching rule (exact filename vs prefix vs pattern) must be determined from whitelist source, not assumed.",
+      "Vertebrae 'T段' boundaries (T1? T2? T12? T13?) are undefined; do not assume T2-T12.",
+      "Rib count and numbering format (rib_left_1 vs rib_left_01) are undefined; do not assume 1-12.",
+      "Move operation must verify success before removing source; rollback or resume strategy undefined.",
+      "Archive collision policy (overwrite/skip/rename) remains undecided and must be resolved.",
+      "Per-patient atomicity: partial failure leaves mixed state; no rollback specified.",
+      "Use exact filename matching (case-sensitive) for whitelist decisions once the source is known.",
+      "Only move files; do not copy or delete.",
+      "Archive directory must be created if it does not exist.",
+      "Handle per-patient failures gracefully without blocking other patients.",
+      "Log all operations and errors per patient and globally.",
+      "Do not perform any action that modifies the source directory unless the file is whitelisted.",
+      "Ensure atomic moves where possible, with copy+delete fallback.",
+      "Do not assume any file naming conventions beyond what's explicitly listed in the definitive whitelist."
+    ],
+    "information_still_missing": [
+      "Authoritative whitelist: file path, database table, or API endpoint providing definitive keep/discard decisions.",
+      "Matching rule specification: how whitelist entries map to actual filenames.",
+      "Archive collision resolution policy.",
+      "Log output path and structured format (JSON, CSV, text).",
+      "Resume mechanism: whether to skip patients with existing archive directories.",
+      "Cross-device move requirements and verification method.",
+      "Checksum or integrity verification requirements."
+    ],
+    "first_3_concrete_actions": [
+      "Locate whitelist configuration file or database referenced in project documentation.",
+      "List actual files in 2-3 sample patient directories to observe real TotalSeg output naming.",
+      "Inspect whether 'vertebrae_T1.nii.gz' or 'vertebrae_T13.nii.gz' exist in sample outputs."
+    ],
+    "understanding_delta": [
+      "Replaced hardcoded filename enumerations with requirement to obtain an authoritative whitelist.",
+      "Clarified that category descriptions are not executable rules and must be mapped via a definitive source.",
+      "Removed assumptions about vertebrae range, rib numbering, and substructure completeness.",
+      "Acknowledged that archive collision policy is unresolved and must be determined.",
+      "Recognized that log format and destination are not defined in the prompt.",
+      "Understood that resume mechanisms and cross-device move behaviors are not specified."
+    ]
+  },
+  "deterministic_contract_checks": {
+    "planner_non_empty": true,
+    "planner_has_json_tail": true,
+    "planner_json_tail_repaired": false,
+    "format_penalty_points": 0,
+    "worker_json_parse_ok": true,
+    "worker_required_fields_present": true,
+    "violations": [],
+    "planner_v2_has_json_tail": true,
+    "planner_v2_json_tail_repaired": false,
+    "worker_v2_json_parse_ok": true,
+    "worker_v2_required_fields_present": true
+  },
+  "judge_instructions": [
+    "Evaluate information flow, not whether final code was produced.",
+    "Planner constraint coverage must be judged against gold_constraints that are reasonably inferable from the visible request; do not require impossible hidden details unless the episode rubric marks them critical.",
+    "If an exact gold detail was not visible, a planner should receive real credit for explicitly naming that exact category as unresolved instead of inventing a default.",
+    "Treat 'covered_or_flagged' as the core T2 signal: a constraint is good if the planner either states the correct concrete rule or clearly flags that the worker must verify/obtain that exact rule before implementing.",
+    "Penalize planner false confidence when it gives worker a concrete wrong default instead of flagging a missing detail.",
+    "Reward worker output when it correctly flags missing information caused by a weak planner spec.",
+    "If planner_v2 and worker_v2 are present, evaluate the rumination loop: did worker_v1 expose a misunderstanding, did planner_v2 address it, and did worker_v2 become more accurate or safer?",
+    "Do not reward planner_v2 for merely restating planner_v1. Reward targeted correction of worker_v1 misunderstandings and sharper missing-info boundaries.",
+    "When two worker rounds are present, final handoff_performance_score should mainly reflect worker_v2 understanding plus the improvement from worker_v1 to worker_v2.",
+    "Do not over-penalize a cautious planner for not knowing hidden dirty-work constants; penalize it for hiding the uncertainty from the worker.",
+    "Treat missing fenced planner JSON tail as a light formatting penalty only when the content is otherwise usable; do not let format alone dominate the benchmark score.",
+    "Score each dimension 0-2 and total to 0-10.",
+    "Set handoff_performance_score as the main benchmark score for the planner-as-signal-sender. It should primarily reflect whether the qwen worker can form a correct, safe interpretation from this planner spec. Use worker_score as the baseline, then cap it if the planner introduced an unsafe false assumption.",
+    "Return strict JSON only."
+  ],
+  "output_schema": {
+    "planner_constraint_coverage_score": "0-2",
+    "planner_risk_flagging_score": "0-2",
+    "worker_v1_score": "0-10",
+    "planner_revision_score": "0-10",
+    "worker_v2_score": "0-10",
+    "understanding_delta_score": "0-10",
+    "spec_score": "0-10",
+    "worker_score": "0-10",
+    "handoff_performance_score": "0-10 main score for planner signal quality",
+    "format_penalty_applied": "0-2 mild deduction for protocol misses such as absent fenced json tail",
+    "final_verdict": "spec_strong | spec_acceptable | spec_weak | spec_unsafe",
+    "covered_or_flagged_constraints": [
+      "gold constraints either correctly stated or clearly exposed as unresolved exact details"
+    ],
+    "covered_gold_constraints": [
+      "gold constraints captured by planner or worker"
+    ],
+    "missed_gold_constraints": [
+      "important gold constraints omitted or mishandled"
+    ],
+    "forbidden_assumptions_made": [
+      "wrong assumptions made by planner or worker"
+    ],
+    "separation_notes": "why this cell should or should not separate models",
+    "concise_rationale": "short evidence-based explanation"
+  }
+}

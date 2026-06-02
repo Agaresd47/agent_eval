@@ -1,0 +1,58 @@
+{
+  "condition": "B1",
+  "seed": 0,
+  "episode_id": "ep003_totalseg_whitelist_split",
+  "original_request": "TotalSeg 输出每个病人 100+ 个结构 mask，但这条线后面训练只保留：\n心脏相关、肺叶、肋骨、胸椎（T 段）、锁骨、肱骨、胸骨、主动脉。\n\n请帮我写一个 worker-ready spec：\n对每个病人目录，把**不在白名单内**的 mask 文件搬到另一个目录留存，\n源目录只保留白名单内的文件。\n\n源：<dataset_root>/totalseg_output/<patient_id>/\n分流目标：<archive_root>/<patient_id>/\n\n这份 spec 里需要明确：\n- 白名单匹配到底按“类别 / 前缀”还是按“精确文件名”\n- 分流动作是 move、delete 还是 copy\n- 目标目录结构怎么镜像\n- 缺失文件怎么处理\n\n病人级独立，可并行。漏文件要记录但不要中断。\n",
+  "planner_v1_spec": "## Worker Implementation Spec: TotalSeg Mask Whitelist Filtering\n\n### Observed Facts\n- Source: `<dataset_root>/totalseg_output/<patient_id>/` — flat directory of `.nii.gz` files\n- Archive: `<archive_root>/<patient_id>/` — exists, empty, will receive moved files\n- Output: source directory retains only whitelisted files; non-whitelisted files moved to archive\n- Patient-level parallelism required; per-patient failures logged but non-blocking\n\n### Whitelist Definition (from prompt + notes)\n| Category | Specific Files to KEEP (exact match) |\n|----------|--------------------------------------|\n| 心脏相关 | `heart.nii.gz`, `heart_atrium_left.nii.gz`, `heart_atrium_right.nii.gz`, `heart_ventricle_left.nii.gz`, `heart_ventricle_right.nii.gz` |\n| 肺叶 | `lung_upper_lobe_left.nii.gz`, `lung_upper_lobe_right.nii.gz`, `lung_lower_lobe_left.nii.gz`, `lung_lower_lobe_right.nii.gz`, `lung_middle_lobe_right.nii.gz` |\n| 肋骨 | `rib_left_1.nii.gz` through `rib_left_12.nii.gz`, `rib_right_1.nii.gz` through `rib_right_12.nii.gz` |\n| 胸椎 (T段) | `vertebrae_T2.nii.gz` through `vertebrae_T12.nii.gz` — **NOT** `vertebrae_C*`, `vertebrae_L*`, `vertebrae_S*` |\n| 锁骨 | `clavicula_left.nii.gz`, `clavicula_right.nii.gz` |\n| 肱骨 | `humerus_left.nii.gz`, `humerus_right.nii.gz` |\n| 胸骨 | `sternum.nii.gz` |\n| 主动脉 | `aorta.nii.gz` |\n\n**Matching rule: EXACT FILENAME** (case-sensitive). No prefix matching, no substring matching, no regex expansion.\n\n### File Operations\n- **Action**: `move` (not copy, not delete) — atomic rename preferred, fallback to copy+delete with verification\n- **Source behavior**: after move, source directory contains only whitelisted files\n- **Archive behavior**: mirror source structure (flat), creating `<archive_root>/<patient_id>/` if needed\n\n### Per-Patient Algorithm\n```\nINPUT: patient_id\n1. List all *.nii.gz in <dataset_root>/totalseg_output/<patient_id>/\n2. For each file:\n   - If filename in whitelist: keep in place\n   - Else: move to <archive_root>/<patient_id>/<filename>\n3. Log: files kept, files moved, any I/O errors\n4. If archive directory creation fails or move fails: log error, skip patient, continue to next\n```\n\n### Error Handling\n- Missing source directory: log warning, skip patient\n- Archive path exists as file (not directory): log error, skip patient\n- Move collision (file exists in archive): **UNDEFINED** — see open questions\n- Partial move failure (some files moved, some not): log which succeeded, do not rollback\n\n### Logging Requirements\n- Per-patient manifest: whitelist files present, non-whitelist files moved, expected-but-missing whitelist files\n- Global summary: total patients processed, success count, skip count with reasons\n\n```json\n{\n  \"assumptions\": [\n    \"TotalSeg output uses exactly the filenames listed in whitelist_notes.md conventions; no additional heart/lung/rib variants exist\",\n    \"Filesystem supports atomic move within same device; cross-device move requires copy+delete fallback\",\n    \"Archive root has sufficient space and write permissions\",\n    \"Patient IDs contain no path traversal characters (validated by caller)\"\n  ],\n  \"risks\": [\n    \"Exact filename matching is brittle: 'heart.nii.gz' vs 'heart_atrium_left.nii.gz' are distinct; substring match would over-retain\",\n    \"Vertebrae_T1 and vertebrae_T13 (if they exist) are NOT in whitelist but look similar to T2-T12\",\n    \"Rib numbering 1-12 is fixed; rib_left_01.nii.gz vs rib_left_1.nii.gz naming inconsistency would cause mismatch\",\n    \"Move collision in archive (re-running on same patient) behavior is unspecified\",\n    \"No transaction log: interrupted run may leave partial state requiring manual reconciliation\"\n  ],\n  \"open_questions\": [\n    \"Is the complete whitelist enumerated above final, or should worker read from a config file?\",\n    \"On archive collision (file already exists), should worker: skip, overwrite, or rename with suffix?\",\n    \"Should worker verify file integrity (checksum) before/after move?\",\n    \"Is there a resume marker to avoid re-processing completed patients?\",\n    \"What is the required log format and destination path?\"\n  ]\n}\n```",
+  "worker_v1_interpretation_text": "{\n  \"understood_goal\": \"Filter files in the TotalSeg output directory for each patient, keeping only those specified in the whitelist and moving the rest to an archive directory. Ensure per-patient parallelism and proper logging of operations and errors.\",\n  \"constraints_to_follow\": [\n    \"Use exact filename matching (case-sensitive) for the whitelist.\",\n    \"Only move files; do not copy or delete.\",\n    \"Archive directory must be created if it does not exist.\",\n    \"Handle per-patient failures gracefully without blocking other patients.\",\n    \"Log all operations and errors per patient and globally.\",\n    \"Do not perform any action that modifies the source directory unless the file is whitelisted.\",\n    \"Ensure atomic moves where possible, with copy+delete fallback.\",\n    \"Do not assume any file naming conventions beyond what's explicitly listed in the whitelist.\"\n  ],\n  \"information_still_missing\": [\n    \"The exact location and format of the global log output (destination path, format).\",\n    \"Whether the worker should read the whitelist from a configuration file or if the provided list is final.\",\n    \"How to handle collisions in the archive (overwrite, skip, rename).\",\n    \"Whether checksum verification is required before or after moving files.\",\n    \"If there is a mechanism to resume processing from where it left off (e.g., a marker file).\",\n    \"The specific filesystem behavior for cross-device moves (whether copy+delete is always required).\"\n  ],\n  \"first_3_concrete_actions\": [\n    \"Verify the existence and accessibility of the dataset root and archive root paths.\",\n    \"List all .nii.gz files in the source directory for a sample patient ID to confirm file listing behavior.\",\n    \"Check whether the archive directory can be created successfully for a test patient ID.\"\n  ]\n}",
+  "worker_v1_interpretation_json": {
+    "understood_goal": "Filter files in the TotalSeg output directory for each patient, keeping only those specified in the whitelist and moving the rest to an archive directory. Ensure per-patient parallelism and proper logging of operations and errors.",
+    "constraints_to_follow": [
+      "Use exact filename matching (case-sensitive) for the whitelist.",
+      "Only move files; do not copy or delete.",
+      "Archive directory must be created if it does not exist.",
+      "Handle per-patient failures gracefully without blocking other patients.",
+      "Log all operations and errors per patient and globally.",
+      "Do not perform any action that modifies the source directory unless the file is whitelisted.",
+      "Ensure atomic moves where possible, with copy+delete fallback.",
+      "Do not assume any file naming conventions beyond what's explicitly listed in the whitelist."
+    ],
+    "information_still_missing": [
+      "The exact location and format of the global log output (destination path, format).",
+      "Whether the worker should read the whitelist from a configuration file or if the provided list is final.",
+      "How to handle collisions in the archive (overwrite, skip, rename).",
+      "Whether checksum verification is required before or after moving files.",
+      "If there is a mechanism to resume processing from where it left off (e.g., a marker file).",
+      "The specific filesystem behavior for cross-device moves (whether copy+delete is always required)."
+    ],
+    "first_3_concrete_actions": [
+      "Verify the existence and accessibility of the dataset root and archive root paths.",
+      "List all .nii.gz files in the source directory for a sample patient ID to confirm file listing behavior.",
+      "Check whether the archive directory can be created successfully for a test patient ID."
+    ]
+  },
+  "task": "Write a second planner message that corrects worker_v1 misunderstandings and fills or flags missing details.",
+  "instructions": [
+    "Do not write final implementation code.",
+    "Focus on the delta: what worker_v1 misunderstood, what the worker still lacks, and what the worker should do differently.",
+    "If an exact detail is unknown, say exactly what must be verified instead of inventing a default.",
+    "Do not turn category words, examples, prefixes, ranges, or semantic groupings into exact executable membership rules unless the prompt already provides the authoritative rule.",
+    "Do not upgrade a missing artifact into a guessed source of truth. If the worker still lacks the definitive whitelist, exact schema, or exact mapping, keep that artifact unresolved.",
+    "Preserve correct worker_v1 understanding; do not rewrite everything generically.",
+    "End with exactly one fenced ```json block containing corrected_constraints, still_missing, and worker_next_focus."
+  ],
+  "output_contract": {
+    "format": "markdown revision message followed by exactly one final fenced json block",
+    "json_block_schema": {
+      "corrected_constraints": [
+        "constraints corrected or sharpened after reading worker_v1"
+      ],
+      "still_missing": [
+        "details still unavailable and not safe to assume"
+      ],
+      "worker_next_focus": [
+        "specific things worker should inspect or verify next"
+      ]
+    }
+  }
+}
