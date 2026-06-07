@@ -11,14 +11,11 @@ class RuntimeCatalog:
         self._constructors: Dict[str, Type] = {}
         self._install_defaults()
 
-    def build(self, kind: str) -> Any:
+    def create(self, kind: str) -> Any:
         constructor = self._constructors.get(kind)
         if constructor is None:
             raise ValueError("Unknown step kind: {0}".format(kind))
         return constructor()
-
-    def create(self, kind: str) -> Any:
-        return self.build(kind)
 
     def supported_kinds(self) -> List[str]:
         return sorted(self._constructors.keys())

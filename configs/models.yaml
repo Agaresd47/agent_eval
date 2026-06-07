@@ -51,8 +51,7 @@ models:
   - model_id: gemini_flash_lite
     provider: google_gemini
     api_model_name: gemini-2.5-flash-lite
-    fallback_api_model_names:
-      - gemini-3.1-flash-lite-preview
+    fallback_api_model_names: []
     role_tags: [mid, worker]
     supports_json_mode: false
     env:
@@ -82,7 +81,7 @@ models:
     role_tags: [mid, worker, planner]
     supports_json_mode: true
     env:
-      api_key_var: Deepseek
+      api_key_var: DEEPSEEK_API_KEY
       base_url: https://api.deepseek.com
     request_options:
       max_tokens_field: max_tokens
@@ -133,7 +132,7 @@ models:
     role_tags: [strong_ref, worker, planner]
     supports_json_mode: false
     env:
-      api_key_var: Xiaomi
+      api_key_var: XIAOMI_API_KEY
       base_url: https://token-plan-cn.xiaomimimo.com/v1
     request_options:
       auth_header: api-key

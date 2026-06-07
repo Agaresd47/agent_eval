@@ -256,19 +256,19 @@ cd /workspace/finished_stage && echo '=== Verify moved targets ===' && ls -lh fi
 
 ```text
 === Verify moved targets ===
--rw-r--r-- 1 agares 197609 26  5月  9 17:31 final_ct/caseA.nii.gz
+-rw-r--r-- 1 user 197609 26  5月  9 17:31 final_ct/caseA.nii.gz
 
 final_mask/caseA_total:
 total 2.0K
--rw-r--r-- 1 agares 197609 29  5月  9 17:31 heart.nii.gz
--rw-r--r-- 1 agares 197609 28  5月  9 17:31 lung.nii.gz
+-rw-r--r-- 1 user 197609 29  5月  9 17:31 heart.nii.gz
+-rw-r--r-- 1 user 197609 28  5月  9 17:31 lung.nii.gz
 === Verify moved sources removed ===
 ls: cannot access 'raw_ct/caseA.nii.gz': No such file or directory
 ls: cannot access 'raw_mask/caseA_total': No such file or directory
 Sources correctly removed
 === Verify skipped sources preserved ===
 ls: cannot access 'raw_ct/caseD.nii.gz': No such file or directory
--rw-r--r-- 1 agares 197609 26  5月  9 17:31 raw_ct/caseB.nii.gz
+-rw-r--r-- 1 user 197609 26  5月  9 17:31 raw_ct/caseB.nii.gz
 ```
 
 ## Turn 4 | system
@@ -626,17 +626,17 @@ cd /workspace/finished_stage && echo '=== Verify moved targets ===' && ls -lh fi
 
 ```text
 === Verify moved targets ===
--rw-r--r-- 1 agares 197609 26  5月  9 17:31 final_ct/caseA.nii.gz
+-rw-r--r-- 1 user 197609 26  5月  9 17:31 final_ct/caseA.nii.gz
 
 final_mask/caseA_total:
 total 2.0K
--rw-r--r-- 1 agares 197609 29  5月  9 17:31 heart.nii.gz
--rw-r--r-- 1 agares 197609 28  5月  9 17:31 lung.nii.gz
+-rw-r--r-- 1 user 197609 29  5月  9 17:31 heart.nii.gz
+-rw-r--r-- 1 user 197609 28  5月  9 17:31 lung.nii.gz
 === Verify moved sources removed ===
 ls: cannot access 'raw_ct/caseA.nii.gz': No such file or directory
 ls: cannot access 'raw_mask/caseA_total': No such file or directory
 Sources correctly removed
 === Verify skipped sources preserved ===
 ls: cannot access 'raw_ct/caseD.nii.gz': No such file or directory
--rw-r--r-- 1 agares 197609 26  5月  9 17:31 raw_ct/caseB.nii.gz
+-rw-r--r-- 1 user 197609 26  5月  9 17:31 raw_ct/caseB.nii.gz
 ```

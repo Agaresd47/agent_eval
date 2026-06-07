@@ -15,8 +15,8 @@
     "manual_review_override": null
   },
   "record": {
-    "episode_yaml": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t2_episodes\\test_ground\\ep003_totalseg_whitelist_split.yaml",
-    "judge_yaml": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t2_episodes\\test_ground\\judges\\ep003_totalseg_whitelist_split.judge.yaml",
+    "episode_yaml": "<REPO_ROOT>\\data\\t2_episodes\\test_ground\\ep003_totalseg_whitelist_split.yaml",
+    "judge_yaml": "<REPO_ROOT>\\data\\t2_episodes\\test_ground\\judges\\ep003_totalseg_whitelist_split.judge.yaml",
     "episode_id": "ep003_totalseg_whitelist_split",
     "condition": "B1",
     "seed": 0,

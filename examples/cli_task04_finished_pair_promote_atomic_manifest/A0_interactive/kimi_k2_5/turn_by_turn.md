@@ -25,11 +25,11 @@ find /workspace/finished_stage/raw_ct -maxdepth 1 -type f -name '*.nii.gz' | sor
 ### stdout
 
 ```text
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_ct/caseA.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_ct/caseB.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_ct/caseC.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_ct/caseE.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_ct/caseF.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_ct/caseA.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_ct/caseB.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_ct/caseC.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_ct/caseE.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_ct/caseF.nii.gz
 ```
 
 ## Turn 1 | tool
@@ -45,10 +45,10 @@ find /workspace/finished_stage/raw_mask -maxdepth 1 -type d -name '*_total' | so
 ### stdout
 
 ```text
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_mask/caseA_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_mask/caseD_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_mask/caseE_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_mask/caseF_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_mask/caseA_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_mask/caseD_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_mask/caseE_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_mask/caseF_total
 ```
 
 ## Turn 1 | tool
@@ -65,9 +65,9 @@ ls -la /workspace/finished_stage/final_ct 2>/dev/null || echo 'final_ct does not
 
 ```text
 total 1
-drwxr-xr-x 1 agares 197609  0  5月  9 16:43 .
-drwxr-xr-x 1 agares 197609  0  5月  9 16:43 ..
--rw-r--r-- 1 agares 197609 32  5月  9 16:43 caseE.nii.gz
+drwxr-xr-x 1 user 197609  0  5月  9 16:43 .
+drwxr-xr-x 1 user 197609  0  5月  9 16:43 ..
+-rw-r--r-- 1 user 197609 32  5月  9 16:43 caseE.nii.gz
 ```
 
 ## Turn 1 | tool
@@ -84,9 +84,9 @@ ls -la /workspace/finished_stage/final_mask 2>/dev/null || echo 'final_mask does
 
 ```text
 total 0
-drwxr-xr-x 1 agares 197609 0  5月  9 16:43 .
-drwxr-xr-x 1 agares 197609 0  5月  9 16:43 ..
-drwxr-xr-x 1 agares 197609 0  5月  9 16:43 caseF_total
+drwxr-xr-x 1 user 197609 0  5月  9 16:43 .
+drwxr-xr-x 1 user 197609 0  5月  9 16:43 ..
+drwxr-xr-x 1 user 197609 0  5月  9 16:43 caseF_total
 ```
 
 ## Turn 1 | tool
@@ -160,11 +160,11 @@ find /workspace/finished_stage/raw_ct -maxdepth 1 -type f -name '*.nii.gz' | sor
 ### stdout
 
 ```text
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_ct/caseA.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_ct/caseB.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_ct/caseC.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_ct/caseE.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_ct/caseF.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_ct/caseA.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_ct/caseB.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_ct/caseC.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_ct/caseE.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_ct/caseF.nii.gz
 ```
 
 ## Turn 2 | tool
@@ -180,10 +180,10 @@ find /workspace/finished_stage/raw_mask -maxdepth 1 -type d -name '*_total' | so
 ### stdout
 
 ```text
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_mask/caseA_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_mask/caseD_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_mask/caseE_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_mask/caseF_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_mask/caseA_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_mask/caseD_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_mask/caseE_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_mask/caseF_total
 ```
 
 ## Turn 3 | agent
@@ -275,9 +275,9 @@ ls -la /workspace/finished_stage/final_ct 2>/dev/null || echo 'final_ct does not
 
 ```text
 total 1
-drwxr-xr-x 1 agares 197609  0  5月  9 16:43 .
-drwxr-xr-x 1 agares 197609  0  5月  9 16:43 ..
--rw-r--r-- 1 agares 197609 32  5月  9 16:43 caseE.nii.gz
+drwxr-xr-x 1 user 197609  0  5月  9 16:43 .
+drwxr-xr-x 1 user 197609  0  5月  9 16:43 ..
+-rw-r--r-- 1 user 197609 32  5月  9 16:43 caseE.nii.gz
 ```
 
 ## Turn 3 | tool
@@ -294,9 +294,9 @@ ls -la /workspace/finished_stage/final_mask 2>/dev/null || echo 'final_mask does
 
 ```text
 total 0
-drwxr-xr-x 1 agares 197609 0  5月  9 16:43 .
-drwxr-xr-x 1 agares 197609 0  5月  9 16:43 ..
-drwxr-xr-x 1 agares 197609 0  5月  9 16:43 caseF_total
+drwxr-xr-x 1 user 197609 0  5月  9 16:43 .
+drwxr-xr-x 1 user 197609 0  5月  9 16:43 ..
+drwxr-xr-x 1 user 197609 0  5月  9 16:43 caseF_total
 ```
 
 ## Turn 4 | agent
@@ -516,34 +516,34 @@ cd /workspace/finished_stage && echo '=== VERIFICATION ===' && echo '' && echo '
 
 --- Final CT contents ---
 total 6
-drwxr-xr-x 1 agares 197609  0  5月  9 16:45 .
-drwxr-xr-x 1 agares 197609  0  5月  9 16:45 ..
--rw-r--r-- 1 agares 197609 26  5月  9 16:43 caseA.nii.gz
--rw-r--r-- 1 agares 197609 32  5月  9 16:43 caseE.nii.gz
+drwxr-xr-x 1 user 197609  0  5月  9 16:45 .
+drwxr-xr-x 1 user 197609  0  5月  9 16:45 ..
+-rw-r--r-- 1 user 197609 26  5月  9 16:43 caseA.nii.gz
+-rw-r--r-- 1 user 197609 32  5月  9 16:43 caseE.nii.gz
 
 --- Final mask contents ---
 total 4
-drwxr-xr-x 1 agares 197609 0  5月  9 16:45 .
-drwxr-xr-x 1 agares 197609 0  5月  9 16:45 ..
-drwxr-xr-x 1 agares 197609 0  5月  9 16:43 caseA_total
-drwxr-xr-x 1 agares 197609 0  5月  9 16:43 caseF_total
+drwxr-xr-x 1 user 197609 0  5月  9 16:45 .
+drwxr-xr-x 1 user 197609 0  5月  9 16:45 ..
+drwxr-xr-x 1 user 197609 0  5月  9 16:43 caseA_total
+drwxr-xr-x 1 user 197609 0  5月  9 16:43 caseF_total
 
 --- Raw CT remaining (should NOT have caseA) ---
 total 12
-drwxr-xr-x 1 agares 197609  0  5月  9 16:45 .
-drwxr-xr-x 1 agares 197609  0  5月  9 16:45 ..
--rw-r--r-- 1 agares 197609 26  5月  9 16:43 caseB.nii.gz
--rw-r--r-- 1 agares 197609 26  5月  9 16:43 caseC.nii.gz
--rw-r--r-- 1 agares 197609 26  5月  9 16:43 caseE.nii.gz
--rw-r--r-- 1 agares 197609 26  5月  9 16:43 caseF.nii.gz
+drwxr-xr-x 1 user 197609  0  5月  9 16:45 .
+drwxr-xr-x 1 user 197609  0  5月  9 16:45 ..
+-rw-r--r-- 1 user 197609 26  5月  9 16:43 caseB.nii.gz
+-rw-r--r-- 1 user 197609 26  5月  9 16:43 caseC.nii.gz
+-rw-r--r-- 1 user 197609 26  5月  9 16:43 caseE.nii.gz
+-rw-r--r-- 1 user 197609 26  5月  9 16:43 caseF.nii.gz
 
 --- Raw mask remaining (should NOT have caseA_total) ---
 total 8
-drwxr-xr-x 1 agares 197609 0  5月  9 16:45 .
-drwxr-xr-x 1 agares 197609 0  5月  9 16:45 ..
-drwxr-xr-x 1 agares 197609 0  5月  9 16:43 caseD_total
-drwxr-xr-x 1 agares 197609 0  5月  9 16:43 caseE_total
-drwxr-xr-x 1 agares 197609 0  5月  9 16:43 caseF_total
+drwxr-xr-x 1 user 197609 0  5月  9 16:45 .
+drwxr-xr-x 1 user 197609 0  5月  9 16:45 ..
+drwxr-xr-x 1 user 197609 0  5月  9 16:43 caseD_total
+drwxr-xr-x 1 user 197609 0  5月  9 16:43 caseE_total
+drwxr-xr-x 1 user 197609 0  5月  9 16:43 caseF_total
 
 --- Manifest contents ---
 case,action,reason,ct_source,ct_target,mask_source,mask_target
@@ -815,11 +815,11 @@ find /workspace/finished_stage/raw_ct -maxdepth 1 -type f -name '*.nii.gz' | sor
 ### stdout
 
 ```text
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_ct/caseA.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_ct/caseB.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_ct/caseC.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_ct/caseE.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_ct/caseF.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_ct/caseA.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_ct/caseB.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_ct/caseC.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_ct/caseE.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_ct/caseF.nii.gz
 ```
 
 ## Observation 2
@@ -835,10 +835,10 @@ find /workspace/finished_stage/raw_mask -maxdepth 1 -type d -name '*_total' | so
 ### stdout
 
 ```text
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_mask/caseA_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_mask/caseD_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_mask/caseE_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_mask/caseF_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_mask/caseA_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_mask/caseD_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_mask/caseE_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_mask/caseF_total
 ```
 
 ## Observation 3
@@ -855,9 +855,9 @@ ls -la /workspace/finished_stage/final_ct 2>/dev/null || echo 'final_ct does not
 
 ```text
 total 1
-drwxr-xr-x 1 agares 197609  0  5月  9 16:43 .
-drwxr-xr-x 1 agares 197609  0  5月  9 16:43 ..
--rw-r--r-- 1 agares 197609 32  5月  9 16:43 caseE.nii.gz
+drwxr-xr-x 1 user 197609  0  5月  9 16:43 .
+drwxr-xr-x 1 user 197609  0  5月  9 16:43 ..
+-rw-r--r-- 1 user 197609 32  5月  9 16:43 caseE.nii.gz
 ```
 
 ## Observation 4
@@ -874,9 +874,9 @@ ls -la /workspace/finished_stage/final_mask 2>/dev/null || echo 'final_mask does
 
 ```text
 total 0
-drwxr-xr-x 1 agares 197609 0  5月  9 16:43 .
-drwxr-xr-x 1 agares 197609 0  5月  9 16:43 ..
-drwxr-xr-x 1 agares 197609 0  5月  9 16:43 caseF_total
+drwxr-xr-x 1 user 197609 0  5月  9 16:43 .
+drwxr-xr-x 1 user 197609 0  5月  9 16:43 ..
+drwxr-xr-x 1 user 197609 0  5月  9 16:43 caseF_total
 ```
 
 ## Observation 5
@@ -924,11 +924,11 @@ find /workspace/finished_stage/raw_ct -maxdepth 1 -type f -name '*.nii.gz' | sor
 ### stdout
 
 ```text
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_ct/caseA.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_ct/caseB.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_ct/caseC.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_ct/caseE.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_ct/caseF.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_ct/caseA.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_ct/caseB.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_ct/caseC.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_ct/caseE.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_ct/caseF.nii.gz
 ```
 
 ## Observation 8
@@ -944,10 +944,10 @@ find /workspace/finished_stage/raw_mask -maxdepth 1 -type d -name '*_total' | so
 ### stdout
 
 ```text
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_mask/caseA_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_mask/caseD_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_mask/caseE_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_mask/caseF_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_mask/caseA_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_mask/caseD_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_mask/caseE_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_8qkn9g3e/workspace/finished_stage/raw_mask/caseF_total
 ```
 
 ## Observation 9
@@ -1003,9 +1003,9 @@ ls -la /workspace/finished_stage/final_ct 2>/dev/null || echo 'final_ct does not
 
 ```text
 total 1
-drwxr-xr-x 1 agares 197609  0  5月  9 16:43 .
-drwxr-xr-x 1 agares 197609  0  5月  9 16:43 ..
--rw-r--r-- 1 agares 197609 32  5月  9 16:43 caseE.nii.gz
+drwxr-xr-x 1 user 197609  0  5月  9 16:43 .
+drwxr-xr-x 1 user 197609  0  5月  9 16:43 ..
+-rw-r--r-- 1 user 197609 32  5月  9 16:43 caseE.nii.gz
 ```
 
 ## Observation 12
@@ -1022,9 +1022,9 @@ ls -la /workspace/finished_stage/final_mask 2>/dev/null || echo 'final_mask does
 
 ```text
 total 0
-drwxr-xr-x 1 agares 197609 0  5月  9 16:43 .
-drwxr-xr-x 1 agares 197609 0  5月  9 16:43 ..
-drwxr-xr-x 1 agares 197609 0  5月  9 16:43 caseF_total
+drwxr-xr-x 1 user 197609 0  5月  9 16:43 .
+drwxr-xr-x 1 user 197609 0  5月  9 16:43 ..
+drwxr-xr-x 1 user 197609 0  5月  9 16:43 caseF_total
 ```
 
 ## Observation 13
@@ -1167,34 +1167,34 @@ cd /workspace/finished_stage && echo '=== VERIFICATION ===' && echo '' && echo '
 
 --- Final CT contents ---
 total 6
-drwxr-xr-x 1 agares 197609  0  5月  9 16:45 .
-drwxr-xr-x 1 agares 197609  0  5月  9 16:45 ..
--rw-r--r-- 1 agares 197609 26  5月  9 16:43 caseA.nii.gz
--rw-r--r-- 1 agares 197609 32  5月  9 16:43 caseE.nii.gz
+drwxr-xr-x 1 user 197609  0  5月  9 16:45 .
+drwxr-xr-x 1 user 197609  0  5月  9 16:45 ..
+-rw-r--r-- 1 user 197609 26  5月  9 16:43 caseA.nii.gz
+-rw-r--r-- 1 user 197609 32  5月  9 16:43 caseE.nii.gz
 
 --- Final mask contents ---
 total 4
-drwxr-xr-x 1 agares 197609 0  5月  9 16:45 .
-drwxr-xr-x 1 agares 197609 0  5月  9 16:45 ..
-drwxr-xr-x 1 agares 197609 0  5月  9 16:43 caseA_total
-drwxr-xr-x 1 agares 197609 0  5月  9 16:43 caseF_total
+drwxr-xr-x 1 user 197609 0  5月  9 16:45 .
+drwxr-xr-x 1 user 197609 0  5月  9 16:45 ..
+drwxr-xr-x 1 user 197609 0  5月  9 16:43 caseA_total
+drwxr-xr-x 1 user 197609 0  5月  9 16:43 caseF_total
 
 --- Raw CT remaining (should NOT have caseA) ---
 total 12
-drwxr-xr-x 1 agares 197609  0  5月  9 16:45 .
-drwxr-xr-x 1 agares 197609  0  5月  9 16:45 ..
--rw-r--r-- 1 agares 197609 26  5月  9 16:43 caseB.nii.gz
--rw-r--r-- 1 agares 197609 26  5月  9 16:43 caseC.nii.gz
--rw-r--r-- 1 agares 197609 26  5月  9 16:43 caseE.nii.gz
--rw-r--r-- 1 agares 197609 26  5月  9 16:43 caseF.nii.gz
+drwxr-xr-x 1 user 197609  0  5月  9 16:45 .
+drwxr-xr-x 1 user 197609  0  5月  9 16:45 ..
+-rw-r--r-- 1 user 197609 26  5月  9 16:43 caseB.nii.gz
+-rw-r--r-- 1 user 197609 26  5月  9 16:43 caseC.nii.gz
+-rw-r--r-- 1 user 197609 26  5月  9 16:43 caseE.nii.gz
+-rw-r--r-- 1 user 197609 26  5月  9 16:43 caseF.nii.gz
 
 --- Raw mask remaining (should NOT have caseA_total) ---
 total 8
-drwxr-xr-x 1 agares 197609 0  5月  9 16:45 .
-drwxr-xr-x 1 agares 197609 0  5月  9 16:45 ..
-drwxr-xr-x 1 agares 197609 0  5月  9 16:43 caseD_total
-drwxr-xr-x 1 agares 197609 0  5月  9 16:43 caseE_total
-drwxr-xr-x 1 agares 197609 0  5月  9 16:43 caseF_total
+drwxr-xr-x 1 user 197609 0  5月  9 16:45 .
+drwxr-xr-x 1 user 197609 0  5月  9 16:45 ..
+drwxr-xr-x 1 user 197609 0  5月  9 16:43 caseD_total
+drwxr-xr-x 1 user 197609 0  5月  9 16:43 caseE_total
+drwxr-xr-x 1 user 197609 0  5月  9 16:43 caseF_total
 
 --- Manifest contents ---
 case,action,reason,ct_source,ct_target,mask_source,mask_target

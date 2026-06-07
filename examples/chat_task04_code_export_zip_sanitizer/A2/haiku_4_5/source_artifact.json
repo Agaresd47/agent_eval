@@ -1,8 +1,8 @@
 {
   "generated_at": "20260504_165225",
   "status": "completed",
-  "workspace_root": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow",
-  "task_dir": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t1_tasks\\test_ground",
+  "workspace_root": "<REPO_ROOT>",
+  "task_dir": "<REPO_ROOT>\\data\\t1_tasks\\test_ground",
   "task_glob": "*.yaml",
   "task_count": 1,
   "runner_count": 4,
@@ -33,8 +33,8 @@
   "validation_errors": [],
   "records": [
     {
-      "task_yaml": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t1_tasks\\code_export_zip_sanitizer.yaml",
-      "judge_yaml": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t1_tasks\\judges\\code_export_zip_sanitizer.judge.yaml",
+      "task_yaml": "<REPO_ROOT>\\data\\t1_tasks\\code_export_zip_sanitizer.yaml",
+      "judge_yaml": "<REPO_ROOT>\\data\\t1_tasks\\judges\\code_export_zip_sanitizer.judge.yaml",
       "task_id": "t1_code_export_zip_sanitizer",
       "eval_slice": "read_only",
       "runner_label": "haiku_4_5",
@@ -174,8 +174,8 @@
       "elapsed_s": 10.034
     },
     {
-      "task_yaml": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t1_tasks\\code_export_zip_sanitizer.yaml",
-      "judge_yaml": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t1_tasks\\judges\\code_export_zip_sanitizer.judge.yaml",
+      "task_yaml": "<REPO_ROOT>\\data\\t1_tasks\\code_export_zip_sanitizer.yaml",
+      "judge_yaml": "<REPO_ROOT>\\data\\t1_tasks\\judges\\code_export_zip_sanitizer.judge.yaml",
       "task_id": "t1_code_export_zip_sanitizer",
       "eval_slice": "read_only",
       "runner_label": "qwen3_coder_30b",
@@ -265,8 +265,8 @@
       "elapsed_s": 3.501
     },
     {
-      "task_yaml": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t1_tasks\\code_export_zip_sanitizer.yaml",
-      "judge_yaml": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t1_tasks\\judges\\code_export_zip_sanitizer.judge.yaml",
+      "task_yaml": "<REPO_ROOT>\\data\\t1_tasks\\code_export_zip_sanitizer.yaml",
+      "judge_yaml": "<REPO_ROOT>\\data\\t1_tasks\\judges\\code_export_zip_sanitizer.judge.yaml",
       "task_id": "t1_code_export_zip_sanitizer",
       "eval_slice": "read_only",
       "runner_label": "glm_4_7_flash",
@@ -364,8 +364,8 @@
       "elapsed_s": 5.836
     },
     {
-      "task_yaml": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t1_tasks\\code_export_zip_sanitizer.yaml",
-      "judge_yaml": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t1_tasks\\judges\\code_export_zip_sanitizer.judge.yaml",
+      "task_yaml": "<REPO_ROOT>\\data\\t1_tasks\\code_export_zip_sanitizer.yaml",
+      "judge_yaml": "<REPO_ROOT>\\data\\t1_tasks\\judges\\code_export_zip_sanitizer.judge.yaml",
       "task_id": "t1_code_export_zip_sanitizer",
       "eval_slice": "read_only",
       "runner_label": "kimi_k2_5",

@@ -1,25 +1,6 @@
 from typing import Any, Dict, List, Sequence
 
 
-def build_slot_match_prompt(question: str, missing_slots: Sequence[Dict[str, Any]]) -> str:
-    allowed_slots = [str(slot.get("slot_name") or "slot") for slot in missing_slots]
-    return (
-        "Classify the assistant question into exactly one slot_name from the allowed list, or no_match.\n"
-        "Allowed slot_names: {slots}\n"
-        "Question: {question}\n"
-        "Return only the slot_name or no_match."
-    ).format(slots=", ".join(allowed_slots), question=question)
-
-
-def build_slot_classification_prompt(allowed_slots: Sequence[str], question: str) -> str:
-    return (
-        "Classify the assistant question into exactly one slot_name from the allowed list, or no_match.\n"
-        "Allowed slot_names: {slots}\n"
-        "Question: {question}\n"
-        "Return only the slot_name or no_match."
-    ).format(slots=", ".join(str(slot) for slot in allowed_slots), question=question)
-
-
 def match_slot(question: str, missing_slots: Sequence[Dict[str, Any]]) -> Dict[str, Any]:
     normalized_question = _tokenize(question)
     best_slot = None

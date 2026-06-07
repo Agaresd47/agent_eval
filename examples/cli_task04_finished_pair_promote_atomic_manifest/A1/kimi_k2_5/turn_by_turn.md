@@ -65,9 +65,9 @@ cd /workspace/finished_stage && ls -la final_ct 2>/dev/null || echo 'final_ct: d
 
 ```text
 total 1
-drwxr-xr-x 1 agares 197609  0  5月  9 18:27 .
-drwxr-xr-x 1 agares 197609  0  5月  9 18:27 ..
--rw-r--r-- 1 agares 197609 32  5月  9 18:27 caseE.nii.gz
+drwxr-xr-x 1 user 197609  0  5月  9 18:27 .
+drwxr-xr-x 1 user 197609  0  5月  9 18:27 ..
+-rw-r--r-- 1 user 197609 32  5月  9 18:27 caseE.nii.gz
 ```
 
 ## Turn 1 | tool
@@ -84,9 +84,9 @@ cd /workspace/finished_stage && ls -la final_mask 2>/dev/null || echo 'final_mas
 
 ```text
 total 0
-drwxr-xr-x 1 agares 197609 0  5月  9 18:27 .
-drwxr-xr-x 1 agares 197609 0  5月  9 18:27 ..
-drwxr-xr-x 1 agares 197609 0  5月  9 18:27 caseF_total
+drwxr-xr-x 1 user 197609 0  5月  9 18:27 .
+drwxr-xr-x 1 user 197609 0  5月  9 18:27 ..
+drwxr-xr-x 1 user 197609 0  5月  9 18:27 caseF_total
 ```
 
 ## Turn 1 | tool
@@ -190,9 +190,9 @@ cd /workspace/finished_stage && ls -la final_ct 2>/dev/null || echo 'final_ct: d
 
 ```text
 total 1
-drwxr-xr-x 1 agares 197609  0  5月  9 18:27 .
-drwxr-xr-x 1 agares 197609  0  5月  9 18:27 ..
--rw-r--r-- 1 agares 197609 32  5月  9 18:27 caseE.nii.gz
+drwxr-xr-x 1 user 197609  0  5月  9 18:27 .
+drwxr-xr-x 1 user 197609  0  5月  9 18:27 ..
+-rw-r--r-- 1 user 197609 32  5月  9 18:27 caseE.nii.gz
 ```
 
 ## Turn 3 | tool
@@ -209,9 +209,9 @@ cd /workspace/finished_stage && ls -la final_mask 2>/dev/null || echo 'final_mas
 
 ```text
 total 0
-drwxr-xr-x 1 agares 197609 0  5月  9 18:27 .
-drwxr-xr-x 1 agares 197609 0  5月  9 18:27 ..
-drwxr-xr-x 1 agares 197609 0  5月  9 18:27 caseF_total
+drwxr-xr-x 1 user 197609 0  5月  9 18:27 .
+drwxr-xr-x 1 user 197609 0  5月  9 18:27 ..
+drwxr-xr-x 1 user 197609 0  5月  9 18:27 caseF_total
 ```
 
 ## Turn 4 | agent
@@ -322,34 +322,34 @@ cd /workspace/finished_stage && echo '=== Verification: final targets ===' && ls
 === Verification: final targets ===
 final_ct/:
 total 1
-drwxr-xr-x 1 agares 197609  0  5月  9 18:27 .
-drwxr-xr-x 1 agares 197609  0  5月  9 18:27 ..
--rw-r--r-- 1 agares 197609 32  5月  9 18:27 caseE.nii.gz
+drwxr-xr-x 1 user 197609  0  5月  9 18:27 .
+drwxr-xr-x 1 user 197609  0  5月  9 18:27 ..
+-rw-r--r-- 1 user 197609 32  5月  9 18:27 caseE.nii.gz
 
 final_mask/:
 total 0
-drwxr-xr-x 1 agares 197609 0  5月  9 18:27 .
-drwxr-xr-x 1 agares 197609 0  5月  9 18:27 ..
-drwxr-xr-x 1 agares 197609 0  5月  9 18:27 caseF_total
+drwxr-xr-x 1 user 197609 0  5月  9 18:27 .
+drwxr-xr-x 1 user 197609 0  5月  9 18:27 ..
+drwxr-xr-x 1 user 197609 0  5月  9 18:27 caseF_total
 === Verification: raw sources preserved ===
 raw_ct/:
 total 9
-drwxr-xr-x 1 agares 197609  0  5月  9 18:27 .
-drwxr-xr-x 1 agares 197609  0  5月  9 18:27 ..
--rw-r--r-- 1 agares 197609 26  5月  9 18:27 caseA.nii.gz
--rw-r--r-- 1 agares 197609 26  5月  9 18:27 caseB.nii.gz
--rw-r--r-- 1 agares 197609 26  5月  9 18:27 caseC.nii.gz
--rw-r--r-- 1 agares 197609 26  5月  9 18:27 caseE.nii.gz
--rw-r--r-- 1 agares 197609 26  5月  9 18:27 caseF.nii.gz
+drwxr-xr-x 1 user 197609  0  5月  9 18:27 .
+drwxr-xr-x 1 user 197609  0  5月  9 18:27 ..
+-rw-r--r-- 1 user 197609 26  5月  9 18:27 caseA.nii.gz
+-rw-r--r-- 1 user 197609 26  5月  9 18:27 caseB.nii.gz
+-rw-r--r-- 1 user 197609 26  5月  9 18:27 caseC.nii.gz
+-rw-r--r-- 1 user 197609 26  5月  9 18:27 caseE.nii.gz
+-rw-r--r-- 1 user 197609 26  5月  9 18:27 caseF.nii.gz
 
 raw_mask/:
 total 4
-drwxr-xr-x 1 agares 197609 0  5月  9 18:27 .
-drwxr-xr-x 1 agares 197609 0  5月  9 18:27 ..
-drwxr-xr-x 1 agares 197609 0  5月  9 18:27 caseA_total
-drwxr-xr-x 1 agares 197609 0  5月  9 18:27 caseD_total
-drwxr-xr-x 1 agares 197609 0  5月  9 18:27 caseE_total
-drwxr-xr-x 1 agares 197609 0  5月  9 18:27 caseF_total
+drwxr-xr-x 1 user 197609 0  5月  9 18:27 .
+drwxr-xr-x 1 user 197609 0  5月  9 18:27 ..
+drwxr-xr-x 1 user 197609 0  5月  9 18:27 caseA_total
+drwxr-xr-x 1 user 197609 0  5月  9 18:27 caseD_total
+drwxr-xr-x 1 user 197609 0  5月  9 18:27 caseE_total
+drwxr-xr-x 1 user 197609 0  5月  9 18:27 caseF_total
 === Verification: manifest exists ===
 ```
 
@@ -667,34 +667,34 @@ cd /workspace/finished_stage && echo '=== Filesystem State ===' && ls -la raw_ct
 === Filesystem State ===
 final_ct/:
 total 2
-drwxr-xr-x 1 agares 197609  0  5月  9 18:29 .
-drwxr-xr-x 1 agares 197609  0  5月  9 18:27 ..
--rw-r--r-- 1 agares 197609 26  5月  9 18:27 caseA.nii.gz
--rw-r--r-- 1 agares 197609 32  5月  9 18:27 caseE.nii.gz
+drwxr-xr-x 1 user 197609  0  5月  9 18:29 .
+drwxr-xr-x 1 user 197609  0  5月  9 18:27 ..
+-rw-r--r-- 1 user 197609 26  5月  9 18:27 caseA.nii.gz
+-rw-r--r-- 1 user 197609 32  5月  9 18:27 caseE.nii.gz
 
 final_mask/:
 total 0
-drwxr-xr-x 1 agares 197609 0  5月  9 18:29 .
-drwxr-xr-x 1 agares 197609 0  5月  9 18:27 ..
-drwxr-xr-x 1 agares 197609 0  5月  9 18:27 caseA_total
-drwxr-xr-x 1 agares 197609 0  5月  9 18:27 caseF_total
+drwxr-xr-x 1 user 197609 0  5月  9 18:29 .
+drwxr-xr-x 1 user 197609 0  5月  9 18:27 ..
+drwxr-xr-x 1 user 197609 0  5月  9 18:27 caseA_total
+drwxr-xr-x 1 user 197609 0  5月  9 18:27 caseF_total
 
 raw_ct/:
 total 8
-drwxr-xr-x 1 agares 197609  0  5月  9 18:29 .
-drwxr-xr-x 1 agares 197609  0  5月  9 18:27 ..
--rw-r--r-- 1 agares 197609 26  5月  9 18:27 caseB.nii.gz
--rw-r--r-- 1 agares 197609 26  5月  9 18:27 caseC.nii.gz
--rw-r--r-- 1 agares 197609 26  5月  9 18:27 caseE.nii.gz
--rw-r--r-- 1 agares 197609 26  5月  9 18:27 caseF.nii.gz
+drwxr-xr-x 1 user 197609  0  5月  9 18:29 .
+drwxr-xr-x 1 user 197609  0  5月  9 18:27 ..
+-rw-r--r-- 1 user 197609 26  5月  9 18:27 caseB.nii.gz
+-rw-r--r-- 1 user 197609 26  5月  9 18:27 caseC.nii.gz
+-rw-r--r-- 1 user 197609 26  5月  9 18:27 caseE.nii.gz
+-rw-r--r-- 1 user 197609 26  5月  9 18:27 caseF.nii.gz
 
 raw_mask/:
 total 4
-drwxr-xr-x 1 agares 197609 0  5月  9 18:29 .
-drwxr-xr-x 1 agares 197609 0  5月  9 18:27 ..
-drwxr-xr-x 1 agares 197609 0  5月  9 18:27 caseD_total
-drwxr-xr-x 1 agares 197609 0  5月  9 18:27 caseE_total
-drwxr-xr-x 1 agares 197609 0  5月  9 18:27 caseF_total
+drwxr-xr-x 1 user 197609 0  5月  9 18:29 .
+drwxr-xr-x 1 user 197609 0  5月  9 18:27 ..
+drwxr-xr-x 1 user 197609 0  5月  9 18:27 caseD_total
+drwxr-xr-x 1 user 197609 0  5月  9 18:27 caseE_total
+drwxr-xr-x 1 user 197609 0  5月  9 18:27 caseF_total
 ```
 
 ## Turn 8 | system
@@ -1113,8 +1113,8 @@ cd /workspace/finished_stage && ls -la promotion_manifest.csv promotion_rollback
 ### stdout
 
 ```text
--rw-r--r-- 1 agares 197609 749  5月  9 18:29 promotion_manifest.csv
--rwxr-xr-x 1 agares 197609 143  5月  9 18:29 promotion_rollback.sh
+-rw-r--r-- 1 user 197609 749  5月  9 18:29 promotion_manifest.csv
+-rwxr-xr-x 1 user 197609 143  5月  9 18:29 promotion_rollback.sh
 ```
 
 ## Turn 12 | system
@@ -1406,9 +1406,9 @@ cd /workspace/finished_stage && ls -la final_ct 2>/dev/null || echo 'final_ct: d
 
 ```text
 total 1
-drwxr-xr-x 1 agares 197609  0  5月  9 18:27 .
-drwxr-xr-x 1 agares 197609  0  5月  9 18:27 ..
--rw-r--r-- 1 agares 197609 32  5月  9 18:27 caseE.nii.gz
+drwxr-xr-x 1 user 197609  0  5月  9 18:27 .
+drwxr-xr-x 1 user 197609  0  5月  9 18:27 ..
+-rw-r--r-- 1 user 197609 32  5月  9 18:27 caseE.nii.gz
 ```
 
 ## Observation 4
@@ -1425,9 +1425,9 @@ cd /workspace/finished_stage && ls -la final_mask 2>/dev/null || echo 'final_mas
 
 ```text
 total 0
-drwxr-xr-x 1 agares 197609 0  5月  9 18:27 .
-drwxr-xr-x 1 agares 197609 0  5月  9 18:27 ..
-drwxr-xr-x 1 agares 197609 0  5月  9 18:27 caseF_total
+drwxr-xr-x 1 user 197609 0  5月  9 18:27 .
+drwxr-xr-x 1 user 197609 0  5月  9 18:27 ..
+drwxr-xr-x 1 user 197609 0  5月  9 18:27 caseF_total
 ```
 
 ## Observation 5
@@ -1515,9 +1515,9 @@ cd /workspace/finished_stage && ls -la final_ct 2>/dev/null || echo 'final_ct: d
 
 ```text
 total 1
-drwxr-xr-x 1 agares 197609  0  5月  9 18:27 .
-drwxr-xr-x 1 agares 197609  0  5月  9 18:27 ..
--rw-r--r-- 1 agares 197609 32  5月  9 18:27 caseE.nii.gz
+drwxr-xr-x 1 user 197609  0  5月  9 18:27 .
+drwxr-xr-x 1 user 197609  0  5月  9 18:27 ..
+-rw-r--r-- 1 user 197609 32  5月  9 18:27 caseE.nii.gz
 ```
 
 ## Observation 10
@@ -1534,9 +1534,9 @@ cd /workspace/finished_stage && ls -la final_mask 2>/dev/null || echo 'final_mas
 
 ```text
 total 0
-drwxr-xr-x 1 agares 197609 0  5月  9 18:27 .
-drwxr-xr-x 1 agares 197609 0  5月  9 18:27 ..
-drwxr-xr-x 1 agares 197609 0  5月  9 18:27 caseF_total
+drwxr-xr-x 1 user 197609 0  5月  9 18:27 .
+drwxr-xr-x 1 user 197609 0  5月  9 18:27 ..
+drwxr-xr-x 1 user 197609 0  5月  9 18:27 caseF_total
 ```
 
 ## Observation 11
@@ -1587,34 +1587,34 @@ cd /workspace/finished_stage && echo '=== Verification: final targets ===' && ls
 === Verification: final targets ===
 final_ct/:
 total 1
-drwxr-xr-x 1 agares 197609  0  5月  9 18:27 .
-drwxr-xr-x 1 agares 197609  0  5月  9 18:27 ..
--rw-r--r-- 1 agares 197609 32  5月  9 18:27 caseE.nii.gz
+drwxr-xr-x 1 user 197609  0  5月  9 18:27 .
+drwxr-xr-x 1 user 197609  0  5月  9 18:27 ..
+-rw-r--r-- 1 user 197609 32  5月  9 18:27 caseE.nii.gz
 
 final_mask/:
 total 0
-drwxr-xr-x 1 agares 197609 0  5月  9 18:27 .
-drwxr-xr-x 1 agares 197609 0  5月  9 18:27 ..
-drwxr-xr-x 1 agares 197609 0  5月  9 18:27 caseF_total
+drwxr-xr-x 1 user 197609 0  5月  9 18:27 .
+drwxr-xr-x 1 user 197609 0  5月  9 18:27 ..
+drwxr-xr-x 1 user 197609 0  5月  9 18:27 caseF_total
 === Verification: raw sources preserved ===
 raw_ct/:
 total 9
-drwxr-xr-x 1 agares 197609  0  5月  9 18:27 .
-drwxr-xr-x 1 agares 197609  0  5月  9 18:27 ..
--rw-r--r-- 1 agares 197609 26  5月  9 18:27 caseA.nii.gz
--rw-r--r-- 1 agares 197609 26  5月  9 18:27 caseB.nii.gz
--rw-r--r-- 1 agares 197609 26  5月  9 18:27 caseC.nii.gz
--rw-r--r-- 1 agares 197609 26  5月  9 18:27 caseE.nii.gz
--rw-r--r-- 1 agares 197609 26  5月  9 18:27 caseF.nii.gz
+drwxr-xr-x 1 user 197609  0  5月  9 18:27 .
+drwxr-xr-x 1 user 197609  0  5月  9 18:27 ..
+-rw-r--r-- 1 user 197609 26  5月  9 18:27 caseA.nii.gz
+-rw-r--r-- 1 user 197609 26  5月  9 18:27 caseB.nii.gz
+-rw-r--r-- 1 user 197609 26  5月  9 18:27 caseC.nii.gz
+-rw-r--r-- 1 user 197609 26  5月  9 18:27 caseE.nii.gz
+-rw-r--r-- 1 user 197609 26  5月  9 18:27 caseF.nii.gz
 
 raw_mask/:
 total 4
-drwxr-xr-x 1 agares 197609 0  5月  9 18:27 .
-drwxr-xr-x 1 agares 197609 0  5月  9 18:27 ..
-drwxr-xr-x 1 agares 197609 0  5月  9 18:27 caseA_total
-drwxr-xr-x 1 agares 197609 0  5月  9 18:27 caseD_total
-drwxr-xr-x 1 agares 197609 0  5月  9 18:27 caseE_total
-drwxr-xr-x 1 agares 197609 0  5月  9 18:27 caseF_total
+drwxr-xr-x 1 user 197609 0  5月  9 18:27 .
+drwxr-xr-x 1 user 197609 0  5月  9 18:27 ..
+drwxr-xr-x 1 user 197609 0  5月  9 18:27 caseA_total
+drwxr-xr-x 1 user 197609 0  5月  9 18:27 caseD_total
+drwxr-xr-x 1 user 197609 0  5月  9 18:27 caseE_total
+drwxr-xr-x 1 user 197609 0  5月  9 18:27 caseF_total
 === Verification: manifest exists ===
 ```
 
@@ -1644,34 +1644,34 @@ cd /workspace/finished_stage && echo '=== Filesystem State ===' && ls -la raw_ct
 === Filesystem State ===
 final_ct/:
 total 2
-drwxr-xr-x 1 agares 197609  0  5月  9 18:29 .
-drwxr-xr-x 1 agares 197609  0  5月  9 18:27 ..
--rw-r--r-- 1 agares 197609 26  5月  9 18:27 caseA.nii.gz
--rw-r--r-- 1 agares 197609 32  5月  9 18:27 caseE.nii.gz
+drwxr-xr-x 1 user 197609  0  5月  9 18:29 .
+drwxr-xr-x 1 user 197609  0  5月  9 18:27 ..
+-rw-r--r-- 1 user 197609 26  5月  9 18:27 caseA.nii.gz
+-rw-r--r-- 1 user 197609 32  5月  9 18:27 caseE.nii.gz
 
 final_mask/:
 total 0
-drwxr-xr-x 1 agares 197609 0  5月  9 18:29 .
-drwxr-xr-x 1 agares 197609 0  5月  9 18:27 ..
-drwxr-xr-x 1 agares 197609 0  5月  9 18:27 caseA_total
-drwxr-xr-x 1 agares 197609 0  5月  9 18:27 caseF_total
+drwxr-xr-x 1 user 197609 0  5月  9 18:29 .
+drwxr-xr-x 1 user 197609 0  5月  9 18:27 ..
+drwxr-xr-x 1 user 197609 0  5月  9 18:27 caseA_total
+drwxr-xr-x 1 user 197609 0  5月  9 18:27 caseF_total
 
 raw_ct/:
 total 8
-drwxr-xr-x 1 agares 197609  0  5月  9 18:29 .
-drwxr-xr-x 1 agares 197609  0  5月  9 18:27 ..
--rw-r--r-- 1 agares 197609 26  5月  9 18:27 caseB.nii.gz
--rw-r--r-- 1 agares 197609 26  5月  9 18:27 caseC.nii.gz
--rw-r--r-- 1 agares 197609 26  5月  9 18:27 caseE.nii.gz
--rw-r--r-- 1 agares 197609 26  5月  9 18:27 caseF.nii.gz
+drwxr-xr-x 1 user 197609  0  5月  9 18:29 .
+drwxr-xr-x 1 user 197609  0  5月  9 18:27 ..
+-rw-r--r-- 1 user 197609 26  5月  9 18:27 caseB.nii.gz
+-rw-r--r-- 1 user 197609 26  5月  9 18:27 caseC.nii.gz
+-rw-r--r-- 1 user 197609 26  5月  9 18:27 caseE.nii.gz
+-rw-r--r-- 1 user 197609 26  5月  9 18:27 caseF.nii.gz
 
 raw_mask/:
 total 4
-drwxr-xr-x 1 agares 197609 0  5月  9 18:29 .
-drwxr-xr-x 1 agares 197609 0  5月  9 18:27 ..
-drwxr-xr-x 1 agares 197609 0  5月  9 18:27 caseD_total
-drwxr-xr-x 1 agares 197609 0  5月  9 18:27 caseE_total
-drwxr-xr-x 1 agares 197609 0  5月  9 18:27 caseF_total
+drwxr-xr-x 1 user 197609 0  5月  9 18:29 .
+drwxr-xr-x 1 user 197609 0  5月  9 18:27 ..
+drwxr-xr-x 1 user 197609 0  5月  9 18:27 caseD_total
+drwxr-xr-x 1 user 197609 0  5月  9 18:27 caseE_total
+drwxr-xr-x 1 user 197609 0  5月  9 18:27 caseF_total
 ```
 
 ## Observation 16
@@ -1775,6 +1775,6 @@ cd /workspace/finished_stage && ls -la promotion_manifest.csv promotion_rollback
 ### stdout
 
 ```text
--rw-r--r-- 1 agares 197609 749  5月  9 18:29 promotion_manifest.csv
--rwxr-xr-x 1 agares 197609 143  5月  9 18:29 promotion_rollback.sh
+-rw-r--r-- 1 user 197609 749  5月  9 18:29 promotion_manifest.csv
+-rwxr-xr-x 1 user 197609 143  5月  9 18:29 promotion_rollback.sh
 ```

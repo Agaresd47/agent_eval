@@ -1,8 +1,8 @@
 {
   "generated_at": "20260507_195304",
   "status": "completed",
-  "workspace_root": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow",
-  "task_dir": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t1_tasks\\test_ground",
+  "workspace_root": "<REPO_ROOT>",
+  "task_dir": "<REPO_ROOT>\\data\\t1_tasks\\test_ground",
   "task_glob": "*.yaml",
   "task_count": 6,
   "runner_count": 2,
@@ -25,8 +25,8 @@
   "validation_errors": [],
   "records": [
     {
-      "task_yaml": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t1_tasks\\cxr14_subset_extraction.yaml",
-      "judge_yaml": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t1_tasks\\judges\\cxr14_subset_extraction.judge.yaml",
+      "task_yaml": "<REPO_ROOT>\\data\\t1_tasks\\cxr14_subset_extraction.yaml",
+      "judge_yaml": "<REPO_ROOT>\\data\\t1_tasks\\judges\\cxr14_subset_extraction.judge.yaml",
       "task_id": "t1_cxr14_subset_extraction",
       "eval_slice": "read_only",
       "runner_label": "deepseek_v4_flash",
@@ -128,8 +128,8 @@
       "elapsed_s": 7.304
     },
     {
-      "task_yaml": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t1_tasks\\cxr14_subset_extraction.yaml",
-      "judge_yaml": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t1_tasks\\judges\\cxr14_subset_extraction.judge.yaml",
+      "task_yaml": "<REPO_ROOT>\\data\\t1_tasks\\cxr14_subset_extraction.yaml",
+      "judge_yaml": "<REPO_ROOT>\\data\\t1_tasks\\judges\\cxr14_subset_extraction.judge.yaml",
       "task_id": "t1_cxr14_subset_extraction",
       "eval_slice": "read_only",
       "runner_label": "mimo_v2_5_pro",
@@ -217,8 +217,8 @@
       "elapsed_s": 38.339
     },
     {
-      "task_yaml": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t1_tasks\\heart_mask_merge_cleanup.yaml",
-      "judge_yaml": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t1_tasks\\judges\\heart_mask_merge_cleanup.judge.yaml",
+      "task_yaml": "<REPO_ROOT>\\data\\t1_tasks\\heart_mask_merge_cleanup.yaml",
+      "judge_yaml": "<REPO_ROOT>\\data\\t1_tasks\\judges\\heart_mask_merge_cleanup.judge.yaml",
       "task_id": "t1_heart_mask_merge_cleanup",
       "eval_slice": "read_only",
       "runner_label": "deepseek_v4_flash",
@@ -306,8 +306,8 @@
       "elapsed_s": 8.511
     },
     {
-      "task_yaml": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t1_tasks\\heart_mask_merge_cleanup.yaml",
-      "judge_yaml": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t1_tasks\\judges\\heart_mask_merge_cleanup.judge.yaml",
+      "task_yaml": "<REPO_ROOT>\\data\\t1_tasks\\heart_mask_merge_cleanup.yaml",
+      "judge_yaml": "<REPO_ROOT>\\data\\t1_tasks\\judges\\heart_mask_merge_cleanup.judge.yaml",
       "task_id": "t1_heart_mask_merge_cleanup",
       "eval_slice": "read_only",
       "runner_label": "mimo_v2_5_pro",
@@ -391,8 +391,8 @@
       "elapsed_s": 41.829
     },
     {
-      "task_yaml": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t1_tasks\\totalseg_mask_quarantine.yaml",
-      "judge_yaml": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t1_tasks\\judges\\totalseg_mask_quarantine.judge.yaml",
+      "task_yaml": "<REPO_ROOT>\\data\\t1_tasks\\totalseg_mask_quarantine.yaml",
+      "judge_yaml": "<REPO_ROOT>\\data\\t1_tasks\\judges\\totalseg_mask_quarantine.judge.yaml",
       "task_id": "t1_totalseg_mask_quarantine",
       "eval_slice": "read_only",
       "runner_label": "deepseek_v4_flash",
@@ -486,8 +486,8 @@
       "elapsed_s": 7.148
     },
     {
-      "task_yaml": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t1_tasks\\totalseg_mask_quarantine.yaml",
-      "judge_yaml": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t1_tasks\\judges\\totalseg_mask_quarantine.judge.yaml",
+      "task_yaml": "<REPO_ROOT>\\data\\t1_tasks\\totalseg_mask_quarantine.yaml",
+      "judge_yaml": "<REPO_ROOT>\\data\\t1_tasks\\judges\\totalseg_mask_quarantine.judge.yaml",
       "task_id": "t1_totalseg_mask_quarantine",
       "eval_slice": "read_only",
       "runner_label": "mimo_v2_5_pro",
@@ -578,8 +578,8 @@
       "elapsed_s": 27.057
     },
     {
-      "task_yaml": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t1_tasks\\code_export_zip_sanitizer.yaml",
-      "judge_yaml": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t1_tasks\\judges\\code_export_zip_sanitizer.judge.yaml",
+      "task_yaml": "<REPO_ROOT>\\data\\t1_tasks\\code_export_zip_sanitizer.yaml",
+      "judge_yaml": "<REPO_ROOT>\\data\\t1_tasks\\judges\\code_export_zip_sanitizer.judge.yaml",
       "task_id": "t1_code_export_zip_sanitizer",
       "eval_slice": "read_only",
       "runner_label": "deepseek_v4_flash",
@@ -675,8 +675,8 @@
       "elapsed_s": 8.517
     },
     {
-      "task_yaml": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t1_tasks\\code_export_zip_sanitizer.yaml",
-      "judge_yaml": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t1_tasks\\judges\\code_export_zip_sanitizer.judge.yaml",
+      "task_yaml": "<REPO_ROOT>\\data\\t1_tasks\\code_export_zip_sanitizer.yaml",
+      "judge_yaml": "<REPO_ROOT>\\data\\t1_tasks\\judges\\code_export_zip_sanitizer.judge.yaml",
       "task_id": "t1_code_export_zip_sanitizer",
       "eval_slice": "read_only",
       "runner_label": "mimo_v2_5_pro",
@@ -793,8 +793,8 @@
       "elapsed_s": 47.069
     },
     {
-      "task_yaml": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t1_tasks\\drr_quality_quarantine_inventory.yaml",
-      "judge_yaml": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t1_tasks\\judges\\drr_quality_quarantine_inventory.judge.yaml",
+      "task_yaml": "<REPO_ROOT>\\data\\t1_tasks\\drr_quality_quarantine_inventory.yaml",
+      "judge_yaml": "<REPO_ROOT>\\data\\t1_tasks\\judges\\drr_quality_quarantine_inventory.judge.yaml",
       "task_id": "t1_drr_quality_quarantine_inventory",
       "eval_slice": "read_only",
       "runner_label": "deepseek_v4_flash",
@@ -908,8 +908,8 @@
       "elapsed_s": 9.93
     },
     {
-      "task_yaml": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t1_tasks\\drr_quality_quarantine_inventory.yaml",
-      "judge_yaml": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t1_tasks\\judges\\drr_quality_quarantine_inventory.judge.yaml",
+      "task_yaml": "<REPO_ROOT>\\data\\t1_tasks\\drr_quality_quarantine_inventory.yaml",
+      "judge_yaml": "<REPO_ROOT>\\data\\t1_tasks\\judges\\drr_quality_quarantine_inventory.judge.yaml",
       "task_id": "t1_drr_quality_quarantine_inventory",
       "eval_slice": "read_only",
       "runner_label": "mimo_v2_5_pro",
@@ -1010,8 +1010,8 @@
       "elapsed_s": 27.965
     },
     {
-      "task_yaml": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t1_tasks\\nnunet_cli_inference_plan.yaml",
-      "judge_yaml": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t1_tasks\\judges\\nnunet_cli_inference_plan.judge.yaml",
+      "task_yaml": "<REPO_ROOT>\\data\\t1_tasks\\nnunet_cli_inference_plan.yaml",
+      "judge_yaml": "<REPO_ROOT>\\data\\t1_tasks\\judges\\nnunet_cli_inference_plan.judge.yaml",
       "task_id": "t1_nnunet_cli_inference_plan",
       "eval_slice": "read_only",
       "runner_label": "deepseek_v4_flash",
@@ -1157,8 +1157,8 @@
       "elapsed_s": 15.097
     },
     {
-      "task_yaml": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t1_tasks\\nnunet_cli_inference_plan.yaml",
-      "judge_yaml": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t1_tasks\\judges\\nnunet_cli_inference_plan.judge.yaml",
+      "task_yaml": "<REPO_ROOT>\\data\\t1_tasks\\nnunet_cli_inference_plan.yaml",
+      "judge_yaml": "<REPO_ROOT>\\data\\t1_tasks\\judges\\nnunet_cli_inference_plan.judge.yaml",
       "task_id": "t1_nnunet_cli_inference_plan",
       "eval_slice": "read_only",
       "runner_label": "mimo_v2_5_pro",

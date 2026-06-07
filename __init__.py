@@ -1,1 +1,1 @@
-"""Quant ReAct interview package."""
+"""Agent boundary-discipline evaluation harness."""

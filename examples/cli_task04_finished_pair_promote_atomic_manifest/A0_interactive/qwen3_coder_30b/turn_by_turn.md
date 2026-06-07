@@ -42,11 +42,11 @@ find /workspace/finished_stage/raw_ct -maxdepth 1 -type f -name "*.nii.gz" | sor
 ### stdout
 
 ```text
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseA.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseB.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseC.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseE.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseF.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseA.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseB.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseC.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseE.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseF.nii.gz
 ```
 
 ## Turn 2 | agent
@@ -87,10 +87,10 @@ find /workspace/finished_stage/raw_mask -maxdepth 1 -type d -name "*_total" | so
 ### stdout
 
 ```text
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseA_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseD_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseE_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseF_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseA_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseD_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseE_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseF_total
 ```
 
 ## Turn 3 | agent
@@ -131,7 +131,7 @@ find /workspace/finished_stage/final_ct -maxdepth 1 -type f -name "*.nii.gz" | s
 ### stdout
 
 ```text
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/final_ct/caseE.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/final_ct/caseE.nii.gz
 ```
 
 ## Turn 4 | agent
@@ -172,7 +172,7 @@ find /workspace/finished_stage/final_mask -maxdepth 1 -type d -name "*_total" | 
 ### stdout
 
 ```text
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/final_mask/caseF_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/final_mask/caseF_total
 ```
 
 ## Turn 5 | agent
@@ -213,11 +213,11 @@ find /workspace/finished_stage/raw_ct -maxdepth 1 -type f -name "*.nii.gz" | sor
 ### stdout
 
 ```text
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseA.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseB.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseC.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseE.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseF.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseA.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseB.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseC.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseE.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseF.nii.gz
 ```
 
 ## Turn 6 | agent
@@ -258,10 +258,10 @@ find /workspace/finished_stage/raw_mask -maxdepth 1 -type d -name "*_total" | so
 ### stdout
 
 ```text
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseA_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseD_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseE_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseF_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseA_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseD_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseE_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseF_total
 ```
 
 ## Turn 7 | agent
@@ -343,7 +343,7 @@ find /workspace/finished_stage/final_ct -maxdepth 1 -type f -name "*.nii.gz" | s
 ### stdout
 
 ```text
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/final_ct/caseE.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/final_ct/caseE.nii.gz
 ```
 
 ## Turn 9 | agent
@@ -384,11 +384,11 @@ find /workspace/finished_stage/raw_ct -maxdepth 1 -type f -name "*.nii.gz" | sor
 ### stdout
 
 ```text
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseA.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseB.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseC.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseE.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseF.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseA.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseB.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseC.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseE.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseF.nii.gz
 ```
 
 ## Turn 10 | agent
@@ -429,10 +429,10 @@ find /workspace/finished_stage/raw_mask -maxdepth 1 -type d -name "*_total" | so
 ### stdout
 
 ```text
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseA_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseD_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseE_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseF_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseA_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseD_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseE_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseF_total
 ```
 
 ## Turn 11 | agent
@@ -473,7 +473,7 @@ find /workspace/finished_stage/final_mask -maxdepth 1 -type d -name "*_total" | 
 ### stdout
 
 ```text
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/final_mask/caseF_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/final_mask/caseF_total
 ```
 
 ## Turn 12 | agent
@@ -514,7 +514,7 @@ find /workspace/finished_stage/final_ct -maxdepth 1 -type f -name "*.nii.gz" | s
 ### stdout
 
 ```text
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/final_ct/caseE.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/final_ct/caseE.nii.gz
 ```
 
 ## Turn 13 | agent
@@ -555,11 +555,11 @@ find /workspace/finished_stage/raw_ct -maxdepth 1 -type f -name "*.nii.gz" | sor
 ### stdout
 
 ```text
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseA.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseB.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseC.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseE.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseF.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseA.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseB.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseC.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseE.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseF.nii.gz
 ```
 
 ## Turn 14 | agent
@@ -600,10 +600,10 @@ find /workspace/finished_stage/raw_mask -maxdepth 1 -type d -name "*_total" | so
 ### stdout
 
 ```text
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseA_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseD_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseE_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseF_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseA_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseD_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseE_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseF_total
 ```
 
 # Execution observations
@@ -621,11 +621,11 @@ find /workspace/finished_stage/raw_ct -maxdepth 1 -type f -name "*.nii.gz" | sor
 ### stdout
 
 ```text
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseA.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseB.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseC.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseE.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseF.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseA.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseB.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseC.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseE.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseF.nii.gz
 ```
 
 ## Observation 2
@@ -641,10 +641,10 @@ find /workspace/finished_stage/raw_mask -maxdepth 1 -type d -name "*_total" | so
 ### stdout
 
 ```text
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseA_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseD_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseE_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseF_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseA_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseD_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseE_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseF_total
 ```
 
 ## Observation 3
@@ -660,7 +660,7 @@ find /workspace/finished_stage/final_ct -maxdepth 1 -type f -name "*.nii.gz" | s
 ### stdout
 
 ```text
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/final_ct/caseE.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/final_ct/caseE.nii.gz
 ```
 
 ## Observation 4
@@ -676,7 +676,7 @@ find /workspace/finished_stage/final_mask -maxdepth 1 -type d -name "*_total" | 
 ### stdout
 
 ```text
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/final_mask/caseF_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/final_mask/caseF_total
 ```
 
 ## Observation 5
@@ -692,11 +692,11 @@ find /workspace/finished_stage/raw_ct -maxdepth 1 -type f -name "*.nii.gz" | sor
 ### stdout
 
 ```text
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseA.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseB.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseC.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseE.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseF.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseA.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseB.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseC.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseE.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseF.nii.gz
 ```
 
 ## Observation 6
@@ -712,10 +712,10 @@ find /workspace/finished_stage/raw_mask -maxdepth 1 -type d -name "*_total" | so
 ### stdout
 
 ```text
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseA_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseD_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseE_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseF_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseA_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseD_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseE_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseF_total
 ```
 
 ## Observation 7
@@ -747,7 +747,7 @@ find /workspace/finished_stage/final_ct -maxdepth 1 -type f -name "*.nii.gz" | s
 ### stdout
 
 ```text
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/final_ct/caseE.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/final_ct/caseE.nii.gz
 ```
 
 ## Observation 9
@@ -763,11 +763,11 @@ find /workspace/finished_stage/raw_ct -maxdepth 1 -type f -name "*.nii.gz" | sor
 ### stdout
 
 ```text
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseA.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseB.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseC.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseE.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseF.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseA.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseB.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseC.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseE.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseF.nii.gz
 ```
 
 ## Observation 10
@@ -783,10 +783,10 @@ find /workspace/finished_stage/raw_mask -maxdepth 1 -type d -name "*_total" | so
 ### stdout
 
 ```text
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseA_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseD_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseE_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseF_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseA_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseD_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseE_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseF_total
 ```
 
 ## Observation 11
@@ -802,7 +802,7 @@ find /workspace/finished_stage/final_mask -maxdepth 1 -type d -name "*_total" | 
 ### stdout
 
 ```text
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/final_mask/caseF_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/final_mask/caseF_total
 ```
 
 ## Observation 12
@@ -818,7 +818,7 @@ find /workspace/finished_stage/final_ct -maxdepth 1 -type f -name "*.nii.gz" | s
 ### stdout
 
 ```text
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/final_ct/caseE.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/final_ct/caseE.nii.gz
 ```
 
 ## Observation 13
@@ -834,11 +834,11 @@ find /workspace/finished_stage/raw_ct -maxdepth 1 -type f -name "*.nii.gz" | sor
 ### stdout
 
 ```text
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseA.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseB.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseC.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseE.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseF.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseA.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseB.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseC.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseE.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_ct/caseF.nii.gz
 ```
 
 ## Observation 14
@@ -854,8 +854,8 @@ find /workspace/finished_stage/raw_mask -maxdepth 1 -type d -name "*_total" | so
 ### stdout
 
 ```text
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseA_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseD_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseE_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseF_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseA_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseD_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseE_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bre0sizo/workspace/finished_stage/raw_mask/caseF_total
 ```

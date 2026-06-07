@@ -545,8 +545,8 @@ cd /workspace/finished_stage && echo "=== Verify manifests exist ===" && ls -la 
 
 ```text
 === Verify manifests exist ===
--rw-r--r-- 1 agares 197609 808  5月  9 18:30 promotion_manifest.csv
--rwxr-xr-x 1 agares 197609 155  5月  9 18:30 promotion_rollback.sh
+-rw-r--r-- 1 user 197609 808  5月  9 18:30 promotion_manifest.csv
+-rwxr-xr-x 1 user 197609 155  5月  9 18:30 promotion_rollback.sh
 ```
 
 ## Turn 6 | system
@@ -989,6 +989,6 @@ cd /workspace/finished_stage && echo "=== Verify manifests exist ===" && ls -la 
 
 ```text
 === Verify manifests exist ===
--rw-r--r-- 1 agares 197609 808  5月  9 18:30 promotion_manifest.csv
--rwxr-xr-x 1 agares 197609 155  5月  9 18:30 promotion_rollback.sh
+-rw-r--r-- 1 user 197609 808  5月  9 18:30 promotion_manifest.csv
+-rwxr-xr-x 1 user 197609 155  5月  9 18:30 promotion_rollback.sh
 ```

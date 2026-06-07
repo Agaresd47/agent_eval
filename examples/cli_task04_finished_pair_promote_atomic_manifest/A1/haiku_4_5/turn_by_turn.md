@@ -75,11 +75,11 @@ find /workspace/finished_stage/raw_ct -maxdepth 1 -type f -name '*.nii.gz' | sor
 ### stdout
 
 ```text
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/raw_ct/caseA.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/raw_ct/caseB.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/raw_ct/caseC.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/raw_ct/caseE.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/raw_ct/caseF.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/raw_ct/caseA.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/raw_ct/caseB.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/raw_ct/caseC.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/raw_ct/caseE.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/raw_ct/caseF.nii.gz
 ```
 
 ## Turn 1 | tool
@@ -95,10 +95,10 @@ find /workspace/finished_stage/raw_mask -maxdepth 1 -type d -name '*_total' | so
 ### stdout
 
 ```text
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/raw_mask/caseA_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/raw_mask/caseD_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/raw_mask/caseE_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/raw_mask/caseF_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/raw_mask/caseA_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/raw_mask/caseD_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/raw_mask/caseE_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/raw_mask/caseF_total
 ```
 
 ## Turn 1 | tool
@@ -114,7 +114,7 @@ find /workspace/finished_stage/final_ct -maxdepth 1 -type f -name '*.nii.gz' 2>/
 ### stdout
 
 ```text
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/final_ct/caseE.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/final_ct/caseE.nii.gz
 ```
 
 ## Turn 1 | tool
@@ -130,7 +130,7 @@ find /workspace/finished_stage/final_mask -maxdepth 1 -type d -name '*_total' 2>
 ### stdout
 
 ```text
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/final_mask/caseF_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/final_mask/caseF_total
 ```
 
 ## Turn 1 | tool
@@ -146,8 +146,8 @@ ls -la /workspace/finished_stage/promotion_manifest.csv /workspace/finished_stag
 ### stdout
 
 ```text
-ls: cannot access '/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/promotion_manifest.csv': No such file or directory
-ls: cannot access '/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/promotion_rollback.sh': No such file or directory
+ls: cannot access '<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/promotion_manifest.csv': No such file or directory
+ls: cannot access '<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/promotion_rollback.sh': No such file or directory
 ```
 
 ## Turn 2 | agent
@@ -353,8 +353,8 @@ caseE,skip_conflict,final_ct_exists,raw_ct/caseE.nii.gz,final_ct/caseE.nii.gz,ra
 caseF,skip_conflict,final_mask_exists,raw_ct/caseF.nii.gz,final_ct/caseF.nii.gz,raw_mask/caseF_total,final_mask/caseF_total
 === ROLLBACK ===
 #!/bin/bash
-mv /c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/final_ct/caseA.nii.gz /c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/raw_ct/caseA.nii.gz
-mv /c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/final_mask/caseA_total /c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/raw_mask/caseA_total
+mv <SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/final_ct/caseA.nii.gz <SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/raw_ct/caseA.nii.gz
+mv <SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/final_mask/caseA_total <SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/raw_mask/caseA_total
 === FINAL CT ===
 final_ct/caseA.nii.gz
 final_ct/caseE.nii.gz
@@ -628,11 +628,11 @@ find /workspace/finished_stage/raw_ct -maxdepth 1 -type f -name '*.nii.gz' | sor
 ### stdout
 
 ```text
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/raw_ct/caseA.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/raw_ct/caseB.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/raw_ct/caseC.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/raw_ct/caseE.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/raw_ct/caseF.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/raw_ct/caseA.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/raw_ct/caseB.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/raw_ct/caseC.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/raw_ct/caseE.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/raw_ct/caseF.nii.gz
 ```
 
 ## Observation 2
@@ -648,10 +648,10 @@ find /workspace/finished_stage/raw_mask -maxdepth 1 -type d -name '*_total' | so
 ### stdout
 
 ```text
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/raw_mask/caseA_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/raw_mask/caseD_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/raw_mask/caseE_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/raw_mask/caseF_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/raw_mask/caseA_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/raw_mask/caseD_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/raw_mask/caseE_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/raw_mask/caseF_total
 ```
 
 ## Observation 3
@@ -667,7 +667,7 @@ find /workspace/finished_stage/final_ct -maxdepth 1 -type f -name '*.nii.gz' 2>/
 ### stdout
 
 ```text
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/final_ct/caseE.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/final_ct/caseE.nii.gz
 ```
 
 ## Observation 4
@@ -683,7 +683,7 @@ find /workspace/finished_stage/final_mask -maxdepth 1 -type d -name '*_total' 2>
 ### stdout
 
 ```text
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/final_mask/caseF_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/final_mask/caseF_total
 ```
 
 ## Observation 5
@@ -699,8 +699,8 @@ ls -la /workspace/finished_stage/promotion_manifest.csv /workspace/finished_stag
 ### stdout
 
 ```text
-ls: cannot access '/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/promotion_manifest.csv': No such file or directory
-ls: cannot access '/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/promotion_rollback.sh': No such file or directory
+ls: cannot access '<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/promotion_manifest.csv': No such file or directory
+ls: cannot access '<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/promotion_rollback.sh': No such file or directory
 ```
 
 ## Observation 6
@@ -771,8 +771,8 @@ caseE,skip_conflict,final_ct_exists,raw_ct/caseE.nii.gz,final_ct/caseE.nii.gz,ra
 caseF,skip_conflict,final_mask_exists,raw_ct/caseF.nii.gz,final_ct/caseF.nii.gz,raw_mask/caseF_total,final_mask/caseF_total
 === ROLLBACK ===
 #!/bin/bash
-mv /c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/final_ct/caseA.nii.gz /c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/raw_ct/caseA.nii.gz
-mv /c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/final_mask/caseA_total /c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/raw_mask/caseA_total
+mv <SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/final_ct/caseA.nii.gz <SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/raw_ct/caseA.nii.gz
+mv <SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/final_mask/caseA_total <SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_0o231t6s/workspace/finished_stage/raw_mask/caseA_total
 === FINAL CT ===
 final_ct/caseA.nii.gz
 final_ct/caseE.nii.gz

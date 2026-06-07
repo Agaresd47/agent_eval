@@ -24,19 +24,21 @@
 ## 仓库结构
 
 ```
-agent/         planner 的 ReAct loop 与工具表
+agent/         ReAct loop 与工具表（demo agent 用，会自己搭 pipeline）
 configs/       judge / 模型 / 公开 demo 配置
 data/
   t1_chat/         T1 Chat 任务与 judge
   t1_cli/          T1 CLI 任务与 judge
   t2_episodes/     T2 planner-worker episodes 与 judge
-engine/        核心 runner、DSL、节点定义
+engine/        Pipeline DSL + 执行节点；smoke 测试与 demo agent 用这一套跑单步
 examples/      三道展示题的完整 run 结果（不用配 key 也能看）
 fixtures/      任务依赖的样例目录和文件
 rules/         评分规则、rubric 与共享定义
-scripts/task/  T1/T2 矩阵 runner
+scripts/task/  跑大矩阵实测用的 runner（T1/T2，端到端 LLM 调用、判分、写盘）
 tests/         smoke cases 与单元测试
 ```
+
+`engine/` 和 `scripts/task/` 是两条执行路径：前者把任务封成 DSL 步骤，给 demo agent 和 smoke 测试用；后者是 production runner，直接驱动模型跑全量矩阵并落盘。两边共用 `data/` 里的任务和 judge 定义。
 
 不想跑也想看实际效果，直接看 [examples/](examples/)——三条评测线各一道展示题，含全部 condition × 全部模型 × 多次重复的 run，以及 judge 误判已知 case 的 audit log。
 

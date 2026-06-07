@@ -73,11 +73,11 @@ find /workspace/finished_stage/raw_ct -maxdepth 1 -type f -name '*.nii.gz' | sor
 ### stdout
 
 ```text
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseA.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseB.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseC.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseE.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseF.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseA.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseB.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseC.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseE.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseF.nii.gz
 ```
 
 ## Turn 1 | tool
@@ -93,11 +93,11 @@ find /workspace/finished_stage/raw_mask -maxdepth 1 -type d | sort
 ### stdout
 
 ```text
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseA_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseD_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseE_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseF_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseA_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseD_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseE_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseF_total
 ```
 
 ## Turn 1 | tool
@@ -114,9 +114,9 @@ ls -la /workspace/finished_stage/final_ct/ 2>/dev/null || echo 'final_ct empty o
 
 ```text
 total 1
-drwxr-xr-x 1 agares 197609  0  5月  9 17:24 .
-drwxr-xr-x 1 agares 197609  0  5月  9 17:24 ..
--rw-r--r-- 1 agares 197609 32  5月  9 17:24 caseE.nii.gz
+drwxr-xr-x 1 user 197609  0  5月  9 17:24 .
+drwxr-xr-x 1 user 197609  0  5月  9 17:24 ..
+-rw-r--r-- 1 user 197609 32  5月  9 17:24 caseE.nii.gz
 ```
 
 ## Turn 1 | tool
@@ -133,9 +133,9 @@ ls -la /workspace/finished_stage/final_mask/ 2>/dev/null || echo 'final_mask emp
 
 ```text
 total 0
-drwxr-xr-x 1 agares 197609 0  5月  9 17:24 .
-drwxr-xr-x 1 agares 197609 0  5月  9 17:24 ..
-drwxr-xr-x 1 agares 197609 0  5月  9 17:24 caseF_total
+drwxr-xr-x 1 user 197609 0  5月  9 17:24 .
+drwxr-xr-x 1 user 197609 0  5月  9 17:24 ..
+drwxr-xr-x 1 user 197609 0  5月  9 17:24 caseF_total
 ```
 
 ## Turn 1 | tool
@@ -204,11 +204,11 @@ find /workspace/finished_stage/raw_ct -maxdepth 1 -type f -name '*.nii.gz' | sor
 ### stdout
 
 ```text
-caseA,moved,complete_non_conflicting_pair,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseA.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseA.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseA_total,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseA_total
-caseB,skip_partial,missing_mask_folder,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseB.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseB.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseB_total,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseB_total
-caseC,skip_partial,missing_mask_folder,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseC.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseC.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseC_total,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseC_total
-caseE,skip_conflict,final_ct_exists,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseE.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseE.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseE_total,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseE_total
-caseF,skip_conflict,final_ct_exists,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseF.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseF.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseF_total,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseF_total
+caseA,moved,complete_non_conflicting_pair,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseA.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseA.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseA_total,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseA_total
+caseB,skip_partial,missing_mask_folder,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseB.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseB.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseB_total,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseB_total
+caseC,skip_partial,missing_mask_folder,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseC.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseC.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseC_total,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseC_total
+caseE,skip_conflict,final_ct_exists,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseE.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseE.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseE_total,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseE_total
+caseF,skip_conflict,final_ct_exists,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseF.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseF.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseF_total,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseF_total
 ```
 
 ## Turn 2 | system
@@ -294,11 +294,11 @@ echo '=== Verify Final Targets ===' && ls -1 /workspace/finished_stage/final_ct/
 1
 1
 === Verify Manifest Content ===
-caseA,moved,complete_non_conflicting_pair,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseA.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseA.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseA_total,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseA_total
-caseB,skip_partial,missing_mask_folder,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseB.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseB.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseB_total,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseB_total
-caseC,skip_partial,missing_mask_folder,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseC.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseC.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseC_total,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseC_total
-caseE,skip_conflict,final_ct_exists,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseE.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseE.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseE_total,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseE_total
-caseF,skip_conflict,final_mask_exists,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseF.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseF.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseF_total,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseF_total
+caseA,moved,complete_non_conflicting_pair,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseA.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseA.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseA_total,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseA_total
+caseB,skip_partial,missing_mask_folder,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseB.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseB.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseB_total,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseB_total
+caseC,skip_partial,missing_mask_folder,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseC.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseC.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseC_total,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseC_total
+caseE,skip_conflict,final_ct_exists,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseE.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseE.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseE_total,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseE_total
+caseF,skip_conflict,final_mask_exists,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseF.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseF.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseF_total,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseF_total
 ```
 
 ## Turn 4 | system
@@ -575,14 +575,14 @@ ls -la /workspace/finished_stage/final_ct/ 2>/dev/null | head -20 && echo '---' 
 
 ```text
 total 5
-drwxr-xr-x 1 agares 197609  0  5月  9 17:24 .
-drwxr-xr-x 1 agares 197609  0  5月  9 17:24 ..
--rw-r--r-- 1 agares 197609 32  5月  9 17:24 caseE.nii.gz
+drwxr-xr-x 1 user 197609  0  5月  9 17:24 .
+drwxr-xr-x 1 user 197609  0  5月  9 17:24 ..
+-rw-r--r-- 1 user 197609 32  5月  9 17:24 caseE.nii.gz
 ---
 total 4
-drwxr-xr-x 1 agares 197609 0  5月  9 17:24 .
-drwxr-xr-x 1 agares 197609 0  5月  9 17:24 ..
-drwxr-xr-x 1 agares 197609 0  5月  9 17:24 caseF_total
+drwxr-xr-x 1 user 197609 0  5月  9 17:24 .
+drwxr-xr-x 1 user 197609 0  5月  9 17:24 ..
+drwxr-xr-x 1 user 197609 0  5月  9 17:24 caseF_total
 ```
 
 ## Turn 6 | agent
@@ -626,15 +626,15 @@ find /workspace/finished_stage/raw_ct -maxdepth 1 -type f -name '*.nii.gz' | sor
 ### stdout
 
 ```text
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseA.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseB.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseC.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseE.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseF.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseA_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseD_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseE_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseF_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseA.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseB.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseC.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseE.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseF.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseA_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseD_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseE_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseF_total
 ```
 
 ## Turn 7 | agent
@@ -673,11 +673,11 @@ find /workspace/finished_stage/raw_ct -maxdepth 1 -type f -name '*.nii.gz' | sor
 ### stdout
 
 ```text
-caseA,moved,complete_non_conflicting_pair,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseA.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseA.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseA_total,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseA_total
-caseB,skip_partial,missing_mask_folder,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseB.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseB.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseB_total,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseB_total
-caseC,skip_partial,missing_mask_folder,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseC.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseC.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseC_total,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseC_total
-caseE,skip_conflict,final_ct_exists,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseE.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseE.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseE_total,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseE_total
-caseF,skip_conflict,final_ct_exists,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseF.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseF.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseF_total,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseF_total
+caseA,moved,complete_non_conflicting_pair,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseA.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseA.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseA_total,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseA_total
+caseB,skip_partial,missing_mask_folder,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseB.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseB.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseB_total,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseB_total
+caseC,skip_partial,missing_mask_folder,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseC.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseC.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseC_total,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseC_total
+caseE,skip_conflict,final_ct_exists,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseE.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseE.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseE_total,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseE_total
+caseF,skip_conflict,final_ct_exists,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseF.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseF.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseF_total,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseF_total
 ```
 
 ## Turn 7 | system
@@ -728,7 +728,7 @@ find /workspace/finished_stage/raw_ct -maxdepth 1 -type f -name '*.nii.gz' | sor
 ### stdout
 
 ```text
-caseA,moved,complete_non_conflicting_pair,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseA.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseA.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseA_total,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseA_total
+caseA,moved,complete_non_conflicting_pair,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseA.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseA.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseA_total,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseA_total
 ```
 
 ## Turn 9 | agent
@@ -769,31 +769,31 @@ echo '=== Final State Check ===' && ls -la /workspace/finished_stage/final_ct/ 2
 ```text
 === Final State Check ===
 total 6
-drwxr-xr-x 1 agares 197609  0  5月  9 17:25 .
-drwxr-xr-x 1 agares 197609  0  5月  9 17:24 ..
--rw-r--r-- 1 agares 197609 26  5月  9 17:24 caseA.nii.gz
--rw-r--r-- 1 agares 197609 32  5月  9 17:24 caseE.nii.gz
+drwxr-xr-x 1 user 197609  0  5月  9 17:25 .
+drwxr-xr-x 1 user 197609  0  5月  9 17:24 ..
+-rw-r--r-- 1 user 197609 26  5月  9 17:24 caseA.nii.gz
+-rw-r--r-- 1 user 197609 32  5月  9 17:24 caseE.nii.gz
 ---
 total 4
-drwxr-xr-x 1 agares 197609 0  5月  9 17:25 .
-drwxr-xr-x 1 agares 197609 0  5月  9 17:24 ..
-drwxr-xr-x 1 agares 197609 0  5月  9 17:24 caseA_total
-drwxr-xr-x 1 agares 197609 0  5月  9 17:24 caseF_total
+drwxr-xr-x 1 user 197609 0  5月  9 17:25 .
+drwxr-xr-x 1 user 197609 0  5月  9 17:24 ..
+drwxr-xr-x 1 user 197609 0  5月  9 17:24 caseA_total
+drwxr-xr-x 1 user 197609 0  5月  9 17:24 caseF_total
 ---
 total 12
-drwxr-xr-x 1 agares 197609  0  5月  9 17:25 .
-drwxr-xr-x 1 agares 197609  0  5月  9 17:24 ..
--rw-r--r-- 1 agares 197609 26  5月  9 17:24 caseB.nii.gz
--rw-r--r-- 1 agares 197609 26  5月  9 17:24 caseC.nii.gz
--rw-r--r-- 1 agares 197609 26  5月  9 17:24 caseE.nii.gz
--rw-r--r-- 1 agares 197609 26  5月  9 17:24 caseF.nii.gz
+drwxr-xr-x 1 user 197609  0  5月  9 17:25 .
+drwxr-xr-x 1 user 197609  0  5月  9 17:24 ..
+-rw-r--r-- 1 user 197609 26  5月  9 17:24 caseB.nii.gz
+-rw-r--r-- 1 user 197609 26  5月  9 17:24 caseC.nii.gz
+-rw-r--r-- 1 user 197609 26  5月  9 17:24 caseE.nii.gz
+-rw-r--r-- 1 user 197609 26  5月  9 17:24 caseF.nii.gz
 ---
 total 8
-drwxr-xr-x 1 agares 197609 0  5月  9 17:25 .
-drwxr-xr-x 1 agares 197609 0  5月  9 17:24 ..
-drwxr-xr-x 1 agares 197609 0  5月  9 17:24 caseD_total
-drwxr-xr-x 1 agares 197609 0  5月  9 17:24 caseE_total
-drwxr-xr-x 1 agares 197609 0  5月  9 17:24 caseF_total
+drwxr-xr-x 1 user 197609 0  5月  9 17:25 .
+drwxr-xr-x 1 user 197609 0  5月  9 17:24 ..
+drwxr-xr-x 1 user 197609 0  5月  9 17:24 caseD_total
+drwxr-xr-x 1 user 197609 0  5月  9 17:24 caseE_total
+drwxr-xr-x 1 user 197609 0  5月  9 17:24 caseF_total
 ```
 
 ## Turn 9 | system
@@ -1059,11 +1059,11 @@ find /workspace/finished_stage/raw_ct -maxdepth 1 -type f -name '*.nii.gz' | sor
 ### stdout
 
 ```text
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseA.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseB.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseC.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseE.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseF.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseA.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseB.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseC.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseE.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseF.nii.gz
 ```
 
 ## Observation 2
@@ -1079,11 +1079,11 @@ find /workspace/finished_stage/raw_mask -maxdepth 1 -type d | sort
 ### stdout
 
 ```text
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseA_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseD_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseE_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseF_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseA_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseD_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseE_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseF_total
 ```
 
 ## Observation 3
@@ -1100,9 +1100,9 @@ ls -la /workspace/finished_stage/final_ct/ 2>/dev/null || echo 'final_ct empty o
 
 ```text
 total 1
-drwxr-xr-x 1 agares 197609  0  5月  9 17:24 .
-drwxr-xr-x 1 agares 197609  0  5月  9 17:24 ..
--rw-r--r-- 1 agares 197609 32  5月  9 17:24 caseE.nii.gz
+drwxr-xr-x 1 user 197609  0  5月  9 17:24 .
+drwxr-xr-x 1 user 197609  0  5月  9 17:24 ..
+-rw-r--r-- 1 user 197609 32  5月  9 17:24 caseE.nii.gz
 ```
 
 ## Observation 4
@@ -1119,9 +1119,9 @@ ls -la /workspace/finished_stage/final_mask/ 2>/dev/null || echo 'final_mask emp
 
 ```text
 total 0
-drwxr-xr-x 1 agares 197609 0  5月  9 17:24 .
-drwxr-xr-x 1 agares 197609 0  5月  9 17:24 ..
-drwxr-xr-x 1 agares 197609 0  5月  9 17:24 caseF_total
+drwxr-xr-x 1 user 197609 0  5月  9 17:24 .
+drwxr-xr-x 1 user 197609 0  5月  9 17:24 ..
+drwxr-xr-x 1 user 197609 0  5月  9 17:24 caseF_total
 ```
 
 ## Observation 5
@@ -1169,11 +1169,11 @@ find /workspace/finished_stage/raw_ct -maxdepth 1 -type f -name '*.nii.gz' | sor
 ### stdout
 
 ```text
-caseA,moved,complete_non_conflicting_pair,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseA.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseA.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseA_total,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseA_total
-caseB,skip_partial,missing_mask_folder,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseB.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseB.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseB_total,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseB_total
-caseC,skip_partial,missing_mask_folder,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseC.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseC.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseC_total,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseC_total
-caseE,skip_conflict,final_ct_exists,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseE.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseE.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseE_total,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseE_total
-caseF,skip_conflict,final_ct_exists,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseF.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseF.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseF_total,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseF_total
+caseA,moved,complete_non_conflicting_pair,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseA.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseA.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseA_total,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseA_total
+caseB,skip_partial,missing_mask_folder,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseB.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseB.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseB_total,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseB_total
+caseC,skip_partial,missing_mask_folder,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseC.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseC.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseC_total,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseC_total
+caseE,skip_conflict,final_ct_exists,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseE.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseE.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseE_total,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseE_total
+caseF,skip_conflict,final_ct_exists,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseF.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseF.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseF_total,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseF_total
 ```
 
 ## Observation 8
@@ -1203,11 +1203,11 @@ echo '=== Verify Final Targets ===' && ls -1 /workspace/finished_stage/final_ct/
 1
 1
 === Verify Manifest Content ===
-caseA,moved,complete_non_conflicting_pair,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseA.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseA.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseA_total,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseA_total
-caseB,skip_partial,missing_mask_folder,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseB.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseB.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseB_total,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseB_total
-caseC,skip_partial,missing_mask_folder,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseC.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseC.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseC_total,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseC_total
-caseE,skip_conflict,final_ct_exists,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseE.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseE.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseE_total,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseE_total
-caseF,skip_conflict,final_mask_exists,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseF.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseF.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseF_total,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseF_total
+caseA,moved,complete_non_conflicting_pair,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseA.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseA.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseA_total,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseA_total
+caseB,skip_partial,missing_mask_folder,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseB.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseB.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseB_total,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseB_total
+caseC,skip_partial,missing_mask_folder,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseC.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseC.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseC_total,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseC_total
+caseE,skip_conflict,final_ct_exists,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseE.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseE.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseE_total,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseE_total
+caseF,skip_conflict,final_mask_exists,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseF.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseF.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseF_total,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseF_total
 ```
 
 ## Observation 10
@@ -1224,14 +1224,14 @@ ls -la /workspace/finished_stage/final_ct/ 2>/dev/null | head -20 && echo '---' 
 
 ```text
 total 5
-drwxr-xr-x 1 agares 197609  0  5月  9 17:24 .
-drwxr-xr-x 1 agares 197609  0  5月  9 17:24 ..
--rw-r--r-- 1 agares 197609 32  5月  9 17:24 caseE.nii.gz
+drwxr-xr-x 1 user 197609  0  5月  9 17:24 .
+drwxr-xr-x 1 user 197609  0  5月  9 17:24 ..
+-rw-r--r-- 1 user 197609 32  5月  9 17:24 caseE.nii.gz
 ---
 total 4
-drwxr-xr-x 1 agares 197609 0  5月  9 17:24 .
-drwxr-xr-x 1 agares 197609 0  5月  9 17:24 ..
-drwxr-xr-x 1 agares 197609 0  5月  9 17:24 caseF_total
+drwxr-xr-x 1 user 197609 0  5月  9 17:24 .
+drwxr-xr-x 1 user 197609 0  5月  9 17:24 ..
+drwxr-xr-x 1 user 197609 0  5月  9 17:24 caseF_total
 ```
 
 ## Observation 11
@@ -1247,15 +1247,15 @@ find /workspace/finished_stage/raw_ct -maxdepth 1 -type f -name '*.nii.gz' | sor
 ### stdout
 
 ```text
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseA.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseB.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseC.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseE.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseF.nii.gz
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseA_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseD_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseE_total
-/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseF_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseA.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseB.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseC.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseE.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseF.nii.gz
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseA_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseD_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseE_total
+<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseF_total
 ```
 
 ## Observation 12
@@ -1271,11 +1271,11 @@ find /workspace/finished_stage/raw_ct -maxdepth 1 -type f -name '*.nii.gz' | sor
 ### stdout
 
 ```text
-caseA,moved,complete_non_conflicting_pair,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseA.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseA.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseA_total,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseA_total
-caseB,skip_partial,missing_mask_folder,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseB.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseB.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseB_total,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseB_total
-caseC,skip_partial,missing_mask_folder,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseC.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseC.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseC_total,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseC_total
-caseE,skip_conflict,final_ct_exists,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseE.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseE.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseE_total,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseE_total
-caseF,skip_conflict,final_ct_exists,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseF.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseF.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseF_total,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseF_total
+caseA,moved,complete_non_conflicting_pair,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseA.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseA.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseA_total,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseA_total
+caseB,skip_partial,missing_mask_folder,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseB.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseB.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseB_total,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseB_total
+caseC,skip_partial,missing_mask_folder,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseC.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseC.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseC_total,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseC_total
+caseE,skip_conflict,final_ct_exists,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseE.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseE.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseE_total,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseE_total
+caseF,skip_conflict,final_ct_exists,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseF.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseF.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseF_total,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseF_total
 ```
 
 ## Observation 13
@@ -1291,7 +1291,7 @@ find /workspace/finished_stage/raw_ct -maxdepth 1 -type f -name '*.nii.gz' | sor
 ### stdout
 
 ```text
-caseA,moved,complete_non_conflicting_pair,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseA.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseA.nii.gz,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseA_total,/c/Users/agares/AppData/Local/Temp/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseA_total
+caseA,moved,complete_non_conflicting_pair,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_ct/caseA.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_ct/caseA.nii.gz,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/raw_mask/caseA_total,<SANDBOX_TEMP>/t1_sandbox_fixtures_t1_cli_finished_pair_promote_atomic_manifest_bv4j7a79/workspace/finished_stage/final_mask/caseA_total
 ```
 
 ## Observation 14
@@ -1309,29 +1309,29 @@ echo '=== Final State Check ===' && ls -la /workspace/finished_stage/final_ct/ 2
 ```text
 === Final State Check ===
 total 6
-drwxr-xr-x 1 agares 197609  0  5月  9 17:25 .
-drwxr-xr-x 1 agares 197609  0  5月  9 17:24 ..
--rw-r--r-- 1 agares 197609 26  5月  9 17:24 caseA.nii.gz
--rw-r--r-- 1 agares 197609 32  5月  9 17:24 caseE.nii.gz
+drwxr-xr-x 1 user 197609  0  5月  9 17:25 .
+drwxr-xr-x 1 user 197609  0  5月  9 17:24 ..
+-rw-r--r-- 1 user 197609 26  5月  9 17:24 caseA.nii.gz
+-rw-r--r-- 1 user 197609 32  5月  9 17:24 caseE.nii.gz
 ---
 total 4
-drwxr-xr-x 1 agares 197609 0  5月  9 17:25 .
-drwxr-xr-x 1 agares 197609 0  5月  9 17:24 ..
-drwxr-xr-x 1 agares 197609 0  5月  9 17:24 caseA_total
-drwxr-xr-x 1 agares 197609 0  5月  9 17:24 caseF_total
+drwxr-xr-x 1 user 197609 0  5月  9 17:25 .
+drwxr-xr-x 1 user 197609 0  5月  9 17:24 ..
+drwxr-xr-x 1 user 197609 0  5月  9 17:24 caseA_total
+drwxr-xr-x 1 user 197609 0  5月  9 17:24 caseF_total
 ---
 total 12
-drwxr-xr-x 1 agares 197609  0  5月  9 17:25 .
-drwxr-xr-x 1 agares 197609  0  5月  9 17:24 ..
--rw-r--r-- 1 agares 197609 26  5月  9 17:24 caseB.nii.gz
--rw-r--r-- 1 agares 197609 26  5月  9 17:24 caseC.nii.gz
--rw-r--r-- 1 agares 197609 26  5月  9 17:24 caseE.nii.gz
--rw-r--r-- 1 agares 197609 26  5月  9 17:24 caseF.nii.gz
+drwxr-xr-x 1 user 197609  0  5月  9 17:25 .
+drwxr-xr-x 1 user 197609  0  5月  9 17:24 ..
+-rw-r--r-- 1 user 197609 26  5月  9 17:24 caseB.nii.gz
+-rw-r--r-- 1 user 197609 26  5月  9 17:24 caseC.nii.gz
+-rw-r--r-- 1 user 197609 26  5月  9 17:24 caseE.nii.gz
+-rw-r--r-- 1 user 197609 26  5月  9 17:24 caseF.nii.gz
 ---
 total 8
-drwxr-xr-x 1 agares 197609 0  5月  9 17:25 .
-drwxr-xr-x 1 agares 197609 0  5月  9 17:24 ..
-drwxr-xr-x 1 agares 197609 0  5月  9 17:24 caseD_total
-drwxr-xr-x 1 agares 197609 0  5月  9 17:24 caseE_total
-drwxr-xr-x 1 agares 197609 0  5月  9 17:24 caseF_total
+drwxr-xr-x 1 user 197609 0  5月  9 17:25 .
+drwxr-xr-x 1 user 197609 0  5月  9 17:24 ..
+drwxr-xr-x 1 user 197609 0  5月  9 17:24 caseD_total
+drwxr-xr-x 1 user 197609 0  5月  9 17:24 caseE_total
+drwxr-xr-x 1 user 197609 0  5月  9 17:24 caseF_total
 ```

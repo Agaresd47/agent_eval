@@ -1,7 +1,7 @@
 {
   "generated_at": "20260505_104505",
   "status": "completed",
-  "workspace_root": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow",
+  "workspace_root": "<REPO_ROOT>",
   "condition": "B1_guardrailed",
   "rounds": 2,
   "episode_count": 1,
@@ -43,8 +43,8 @@
   "validation_errors": [],
   "records": [
     {
-      "episode_yaml": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t2_episodes\\test_ground\\ep003_totalseg_whitelist_split.yaml",
-      "judge_yaml": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t2_episodes\\test_ground\\judges\\ep003_totalseg_whitelist_split.judge.yaml",
+      "episode_yaml": "<REPO_ROOT>\\data\\t2_episodes\\test_ground\\ep003_totalseg_whitelist_split.yaml",
+      "judge_yaml": "<REPO_ROOT>\\data\\t2_episodes\\test_ground\\judges\\ep003_totalseg_whitelist_split.judge.yaml",
       "episode_id": "ep003_totalseg_whitelist_split",
       "condition": "B1_guardrailed",
       "seed": 0,
@@ -267,8 +267,8 @@
       "elapsed_s": 55.668
     },
     {
-      "episode_yaml": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t2_episodes\\test_ground\\ep003_totalseg_whitelist_split.yaml",
-      "judge_yaml": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t2_episodes\\test_ground\\judges\\ep003_totalseg_whitelist_split.judge.yaml",
+      "episode_yaml": "<REPO_ROOT>\\data\\t2_episodes\\test_ground\\ep003_totalseg_whitelist_split.yaml",
+      "judge_yaml": "<REPO_ROOT>\\data\\t2_episodes\\test_ground\\judges\\ep003_totalseg_whitelist_split.judge.yaml",
       "episode_id": "ep003_totalseg_whitelist_split",
       "condition": "B1_guardrailed",
       "seed": 0,

@@ -68,37 +68,6 @@ class PipelineScheduler:
         except Exception:
             return reference
 
-    def _get_refs(self, step: Step) -> Set[str]:
-        refs: Set[str] = set()
-
-        def walk(value: Any) -> None:
-            if isinstance(value, dict):
-                for item in value.values():
-                    walk(item)
-                return
-            if isinstance(value, list):
-                for item in value:
-                    walk(item)
-                return
-            if isinstance(value, str) and value.startswith("$"):
-                refs.add(value[1:].split("[")[0].split(".")[0])
-
-        walk(step.config)
-        return refs
-
-    def _build_dependency_map(self, pipeline: Pipeline) -> Dict[str, Set[str]]:
-        deps = {step.id: set() for step in pipeline.steps}
-        known_ids = {step.id for step in pipeline.steps}
-        for step in pipeline.steps:
-            for downstream_id in step.next or []:
-                if downstream_id in deps:
-                    deps[downstream_id].add(step.id)
-            for source_id in self._get_refs(step):
-                if source_id in known_ids:
-                    deps[step.id].add(source_id)
-        return deps
-
-
 class _ExecutionGraph:
     def __init__(
         self,

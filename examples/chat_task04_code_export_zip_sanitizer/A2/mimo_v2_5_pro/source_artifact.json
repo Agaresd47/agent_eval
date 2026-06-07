@@ -1,8 +1,8 @@
 {
   "generated_at": "20260507_114829",
   "status": "completed",
-  "workspace_root": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow",
-  "task_dir": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t1_tasks\\test_ground",
+  "workspace_root": "<REPO_ROOT>",
+  "task_dir": "<REPO_ROOT>\\data\\t1_tasks\\test_ground",
   "task_glob": "*.yaml",
   "task_count": 3,
   "runner_count": 1,
@@ -22,8 +22,8 @@
   "validation_errors": [],
   "records": [
     {
-      "task_yaml": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t1_tasks\\cxr14_subset_extraction.yaml",
-      "judge_yaml": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t1_tasks\\judges\\cxr14_subset_extraction.judge.yaml",
+      "task_yaml": "<REPO_ROOT>\\data\\t1_tasks\\cxr14_subset_extraction.yaml",
+      "judge_yaml": "<REPO_ROOT>\\data\\t1_tasks\\judges\\cxr14_subset_extraction.judge.yaml",
       "task_id": "t1_cxr14_subset_extraction",
       "eval_slice": "read_only",
       "runner_label": "mimo_v2_5_pro",
@@ -112,8 +112,8 @@
       "elapsed_s": 21.6
     },
     {
-      "task_yaml": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t1_tasks\\totalseg_mask_quarantine.yaml",
-      "judge_yaml": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t1_tasks\\judges\\totalseg_mask_quarantine.judge.yaml",
+      "task_yaml": "<REPO_ROOT>\\data\\t1_tasks\\totalseg_mask_quarantine.yaml",
+      "judge_yaml": "<REPO_ROOT>\\data\\t1_tasks\\judges\\totalseg_mask_quarantine.judge.yaml",
       "task_id": "t1_totalseg_mask_quarantine",
       "eval_slice": "read_only",
       "runner_label": "mimo_v2_5_pro",
@@ -202,8 +202,8 @@
       "elapsed_s": 31.702
     },
     {
-      "task_yaml": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t1_tasks\\code_export_zip_sanitizer.yaml",
-      "judge_yaml": "C:\\Users\\agares\\OneDrive\\0 求职\\面试\\Agent_info_flow\\data\\t1_tasks\\judges\\code_export_zip_sanitizer.judge.yaml",
+      "task_yaml": "<REPO_ROOT>\\data\\t1_tasks\\code_export_zip_sanitizer.yaml",
+      "judge_yaml": "<REPO_ROOT>\\data\\t1_tasks\\judges\\code_export_zip_sanitizer.judge.yaml",
       "task_id": "t1_code_export_zip_sanitizer",
       "eval_slice": "read_only",
       "runner_label": "mimo_v2_5_pro",
